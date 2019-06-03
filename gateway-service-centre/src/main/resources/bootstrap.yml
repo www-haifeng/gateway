@@ -1,0 +1,8 @@
+server:
+  port: 8000 #服务端口
+spring:
+  application:
+    name: gateway-service-centre #指定服务名
+
+
+

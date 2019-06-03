@@ -1,0 +1,8 @@
+server:
+  port: 8001 #服务端口
+spring:
+  application:
+    name: gateway-broadcast-spon #指定服务名
+
+
+
