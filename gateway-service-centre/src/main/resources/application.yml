@@ -38,5 +38,3 @@ worker:
 so:
   keepalive: true
   backlog: 100
-logging:
-  file:

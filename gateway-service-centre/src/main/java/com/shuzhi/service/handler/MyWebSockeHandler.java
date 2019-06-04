@@ -80,26 +80,25 @@ public class MyWebSockeHandler extends SimpleChannelInboundHandler<Object> {
             System.out.println("不支持二进制消息");
             throw new RuntimeException(this.getClass().getName());
         }
+
+
         //返回应答消息
         //获取客户端向服务端发送的消息
         String request = ((TextWebSocketFrame) webSocketFrame ).text();
-        Map<Object,Object> maps = (Map) JSON.parse(request);
+        System.out.println("服务端收到客户端的消息：" + request);
+
+        //发送mq 开始------------------------------
+        //Map<Object,Object> maps = (Map) JSON.parse(request);
         Map<String,Object> maps11 = new HashMap<String,Object>();
-        for (Map.Entry<Object,Object>  maps1: maps.entrySet() ) {
+        maps11.put("name","张三");
+        /*for (Map.Entry<Object,Object>  maps1: maps.entrySet() ) {
             maps11.put(maps1.getKey().toString(),maps1.getValue());
-        }
+        }*/
         try {
-            rabbitSender.send("Hello RabbitMQ For Spring Boot!", maps11);
+            rabbitSender.send("upMessage", maps11);
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        System.out.println("服务端收到客户端的消息：" + request);
-        //TextWebSocketFrame textWebSocketFrame = new TextWebSocketFrame(context.channel().id() + ":" + request);
-        //服务端向每个连接上来的客户端发送消息
-        //context.channel().writeAndFlush(new TextWebSocketFrame("hahah"));
-        //new Thread(new TestDemo(channelRepository)).start();
-
     }
 
 
