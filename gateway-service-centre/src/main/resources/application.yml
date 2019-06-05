@@ -38,3 +38,5 @@ worker:
 so:
   keepalive: true
   backlog: 100
+websocket:
+  path: /websocket

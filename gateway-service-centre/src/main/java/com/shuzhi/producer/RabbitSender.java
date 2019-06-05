@@ -13,7 +13,12 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
-
+/**
+* @Program: RabbitSender
+* @Description: 
+* @Author: YuJQ
+* @Create: 2019/6/4 17:41
+**/
 @Component
 public class RabbitSender {
 

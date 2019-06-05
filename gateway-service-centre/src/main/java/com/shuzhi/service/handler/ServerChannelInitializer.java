@@ -1,8 +1,7 @@
-package com.shuzhi;
+package com.shuzhi.service.handler;
 
 
 import com.shuzhi.producer.RabbitSender;
-import com.shuzhi.service.handler.MyWebSockeHandler;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
@@ -12,6 +11,7 @@ import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import io.netty.handler.codec.http.websocketx.extensions.compression.WebSocketServerCompressionHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /**
@@ -26,8 +26,11 @@ public class ServerChannelInitializer extends ChannelInitializer<SocketChannel> 
 	private final static int READER_IDLE_TIME_SECONDS = 20;//读操作空闲20秒
 	private final static int WRITER_IDLE_TIME_SECONDS = 20;//写操作空闲20秒
 	private final static int ALL_IDLE_TIME_SECONDS = 40;//读写全部空闲40秒
-    private static final String WEBSOCKET_PATH = "/websocket";
+    //private static final String WEBSOCKET_PATH = "/websocket";
 
+
+    @Value("${websocket.path}")
+    private String WEBSOCKET_PATH;
     @Autowired
     public ChannelRepository channelRepository;
     @Autowired

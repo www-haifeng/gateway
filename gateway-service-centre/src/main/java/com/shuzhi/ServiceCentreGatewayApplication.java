@@ -1,5 +1,8 @@
 package com.shuzhi;
 
+import com.shuzhi.service.handler.ChannelRepository;
+import com.shuzhi.service.handler.ServerChannelInitializer;
+import com.shuzhi.service.handler.TCPServer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -33,9 +36,15 @@ import java.util.Set;
 public class ServiceCentreGatewayApplication {
     public static void main(String[] args) throws Exception {
         ConfigurableApplicationContext context = SpringApplication.run(ServiceCentreGatewayApplication.class, args);
-        TCPServer tcpServer = context.getBean(TCPServer.class);
-        tcpServer.start();
+        //TCPServer tcpServer = context.getBean(TCPServer.class);
+        //tcpServer.start();
+        //socketClientCreate
     }
+
+
+
+
+
     @Value("${tcp.port}")
     private int tcpPort;
 

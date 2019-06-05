@@ -24,6 +24,9 @@ public class TGatewayConfigEntity {
     @Column(name = "port")
     private String port;
 
+    @Column(name = "socket_name")
+    private String socketName;
+
     @Column(name = "sys_id")
     private String sysId;
 

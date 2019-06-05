@@ -1,7 +1,5 @@
 package com.shuzhi.service.handler;
 
-import com.alibaba.fastjson.JSON;
-import com.shuzhi.ChannelRepository;
 import com.shuzhi.producer.RabbitSender;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
