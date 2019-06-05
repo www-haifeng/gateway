@@ -1,0 +1,55 @@
+//消息类型：message:是消息首体  0:心跳 1：命令 2：回执 3：命令执行结果 4：上报信息 5：首次建立连接 6、建连回复 7、告警信息
+{
+   "message":{
+	   "msgid": "",
+	   "msgtype": "",
+	   "systype": "",
+	   "sysid": "",
+	   "connectid": "",
+	   "sign": "",
+	   "msgts": "",
+	   "msg": {}
+   },
+	"0":{
+		   "timestamp": ""
+    },
+	"1":{
+			"timestamp": ""
+	},
+	"2":{
+			"timestamp": ""
+	},
+	"3":{
+			"code": "",
+			"cycletime": "",
+			"timestamp": ""
+	},
+	"4":{
+			"overtime": "",
+			"type": "",
+			"subtype": "",
+			"did": "",
+			"cmdid ": "",
+			"data": {}
+	},
+	"5":{
+			"timestamp": "",
+			"code": "",
+			"data": {}
+	},
+	"6":{
+			"type": "",
+			"subtype": "",
+			"did": "",
+			"infoid": "",
+			"data": {}
+	},
+	"7":{
+			"type": "",
+			"subtype": "",
+			"did": "",
+			"alarmid": "",
+			"data": {}
+	 }
+
+}
