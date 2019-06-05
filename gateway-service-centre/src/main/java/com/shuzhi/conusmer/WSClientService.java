@@ -26,5 +26,6 @@ public class WSClientService {
     @OnClose
     public void onClose() {
         log.info("客户端关闭");
+        //重新建立连接
     }
 }

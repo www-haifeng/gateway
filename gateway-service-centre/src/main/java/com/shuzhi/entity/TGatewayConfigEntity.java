@@ -19,10 +19,10 @@ public class TGatewayConfigEntity {
     private int id;
 
     @Column(name = "ip")
-    private int ip;
+    private String ip;
 
     @Column(name = "port")
-    private String port;
+    private Integer port;
 
     @Column(name = "socket_name")
     private String socketName;

@@ -37,11 +37,15 @@ public class RabbitReceiver {
 	)
 	@RabbitHandler
 	public void upMessage(Message message, Channel channel) throws Exception {
-		System.err.println("--------------------------------------");
-		System.err.println("upMessage消费端Payload: " + message.getPayload());
-		Long deliveryTag = (Long)message.getHeaders().get(AmqpHeaders.DELIVERY_TAG);
-		//手工ACK
-		channel.basicAck(deliveryTag, false);
+		try {
+			System.err.println("--------------------------------------");
+			System.err.println("upMessage消费端Payload: " + message.getPayload());
+			Long deliveryTag = (Long) message.getHeaders().get(AmqpHeaders.DELIVERY_TAG);
+			//手工ACK
+			channel.basicAck(deliveryTag, false);
+		}catch (Exception e){
+
+		}
 	}
 	/**
 	 * @Description: 监听下控主题
@@ -61,11 +65,15 @@ public class RabbitReceiver {
 	)
 	@RabbitHandler
 	public void lowerControlMessage(Message message, Channel channel) throws Exception {
-		System.err.println("--------------------------------------");
-		System.err.println("lowerControlMessage消费端Payload: " + message.getPayload());
-		Long deliveryTag = (Long)message.getHeaders().get(AmqpHeaders.DELIVERY_TAG);
-		//手工ACK
-		channel.basicAck(deliveryTag, false);
+		try {
+			System.err.println("--------------------------------------");
+			System.err.println("lowerControlMessage消费端Payload: " + message.getPayload());
+			Long deliveryTag = (Long) message.getHeaders().get(AmqpHeaders.DELIVERY_TAG);
+			//手工ACK
+			channel.basicAck(deliveryTag, false);
+		}catch (Exception e){
+
+		}
 	}
 	/**
 	 * @Description: 监听WIFI主题
@@ -85,11 +93,15 @@ public class RabbitReceiver {
 	)
 	@RabbitHandler
 	public void wifiMessage(Message message, Channel channel) throws Exception {
-		System.err.println("--------------------------------------");
-		System.err.println("wifiMessage消费端Payload: " + message.getPayload());
-		Long deliveryTag = (Long)message.getHeaders().get(AmqpHeaders.DELIVERY_TAG);
-		//手工ACK
-		channel.basicAck(deliveryTag, false);
+		try {
+			System.err.println("--------------------------------------");
+			System.err.println("wifiMessage消费端Payload: " + message.getPayload());
+			Long deliveryTag = (Long) message.getHeaders().get(AmqpHeaders.DELIVERY_TAG);
+			//手工ACK
+			channel.basicAck(deliveryTag, false);
+		}catch (Exception e){
+
+		}
 	}
 	/**
 	 * @Description: 监听告警主题
@@ -109,10 +121,14 @@ public class RabbitReceiver {
 	)
 	@RabbitHandler
 	public void alarmMessage(Message message, Channel channel) throws Exception {
-		System.err.println("--------------------------------------");
-		System.err.println("alarmMessage消费端Payload: " + message.getPayload());
-		Long deliveryTag = (Long)message.getHeaders().get(AmqpHeaders.DELIVERY_TAG);
-		//手工ACK
-		channel.basicAck(deliveryTag, false);
+		try {
+			System.err.println("--------------------------------------");
+			System.err.println("alarmMessage消费端Payload: " + message.getPayload());
+			Long deliveryTag = (Long) message.getHeaders().get(AmqpHeaders.DELIVERY_TAG);
+			//手工ACK
+			channel.basicAck(deliveryTag, false);
+		}catch (Exception e){
+
+		}
 	}
 }
