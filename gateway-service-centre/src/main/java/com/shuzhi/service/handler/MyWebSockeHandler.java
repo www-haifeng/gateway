@@ -88,12 +88,17 @@ public class MyWebSockeHandler extends SimpleChannelInboundHandler<Object> {
         //发送mq 开始------------------------------
         //Map<Object,Object> maps = (Map) JSON.parse(request);
         Map<String,Object> maps11 = new HashMap<String,Object>();
-        maps11.put("name","张三");
+        maps11.put("name","张三111");
+        Map<String,Object> maps12 = new HashMap<String,Object>();
+        maps11.put("name","张三22");
         /*for (Map.Entry<Object,Object>  maps1: maps.entrySet() ) {
             maps11.put(maps1.getKey().toString(),maps1.getValue());
         }*/
         try {
-            rabbitSender.send("upMessage", maps11);
+           rabbitSender.send("upMessage","upMessage", "upMessage主题");
+           rabbitSender.send("lowerControlMessage","lowerControlMessage", "lowerControlMessage主题");
+            rabbitSender.send("wifiMessage","wifiMessage", "wifiMessage主题");
+            rabbitSender.send("alarmMessage","alarmMessage", "alarmMessage主题");
         } catch (Exception e) {
             e.printStackTrace();
         }

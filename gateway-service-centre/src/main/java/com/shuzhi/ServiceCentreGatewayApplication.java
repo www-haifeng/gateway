@@ -36,8 +36,10 @@ import java.util.Set;
 public class ServiceCentreGatewayApplication {
     public static void main(String[] args) throws Exception {
         ConfigurableApplicationContext context = SpringApplication.run(ServiceCentreGatewayApplication.class, args);
-        //TCPServer tcpServer = context.getBean(TCPServer.class);
-        //tcpServer.start();
+
+        //测试心跳连接 链路
+        TCPServer tcpServer = context.getBean(TCPServer.class);
+        tcpServer.start();
         //socketClientCreate
     }
 
