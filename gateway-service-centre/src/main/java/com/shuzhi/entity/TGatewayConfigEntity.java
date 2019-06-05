@@ -17,12 +17,24 @@ import java.util.Objects;
 public class TGatewayConfigEntity {
     @Id
     private int id;
+
+    @Column(name = "ip")
+    private int ip;
+
+    @Column(name = "port")
+    private String port;
+
     @Column(name = "sys_id")
     private String sysId;
+
     @Column(name = "connect_id")
     private String connectId;
+
     @Column(name = "type_group_code")
     private String typeGroupCode;
+
     @Column(name = "describe")
     private String describe;
+
+
 }
