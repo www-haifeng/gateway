@@ -37,7 +37,7 @@ public class ServiceCentreGatewayApplication {
     public static void main(String[] args) throws Exception {
         ConfigurableApplicationContext context = SpringApplication.run(ServiceCentreGatewayApplication.class, args);
 
-        //测试心跳连接 链路
+        //开启websocket服务端
         TCPServer tcpServer = context.getBean(TCPServer.class);
         tcpServer.start();
         //socketClientCreate

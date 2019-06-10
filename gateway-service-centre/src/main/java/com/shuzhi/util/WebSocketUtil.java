@@ -22,17 +22,17 @@ import java.util.List;
 **/
 public class WebSocketUtil {
     private final static Logger logger = LoggerFactory.getLogger(WebSocketUtil.class);
-    public static List<Session> socketClientCreate(Class clazz,String url) {
-        List<Session> clientList = new ArrayList<>();
+    public static Session socketClientCreate(Class clazz,String url) {
+
         try {
                 WebSocketContainer container = ContainerProvider.getWebSocketContainer();
                 Session session = container.connectToServer(clazz, new URI(url));
-                clientList.add(session);
+                return session;
 
         }  catch (Exception e) {
             logger.info("websocket创建连接失败");
         }finally {
-            return clientList;
+            return null;
         }
         /*
         while (true) {

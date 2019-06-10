@@ -3,6 +3,7 @@ package com.shuzhi;
 import com.shuzhi.conusmer.WSClientService;
 import com.shuzhi.entity.TGatewayConfigEntity;
 import com.shuzhi.service.TGatewayConfigService;
+import com.shuzhi.service.factory.FirstAllianceFactory;
 import com.shuzhi.util.StringUtil;
 import com.shuzhi.util.WebSocketUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,10 @@ public class WBApplicationRunner implements ApplicationRunner {
 
 	@Autowired
 	private TGatewayConfigService tGatewayConfigService;
+	@Autowired
+	private FirstAllianceFactory firstAllianceFactory;
+
+
 
 	@Override
 	public void run(ApplicationArguments arg0) throws Exception {
@@ -35,7 +40,8 @@ public class WBApplicationRunner implements ApplicationRunner {
 			for (TGatewayConfigEntity t :list) {
 				if(StringUtil.isEmpty(t.getIp()) &&StringUtil.isEmpty(t.getSocketName())&& t.getPort() != null){
 					String url = StringUtil.webSocketUrl(t.getIp(),t.getPort(),t.getSocketName());
-					WebSocketUtil.socketClientCreate(WSClientService.class,url);
+					//WebSocketUtil.socketClientCreate(WSClientService.class,url);
+					firstAllianceFactory.firstAllianceConnection(t.getTypeGroupCode(),WSClientService.class,url,t);
 				}
 			}
 

@@ -27,6 +27,9 @@ public class TGatewayConfigEntity {
     @Column(name = "socket_name")
     private String socketName;
 
+    @Column(name = "sys_type")
+    private String sysType;
+
     @Column(name = "sys_id")
     private String sysId;
 
@@ -38,6 +41,8 @@ public class TGatewayConfigEntity {
 
     @Column(name = "describe")
     private String describe;
+
+
 
 
 }

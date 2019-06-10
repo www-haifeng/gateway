@@ -78,8 +78,11 @@ public class MyWebSockeHandler extends SimpleChannelInboundHandler<Object> {
             System.out.println("不支持二进制消息");
             throw new RuntimeException(this.getClass().getName());
         }
+        context.channel().writeAndFlush(new TextWebSocketFrame("hahah"));
 
+        //服务端向每个连接上来的客户端发送消息
 
+/*
         //返回应答消息
         //获取客户端向服务端发送的消息
         String request = ((TextWebSocketFrame) webSocketFrame ).text();
@@ -91,9 +94,10 @@ public class MyWebSockeHandler extends SimpleChannelInboundHandler<Object> {
         maps11.put("name","张三111");
         Map<String,Object> maps12 = new HashMap<String,Object>();
         maps11.put("name","张三22");
-        /*for (Map.Entry<Object,Object>  maps1: maps.entrySet() ) {
+        for (Map.Entry<Object,Object>  maps1: maps.entrySet() ) {
             maps11.put(maps1.getKey().toString(),maps1.getValue());
         }*/
+/*
         try {
            rabbitSender.send("upMessage","upMessage", "upMessage主题");
            rabbitSender.send("lowerControlMessage","lowerControlMessage", "lowerControlMessage主题");
@@ -102,6 +106,7 @@ public class MyWebSockeHandler extends SimpleChannelInboundHandler<Object> {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        */
     }
 
 

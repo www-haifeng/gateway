@@ -5,6 +5,7 @@ import com.shuzhi.entity.TGatewayConfigEntity;
 import com.shuzhi.service.TGatewayConfigService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.List;
 * @Create: 2019/6/5 16:36
 **/
 @Slf4j
+@Service
 @Transactional
 public class TGatewayConfigServiceImpl implements TGatewayConfigService {
     @Autowired

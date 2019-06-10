@@ -40,3 +40,5 @@ so:
   backlog: 100
 websocket:
   path: /websocket
+gateway:
+  key: 123456
