@@ -4,6 +4,7 @@ import com.shuzhi.conusmer.WSClientService;
 import com.shuzhi.entity.TGatewayConfigEntity;
 import com.shuzhi.entity.WebSocketEntity;
 import com.shuzhi.util.SessionRepository;
+import com.shuzhi.util.StringUtil;
 import com.shuzhi.util.WebSocketUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +30,13 @@ public class FirstAllianceFactory {
     * @Author: YuJQ
     * @Date : 2019/6/6 10:51
     */
-    public void firstAllianceConnection(String typeGroupCode,Class clazz,String url,TGatewayConfigEntity tGatewayConfigEntity){
+    public void firstAllianceConnection(String typeGroupCode,Class clazz,String url,TGatewayConfigEntity tGatewayConfigEntity,String sessionId){
         Session session = WebSocketUtil.socketClientCreate(WSClientService.class, url);
         if(session != null){
+            if(StringUtil.isNotEmpty(sessionId)){
+                SessionRepository.removeCaches(session.getId());
+            }
+
             WebSocketEntity entity = new WebSocketEntity();
             entity.setSession(session);
             entity.setTGatewayConfigEntity(tGatewayConfigEntity);

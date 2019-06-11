@@ -4,6 +4,7 @@ import io.netty.channel.Channel;
 
 import javax.websocket.Session;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -19,6 +20,31 @@ public class SessionRepository {
 	private final static Map<String, Object> channelCache = new ConcurrentHashMap<String, Object>();
 	//<websocket sessioncode,上行通道code>
 	private final static Map<String, String> sessionChannelCache = new ConcurrentHashMap<String, String>();
+
+
+	public static  Map<Integer,Map<String,String>> codeSocketName = new HashMap<Integer,Map<String,String>>();
+
+	public static void addKeyValue(Integer type,String key,String value){
+		Map<String,String> map = new HashMap<>();
+		codeSocketName.put(type,map);
+	}
+
+	public static String codeSocketNameKey(Integer type){
+		Map<String,String> map  =codeSocketName.get(type);
+		for (Map.Entry<String, String> entry : map.entrySet()) {
+			return entry.getKey();
+		}
+		return null;
+	}
+	public static String codeSocketNameValue(Integer type){
+		Map<String,String> map  =codeSocketName.get(type);
+		for (Map.Entry<String, String> entry : map.entrySet()) {
+			return entry.getValue();
+		}
+		return null;
+	}
+
+
 
 
 	public static void putChannelCache(String key, Object value) { channelCache.put(key, value); }

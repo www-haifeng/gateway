@@ -7,4 +7,5 @@ package com.shuzhi.util;
 **/
 public class MessageExecutionOrder {
 
+
 }

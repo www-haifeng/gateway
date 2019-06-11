@@ -24,7 +24,7 @@ public class MessageFactoryModelUtil {
           }
 
     //返回MessagePojo 对象
-    public static MessagePojo messagePojoModel(String key,Integer number,String systype,String sysid,String connectid) throws Exception {
+    public static MessagePojo messagePojoModel(String key,Integer number,String systype,String sysid,String connectid)  {
         MessagePojo  pojo = new MessagePojo();
         Map<String,Object> msg = new HashMap<String,Object>();
         String msgid =ToolUtils.generateUUID();
@@ -42,7 +42,11 @@ public class MessageFactoryModelUtil {
             pojo.setMsg(msg);
             //转json 字符串
             String jsonMapString  =   MessageJson.getJsonMap(msg);
-            pojo.setSign(ToolUtils.getBussesSha(msgid+key+ToolUtils.md5Hex(jsonMapString)+msgtype));
+            try {
+                pojo.setSign(ToolUtils.getBussesSha(msgid+key+ToolUtils.md5Hex(jsonMapString)+msgtype));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return pojo;
     }

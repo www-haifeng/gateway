@@ -1,6 +1,7 @@
 package com.shuzhi.thread.handle;
 
 import com.shuzhi.entity.WebSocketEntity;
+import com.shuzhi.util.ConstantUtils;
 
 import java.util.concurrent.ExecutorService;
 
@@ -15,26 +16,29 @@ public class ExecuteThread {
 
 
     //发送
-    public static void executeSendThread(ExecutorService executorService,WebSocketEntity webSocketEntity){
-        executorService.execute(new Runnable() {
+    public static void executeSendThread(ExecutorService executorService,WebSocketEntity webSocketEntity) {
+        executorService.execute(new Runnable()  {
             @Override
-            public void run() {
-                if(webSocketEntity.getSession().isOpen()){
-                    webSocketEntity.getSession().getAsyncRemote().sendText(webSocketEntity.getSendMessage());
-                }
+            public void run(){
+                    if(webSocketEntity.getSession().isOpen()){
+                        webSocketEntity.getSession().getAsyncRemote().sendText(webSocketEntity.getMessage());
+                    }else{
+                            throw new RuntimeException("没有发送成功!");
+                    }
+
             }
         });
     }
     //接收
-    public static void executeReceiveThread(ExecutorService executorService,WebSocketEntity webSocketEntity){
-        executorService.execute(new Runnable() {
-            @Override
-            public void run() {
-                if(webSocketEntity.getSession().isOpen()){
-                    webSocketEntity.getSession().getAsyncRemote().sendText(webSocketEntity.getReceiveMessage());
-                }
-            }
-        });
-    }
+//    public static void executeReceiveThread(ExecutorService executorService,WebSocketEntity webSocketEntity){
+//        executorService.execute(new Runnable() {
+//            @Override
+//            public void run() {
+//                if(webSocketEntity.getSession().isOpen()){
+//                    webSocketEntity.getSession().getAsyncRemote().sendText(webSocketEntity.getReceiveMessage());
+//                }
+//            }
+//        });
+//    }
 
 }

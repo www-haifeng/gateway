@@ -1,4 +1,7 @@
 package com.shuzhi.util;
+
+import java.util.Map;
+
 /**
 * @Program: ConstantUtils
 * @Description:
@@ -22,6 +25,10 @@ public class ConstantUtils {
     public static final Integer KYE_5=5;//5：首次建立连接
     public static final Integer KYE_6=6;//6、建连回复
     public static final Integer KYE_7=7;// 7、告警信息
+
+
+
+
 
 
 

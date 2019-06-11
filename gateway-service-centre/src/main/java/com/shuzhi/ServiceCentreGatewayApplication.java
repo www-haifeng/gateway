@@ -17,6 +17,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.net.InetSocketAddress;
 import java.util.HashMap;
@@ -32,6 +33,7 @@ import java.util.Set;
  */
 
 @SpringBootApplication
+@EnableScheduling
 @EnableJpaAuditing
 public class ServiceCentreGatewayApplication {
     public static void main(String[] args) throws Exception {
