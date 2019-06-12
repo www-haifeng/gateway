@@ -39,7 +39,6 @@
             <artifactId>spring-data-rest-hal-browser</artifactId>
         </dependency>
 
-
         <!--启动连接配置管理失败重试-->
         <dependency>
             <groupId>org.springframework.retry</groupId>
@@ -86,6 +85,19 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
+        </dependency>
+
+        <!--配置文件使用-->
+        <dependency>
+            <groupId> org.springframework.boot </groupId>
+            <artifactId> spring-boot-configuration-processor </artifactId>
+            <optional> true </optional>
+        </dependency>
+        <!--ftp使用-->
+        <dependency>
+            <groupId>commons-net</groupId>
+            <artifactId>commons-net</artifactId>
+            <version>1.4.1</version>
         </dependency>
     </dependencies>
     <build>

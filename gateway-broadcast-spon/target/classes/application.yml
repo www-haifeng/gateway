@@ -1,0 +1,29 @@
+# pgsql 属性配置
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://192.168.8.150:5432/gateways?currentSchema=public&autoReconnect=true
+    username: postgres
+    password: 123456
+  rabbitmq: #RabbitMQ相关的配置
+      host: 192.168.8.150
+      port: 5672
+      username: guest
+      password: guest
+  jpa:
+    show-sql: true
+    hibernate:
+      database-platform: org.hibernate.dialect.PostgreSQLDialect
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      hibernate:
+        temp:
+          use_jdbc_metadata_defaults: false
+redis:
+  host: 192.168.8.150
+  port: 6379
+  pool.max-idle: 10
+  pool.min-idle: 10
+  keytimeout: 2000
+  timeout: 2000
