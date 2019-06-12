@@ -1,3 +1,5 @@
+server:
+  port: 8000
 # pgsql 属性配置
 spring:
   datasource:
@@ -23,8 +25,6 @@ spring:
 redis:
   host: 192.168.8.150
   port: 6379
-  pool.max-idle: 10
-  pool.min-idle: 10
   keytimeout: 2000
   timeout: 2000
 tcp:

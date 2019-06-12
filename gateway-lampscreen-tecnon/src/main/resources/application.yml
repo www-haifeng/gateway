@@ -1,3 +1,5 @@
+server:
+  port: 8002 #服务端口
 # pgsql 属性配置
 spring:
   datasource:

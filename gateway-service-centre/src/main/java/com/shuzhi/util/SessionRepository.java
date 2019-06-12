@@ -22,6 +22,10 @@ public class SessionRepository {
 	private final static Map<String, String> sessionChannelCache = new ConcurrentHashMap<String, String>();
 
 
+   //存储失败消息
+	public  static Map<Integer, Object> sendFailCache = new ConcurrentHashMap<Integer, Object>();
+
+
 	public static  Map<Integer,Map<String,String>> codeSocketName = new HashMap<Integer,Map<String,String>>();
 
 	public static void addKeyValue(Integer type,String key,String value){

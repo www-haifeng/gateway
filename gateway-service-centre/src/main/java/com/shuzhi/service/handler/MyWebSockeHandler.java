@@ -30,6 +30,7 @@ public class MyWebSockeHandler extends SimpleChannelInboundHandler<Object> {
     @Override
     public void channelActive (ChannelHandlerContext context)throws Exception{
         channelRepository.put(context.channel().id().toString(),context.channel());
+       // System.out.println(context.channel().remoteAddress());
         System.out.println("客户端与服务端连接开启");
 
     }
@@ -47,6 +48,7 @@ public class MyWebSockeHandler extends SimpleChannelInboundHandler<Object> {
     //工程出现异常的时候调用
     @Override
     public void exceptionCaught(ChannelHandlerContext context, Throwable throwable)throws Exception{
+        System.out.println("客户端与服务端连接开启");
         throwable.printStackTrace();
         context.close();
     }

@@ -32,8 +32,8 @@ import java.util.concurrent.ExecutorService;
 @Slf4j
 @Service
 public class SendMessageFactory {
-//    @Autowired
-//    private FirstAllianceFactory firstAllianceFactory;
+
+
     @Autowired
     private TReportingInforHistoryService tReportingInforHistoryService;
 
@@ -57,13 +57,7 @@ public class SendMessageFactory {
                         } catch (Exception e) {
                            log.info("首次建联失败");
                         }
-
                     }
-//                    else {
-//                     //不用移除 继续首次建联
-//                        String url = StringUtil.webSocketUrl(wsEntity.getTGatewayConfigEntity().getIp(),wsEntity.getTGatewayConfigEntity().getPort(),wsEntity.getTGatewayConfigEntity().getSocketName());
-//                        firstAllianceFactory.firstAllianceConnection( wsEntity.getTGatewayConfigEntity().getTypeGroupCode(),WSClientService.class,url,wsEntity.getTGatewayConfigEntity(),null);
-//                    }
                 }else {
                     if(SessionManage.sessionStatus(wsEntity.getSession())) {
                         MessagePojo messagePojo= (MessagePojo) JsonConvertBeanUtil.json2Object( wsEntity.getMessage(),MessagePojo.class);
@@ -84,28 +78,16 @@ public class SendMessageFactory {
                                 } catch (Exception e) {
                                     log.info("下控命令,发送mq失败,交换机="+exchange +" 主题="+topic+" 消息="+wsEntity.getMessage());
                                 }
-
                             }else {
                                 //不发控制命令 都是拼好发送
-                                try{
-                                   ExecutorService executorService=FixedThreadPool.getThreadChannelCache(wsEntity.getTGatewayConfigEntity().getTypeGroupCode());
-                                   ExecuteThread.executeSendThread(executorService,wsEntity);
-                               }catch(RuntimeException e){
-                                   //发送有问题  保存数据库 , 定时发送历史数据
-                                    if(ConstantUtils.KYE_4==Integer.parseInt(messagePojo.getMsgtype()) || ConstantUtils.KYE_7 ==Integer.parseInt(messagePojo.getMsgtype())) {
-                                        //保存数据库中
-                                        tReportingInforHistoryService.save(SendMessageFactory.getEntity(MsgTypeEnums.stateOf(Integer.parseInt(messagePojo.getMsgtype())).getInfo(),messagePojo.getSysid(),messagePojo.getSystype(),messagePojo.getMsgtype(),messagePojo.getConnectid(),wsEntity.getMessage()));
-                                    }
-                               }
-
+                               // try{
+                                SendMessageFactory.addSendFailCache(wsEntity);
+                                SessionRepository.sendFailCache.put(messagePojo.getMsgid().hashCode(),wsEntity);
+                                ExecutorService executorService=FixedThreadPool.getThreadChannelCache(wsEntity.getTGatewayConfigEntity().getTypeGroupCode());
+                                ExecuteThread.executeSendThread(executorService,wsEntity);
                             }
                         }
                     }
-                  /*  else {
-                        //SessionRepository.removeCaches(wsEntity.getSession().getId());
-                        String url = StringUtil.webSocketUrl(wsEntity.getTGatewayConfigEntity().getIp(),wsEntity.getTGatewayConfigEntity().getPort(),wsEntity.getTGatewayConfigEntity().getSocketName());
-                        firstAllianceFactory.firstAllianceConnection( wsEntity.getTGatewayConfigEntity().getTypeGroupCode(),WSClientService.class,url,wsEntity.getTGatewayConfigEntity(),wsEntity.getSession().getId());
-                    }*/
                 }
         }
 
@@ -121,6 +103,12 @@ public class SendMessageFactory {
             return entity;
         }
 
+       private static void addSendFailCache(WebSocketEntity wsEntity) {
+           wsEntity.setExpiresTimeStamp(ConstantUtils.EXPIRE_STIME_STAMP);
+           wsEntity.setSendTimeStamp(new Date().getTime());
+           wsEntity.setSendCount(wsEntity.getSendCount() +1);
+
+    }
 
     }
 

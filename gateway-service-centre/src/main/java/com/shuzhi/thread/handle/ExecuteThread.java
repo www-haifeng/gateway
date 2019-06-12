@@ -22,8 +22,6 @@ public class ExecuteThread {
             public void run(){
                     if(webSocketEntity.getSession().isOpen()){
                         webSocketEntity.getSession().getAsyncRemote().sendText(webSocketEntity.getMessage());
-                    }else{
-                            throw new RuntimeException("没有发送成功!");
                     }
 
             }
