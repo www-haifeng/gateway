@@ -1,5 +1,7 @@
 package com.shuzhi.service;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shuzhi.common.ConfigData;
@@ -7,16 +9,16 @@ import com.shuzhi.common.HttpCommandUtils;
 import com.shuzhi.common.Utils;
 import com.shuzhi.dao.SystemInfoData;
 import com.shuzhi.entity.MessageRevertData;
-import com.shuzhi.entity.commandResult.CommonResult;
-import com.shuzhi.entity.commandResult.GetScreenShotsResult;
-import com.shuzhi.entity.commandResult.QueryLoaclFileSizeResult;
-import com.shuzhi.entity.commandResult.XwalkLoadPageResult;
+import com.shuzhi.entity.commandResult.*;
 import com.shuzhi.producer.RabbitSender;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * 功能描述 命令业务逻辑处理
@@ -115,6 +117,7 @@ public class CommandService {
      * @Author: YHF
      * @date 2019/6/10
      */
+
     public void commandServiceClass(String url, String commandJSON, SystemInfoData systemInfoData,String commandType){
         try {
             //调用请求
@@ -127,9 +130,81 @@ public class CommandService {
                 GetScreenShotsResult gssr = mapper.readValue(resultJSON.replace("\\n",""), GetScreenShotsResult.class);
                 logger.info("请求返回结果:"+gssr.toString());
                 commandSend(gssr.toString(),systemInfoData);
-            }
+            }else if("queryAutomaticBrightness".equals(commandType)){
+                QueryAutomaticBrightnessResult qabr = mapper.readValue(resultJSON, QueryAutomaticBrightnessResult.class);
+                logger.info("请求返回结果:"+qabr.toString());
+                commandSend(qabr.toString(),systemInfoData);
+            }else if ("queryTimingBrightness".equals(commandType)){
+                //实例化返回对象
+                QueryTimingBrightnessResult qtbr = new QueryTimingBrightnessResult();
+                //取出接口要使用的参数
+                String type = mapper.readTree(resultJSON).get("_type").traverse(mapper).readValueAs(String.class);
+                qtbr.setType(type);
+                String task = mapper.readTree(resultJSON).get("task").traverse(mapper).readValueAs(String.class);
+                if (StringUtils.isEmpty(task) || "null".equals(task)){
+                    TaskResult tr = mapper.readValue(resultJSON.replace("\\n",""), TaskResult.class);
+                    logger.info("请求返回结果:"+tr.toString());
+                    commandSend(tr.toString(),systemInfoData);
+                    return;
+                }
+                //取出默认亮度
+                Integer defaultBrightness = mapper.readTree(task).get("defaultBrightness").traverse(mapper).readValueAs(Integer.class);
+                qtbr.setDefaultbrightness(defaultBrightness);
+                //取出当前亮度
+                Integer nowBrightness = mapper.readTree(task).get("brightness").traverse(mapper).readValueAs(Integer.class);
+                qtbr.setNowbrightness(nowBrightness);
+                //取出结果集中items
+                JSONArray items = mapper.readTree(task).get("items").traverse(mapper).readValueAs(JSONArray.class);
+                //取出items中schedules
+                JSONArray schedules = mapper.readTree(items.getJSONObject(0).toString()).get("schedules").traverse(mapper).readValueAs(JSONArray.class);
+                //取出控制时间范围内的亮度
+                Integer brightness = mapper.readTree(items.getJSONObject(0).toString()).get("brightness").traverse(mapper).readValueAs(Integer.class);
 
-        } catch (Exception e) {
+                qtbr.setBrightness(brightness);
+                //取出schedules中需要的元素
+                String startDate = mapper.readTree(schedules.getJSONObject(0).toString()).get("startDate").traverse(mapper).readValueAs(String.class);
+                qtbr.setStartdate(startDate);
+                String endDate = mapper.readTree(schedules.getJSONObject(0).toString()).get("endDate").traverse(mapper).readValueAs(String.class);
+                qtbr.setEnddate(endDate);
+                String startTime = mapper.readTree(schedules.getJSONObject(0).toString()).get("startTime").traverse(mapper).readValueAs(String.class);
+                qtbr.setStarttime(startTime);
+                String endTime = mapper.readTree(schedules.getJSONObject(0).toString()).get("endTime").traverse(mapper).readValueAs(String.class);
+                qtbr.setEndtime(endTime);
+                logger.info("请求返回结果:"+qtbr.toString());
+                commandSend(qtbr.toString(),systemInfoData);
+            }else if ("queryTimingSwitchScreen".equals(commandType)){
+                //实例化返回对象
+                QueryTimingSwitchScreen qtss = new QueryTimingSwitchScreen();
+                //取出接口要使用的参数
+                String type = mapper.readTree(resultJSON).get("_type").traverse(mapper).readValueAs(String.class);
+                qtss.setType(type);
+                String task = mapper.readTree(resultJSON).get("task").traverse(mapper).readValueAs(String.class);
+                if (StringUtils.isEmpty(task) || "null".equals(task)){
+                    TaskResult tr = mapper.readValue(resultJSON.replace("\\n",""), TaskResult.class);
+                    logger.info("请求返回结果:"+tr.toString());
+                    commandSend(tr.toString(),systemInfoData);
+                    return;
+                }
+                //取出结果集中items
+                JSONArray schedules = mapper.readTree(task).get("schedules").traverse(mapper).readValueAs(JSONArray.class);
+
+                //取出schedules中需要的元素
+                String startDate = mapper.readTree(schedules.getJSONObject(0).toString()).get("startDate").traverse(mapper).readValueAs(String.class);
+                qtss.setStartdate(startDate);
+                String endDate = mapper.readTree(schedules.getJSONObject(0).toString()).get("endDate").traverse(mapper).readValueAs(String.class);
+                qtss.setEnddate(endDate);
+                String startTime = mapper.readTree(schedules.getJSONObject(0).toString()).get("startTime").traverse(mapper).readValueAs(String.class);
+                qtss.setStarttime(startTime);
+                String endTime = mapper.readTree(schedules.getJSONObject(0).toString()).get("endTime").traverse(mapper).readValueAs(String.class);
+                qtss.setEndtime(endTime);
+                logger.info("请求返回结果:"+qtss.toString());
+                commandSend(qtss.toString(),systemInfoData);
+            }else if("queryTimingRestartDevice".equals(commandType)) {
+                TimingRestartDeviceResult trdr = mapper.readValue(resultJSON, TimingRestartDeviceResult.class);
+                logger.info("请求返回结果:" + trdr.toString());
+                commandSend(trdr.toString(), systemInfoData);
+            }
+            } catch (Exception e) {
             e.printStackTrace();
         }
     }
