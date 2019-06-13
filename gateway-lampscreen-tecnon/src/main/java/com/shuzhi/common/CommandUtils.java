@@ -16,6 +16,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  *功能描述 命令工具
@@ -184,20 +187,75 @@ public class CommandUtils {
                         commandService.commandServiceClass(url, gss.toString(),systemInfoData,"getScreenshots");
                         break;
                     case "automaticBrightness":
+                        //设置自动亮度
+                        AutomaticBrightness ab = mapper.readValue(jsonParentNode.path("msg").path("data").toString(), AutomaticBrightness.class);
+                        commandService.commandServiceString(url, ab.toString(),systemInfoData);
                         break;
                     case "queryAutomaticBrightness":
+                        //查询自动亮度
+                        commandService.commandServiceClass(url,"{\"type\": \"getAutoBrightness\"} " ,systemInfoData,"queryAutomaticBrightness");
                         break;
                     case "timingBrightness":
+                        //定时亮度
+                        //解析参数
+                        TimingBrightnessParameters tbp = mapper.readValue(jsonParentNode.path("msg").path("data").toString(), TimingBrightnessParameters.class);
+                        //封装Schedules
+                        TimingBrightnessTaskItemsSchedules tbtis = new TimingBrightnessTaskItemsSchedules();
+                        tbtis.setStartDate(tbp.getStartdate());
+                        tbtis.setEndDate(tbp.getEnddate());
+                        tbtis.setStartTime(tbp.getStarttime());
+                        tbtis.setEndTime(tbp.getEndtime());
+                        //封装Items
+                        TimingBrightnessTaskItems tbti = new TimingBrightnessTaskItems();
+                        tbti.setBrightness(tbp.getBrightness());
+                        List schedulesList = new ArrayList<>();
+                        schedulesList.add(tbtis);
+                        tbti.setSchedules(schedulesList);
+                        //封装Task
+                        TimingBrightnessTask tbt = new TimingBrightnessTask();
+                        List itemsList = new ArrayList<>();
+                        itemsList.add(tbti);
+                        tbt.setDefaultBrightness(tbp.getDefaultbrightness());
+                        tbt.setItems(itemsList);
+                        //封装TimingBrightness 最终协议
+                        TimingBrightness tb = new TimingBrightness();
+                        tb.setTask(tbt);
+                        commandService.commandServiceString(url, tb.toString(),systemInfoData);
                         break;
                     case "queryTimingBrightness":
+                        //查询定时亮度
+                        commandService.commandServiceClass(url,"{\"type\": \"getTimedBrightness\"} " ,systemInfoData,"queryTimingBrightness");
                         break;
                     case "timingSwitchScreen":
+                        //定时开关屏
+                        //解析参数
+                        TimingSwitchScreenParameters tssp = mapper.readValue(jsonParentNode.path("msg").path("data").toString(), TimingSwitchScreenParameters.class);
+                        //封装Schedules
+                        TimingSwitchScreenTaskSchedules tssts = new TimingSwitchScreenTaskSchedules();
+                        tssts.setStartDate(tssp.getStartdate());
+                        tssts.setEndDate(tssp.getEnddate());
+                        tssts.setStartTime(tssp.getStarttime());
+                        tssts.setEndTime(tssp.getEndtime());
+                        //封装Task
+                        TimingSwitchScreenTask tsst = new TimingSwitchScreenTask();
+                        List schedulesListSs = new ArrayList<>();
+                        schedulesListSs.add(tssts);
+                        tsst.setSchedules(schedulesListSs);
+                        //封装TimingBrightness 最终协议
+                        TimingSwitchScreen tss = new TimingSwitchScreen();
+                        tss.setTask(tsst);
+                        commandService.commandServiceString(url, tss.toString(),systemInfoData);
                         break;
                     case "queryTimingSwitchScreen":
+                        //查询定时开关屏
+                        commandService.commandServiceClass(url,"{\"type\": \"getTimedScreening\"} " ,systemInfoData,"queryTimingSwitchScreen");
                         break;
                     case "timingRestartDevice":
+                        TimingRestartDevice trd = mapper.readValue(jsonParentNode.path("msg").path("data").toString(), TimingRestartDevice.class);
+                        commandService.commandServiceString(url, trd.toString(),systemInfoData);
                         break;
                     case "queryTimingRestartDevice":
+                        commandService.commandServiceClass(url,"{\"type\": \"getTimedReboot\"} " ,systemInfoData,"queryTimingRestartDevice");
                         break;
                         default:
                             logger.error("没有找到对应请求命令,请查证");
