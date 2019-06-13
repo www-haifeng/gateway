@@ -34,7 +34,7 @@ public class SchedulerHeartBeatTask {
     @Autowired
     private FirstAllianceFactory firstAllianceFactory;
 
-    @Scheduled(fixedRate = 15000)
+    @Scheduled(cron = "${scheduled.job.schedulerheartbeat}")
     private  void process(){
 
         Map<String, String> sessionChannelCaches = SessionRepository.getsessionChannelCaches();

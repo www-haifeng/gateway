@@ -80,7 +80,7 @@ public class SendMessageFactory {
                                 pojo.setMsgid(messagePojo.getMsgid());
                                 wsEntity.setMessage(JsonConvertBeanUtil.bean2json(pojo));
                                 ExecutorService executorService=FixedThreadPool.getThreadChannelCache(wsEntity.getTGatewayConfigEntity().getTypeGroupCode());
-                               // ExecuteThread.executeSendThread(executorService,wsEntity);
+                               // ExecuteThread.executeSenadThread(executorService,wsEntity);
 
                                 boolean flug = ExecuteThread.executeSendThread(executorService,wsEntity);
 

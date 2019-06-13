@@ -32,7 +32,7 @@ public class SchedulerSendFailTask {
     @Autowired
     private SendMessageFactory sendMessageFactory;
 
-    @Scheduled(fixedRate = 1000)
+    @Scheduled(cron = "${scheduled.job.sendfail}")
     private void process(){
 
 
@@ -41,7 +41,7 @@ public class SchedulerSendFailTask {
         if(!sendFailCaches.isEmpty() ){
             for (Map.Entry<Integer, Object> map: sendFailCaches.entrySet()) {
                 WebSocketEntity wsEntity = (WebSocketEntity) map.getValue();
-                if(SchedulerSendFailTask.sendCount(wsEntity.getSendCount()) && SchedulerSendFailTask.timeComparison(wsEntity.getSendTimeStamp(),wsEntity.getExpiresTimeStamp())){
+                if( SchedulerSendFailTask.timeComparison(wsEntity.getSendTimeStamp(),ConstantUtils.EXPIRE_STIME) &&SchedulerSendFailTask.sendCount(wsEntity.getSendCount()) && SchedulerSendFailTask.timeComparison(wsEntity.getSendTimeStamp(),wsEntity.getExpiresTimeStamp())){
                     sendMessageFactory.sendMessage(wsEntity);
                 }
             }
