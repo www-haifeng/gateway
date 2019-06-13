@@ -7,7 +7,14 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * <B>系统名称：</B>通用平台<BR>
+ * <B>模块名称：</B>通用平台-公共服务<BR>
+ * <B>中文类名：</B>通用平台-公共服务-FastJsonConvert<BR>
+ * <B>概要说明：</B><BR>
+ * @author Yujq
+ * @since 2019年06月04日 上午16:35:52
+ */
 public class FastJsonConvertUtil {
 
 	private static final SerializerFeature[] featuresWithNullValue = { SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullBooleanAsFalse,

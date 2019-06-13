@@ -1,6 +1,5 @@
 package com.shuzhi.controller;
 
-import com.shuzhi.service.ListenerService;
 import com.shuzhi.service.impl.LonBon;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,15 +19,6 @@ public class LonBonController {
 //    int terNum = 111002;
     @Resource(name="LonBon")
     private LonBon lonBon;
-    @Autowired
-    private ListenerService listenerService;
-    /**
-     *   发布事件
-     */
-    @RequestMapping("/publish")
-    public void publish() {
-        listenerService.publish("hello");
-    }
 
     /**
      *   接听

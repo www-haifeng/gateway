@@ -9,7 +9,6 @@ import java.util.List;
 /**
  * Created by ztt on 2019/6/11
  **/
-@Service
 public class TerminalInfo extends Structure {
 
     public static class ByReference extends TerminalInfo implements Structure.ByReference{}
