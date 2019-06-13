@@ -17,6 +17,8 @@
         <module>gateway-broadcast-spon</module>
         <module>gateway-lampscreen-tecnon</module>
         <module>gateway-service-centre</module>
+        <module>gateway-alarm-service-lonbon</module>
+        <module>gateway-alarm-client-lonbon</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
