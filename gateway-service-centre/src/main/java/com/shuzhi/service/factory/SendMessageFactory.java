@@ -49,46 +49,72 @@ public class SendMessageFactory {
                     if(SessionManage.sessionStatus(wsEntity.getSession())) {
                     // 存活时候 发送首次建联
                         try {
-                            wsEntity.setFirstAllianceConnection(Boolean.TRUE);
+
                             MessagePojo messagePojo = MessageFactoryModelUtil.messagePojoModel(key, ConstantUtils.KYE_5,wsEntity.getTGatewayConfigEntity().getSysType(),wsEntity.getTGatewayConfigEntity().getSysId(),wsEntity.getTGatewayConfigEntity().getConnectId());
                             wsEntity.setMessage(JsonConvertBeanUtil.bean2json(messagePojo));
                             ExecutorService executorService=FixedThreadPool.getThreadChannelCache(wsEntity.getTGatewayConfigEntity().getTypeGroupCode());
-                            ExecuteThread.executeSendThread(executorService,wsEntity);
+                            boolean flug = ExecuteThread.executeSendThread(executorService,wsEntity);
+
+                            if (flug) {
+                                log.info("首次建联发送成功");
+                                wsEntity.setFirstAllianceConnection(Boolean.TRUE);
+                            }else{
+                                log.info("首次建联发送失败");
+                            }
+
+                           // ExecuteThread.executeSendThread(executorService,wsEntity);
+
+
                         } catch (Exception e) {
                            log.info("首次建联失败");
                         }
                     }
                 }else {
-                    if(SessionManage.sessionStatus(wsEntity.getSession())) {
+
                         MessagePojo messagePojo= (MessagePojo) JsonConvertBeanUtil.json2Object( wsEntity.getMessage(),MessagePojo.class);
                         //2.开始发送对应消息  如果是命令消息,回执后在放入mq中,设备在操作
                         if(messagePojo != null){
                             //下控
                             if(ConstantUtils.KYE_1 ==Integer.parseInt(messagePojo.getMsgtype()) ){
                                 MessagePojo pojo = MessageFactoryModelUtil.messagePojoModel(key, ConstantUtils.KYE_2,wsEntity.getTGatewayConfigEntity().getSysType(),wsEntity.getTGatewayConfigEntity().getSysId(),wsEntity.getTGatewayConfigEntity().getConnectId());
+                                pojo.setMsgid(messagePojo.getMsgid());
                                 wsEntity.setMessage(JsonConvertBeanUtil.bean2json(pojo));
                                 ExecutorService executorService=FixedThreadPool.getThreadChannelCache(wsEntity.getTGatewayConfigEntity().getTypeGroupCode());
-                                ExecuteThread.executeSendThread(executorService,wsEntity);
-                                String exchange = SessionRepository.codeSocketNameKey(Integer.parseInt(pojo.getType()));
-                                String topic = SessionRepository.codeSocketNameValue(Integer.parseInt(pojo.getType()));
-                                //放入到mq中
-                                try {
-                                    rabbitSender.send(exchange,topic,wsEntity.getMessage());
-                                    log.info("下控命令,发送mq成功,交换机="+exchange +" 主题="+topic+" 消息="+wsEntity.getMessage());
-                                } catch (Exception e) {
-                                    log.info("下控命令,发送mq失败,交换机="+exchange +" 主题="+topic+" 消息="+wsEntity.getMessage());
+                               // ExecuteThread.executeSendThread(executorService,wsEntity);
+
+                                boolean flug = ExecuteThread.executeSendThread(executorService,wsEntity);
+
+                                if (flug) {
+                                    log.info("下控回执消息发送成功");
+                                    messagePojo= (MessagePojo) JsonConvertBeanUtil.copyProperties(messagePojo,messagePojo.getMsg());
+
+                                    String exchange = SessionRepository.codeSocketNameKey(Integer.parseInt(messagePojo.getType()));
+                                    String topic = SessionRepository.codeSocketNameValue(Integer.parseInt(messagePojo.getType()));
+                                    //放入到mq中
+                                    try {
+                                        rabbitSender.send(exchange,topic,wsEntity.getMessage());
+                                        log.info("下控命令,发送mq成功,交换机="+exchange +" 主题="+topic+" 消息="+wsEntity.getMessage());
+                                    } catch (Exception e) {
+                                        log.info("下控命令,发送mq失败,交换机="+exchange +" 主题="+topic+" 消息="+wsEntity.getMessage());
+                                    }
+                                }else{
+                                    log.info("下控回执消息发送失败,可能交换机路由不存在");
                                 }
+
                             }else {
                                 //不发控制命令 都是拼好发送
                                // try{
                                 SendMessageFactory.addSendFailCache(wsEntity);
                                 SessionRepository.sendFailCache.put(messagePojo.getMsgid().hashCode(),wsEntity);
                                 ExecutorService executorService=FixedThreadPool.getThreadChannelCache(wsEntity.getTGatewayConfigEntity().getTypeGroupCode());
-                                ExecuteThread.executeSendThread(executorService,wsEntity);
+                                boolean flug = ExecuteThread.executeSendThread(executorService,wsEntity);
+                                if(flug){
+                                    log.info("不发控制命令 都是拼好发送成功");
+                                }
                             }
                         }
                     }
-                }
+
         }
 
     private static TReportingInforHistoryEntity getEntity(String msgName,String sysid,String systype,String msgType ,String connectid,String data){

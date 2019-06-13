@@ -28,8 +28,7 @@ import java.util.concurrent.ExecutorService;
 @Slf4j
 @Component
 public class SchedulerSendFailTask {
-    @Value("${gateway.key}")
-    private String key ;
+
     @Autowired
     private SendMessageFactory sendMessageFactory;
 
@@ -49,7 +48,7 @@ public class SchedulerSendFailTask {
         }
     }
     //为true 为超时, false 为 未超时
-    private static  Boolean  timeComparison(Long startTime,Long expiresTimeStamp){
+    public static  Boolean  timeComparison(Long startTime,Long expiresTimeStamp){
         return new Date().getTime() >= startTime+expiresTimeStamp ? true :false;
     }
     //为true  可以继续发送, 为false 达到发送次数 需要存数据库中
@@ -57,4 +56,11 @@ public class SchedulerSendFailTask {
         return sendCount < ConstantUtils.SEND_COUNT ? true :false;
     }
 
+
+    public  static  void  checkMsg(Long startTime,Long expiresTimeStamp,Map<Integer, Object> sendFailCaches,MessagePojo messagePojo){
+        if(SchedulerSendFailTask.timeComparison(startTime,expiresTimeStamp)){
+            sendFailCaches.remove(messagePojo.getMsgid().hashCode());
+        }
+
+    }
 }

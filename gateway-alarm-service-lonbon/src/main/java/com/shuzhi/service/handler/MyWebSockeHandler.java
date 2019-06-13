@@ -88,7 +88,7 @@ public class MyWebSockeHandler extends SimpleChannelInboundHandler<Object> {
 //        map.put("c",3);
         String a = "{" +
                 "\"msgid\": \"b7e84115-3aae-4d72-b49a-ec91a8847482\"," +
-                "\"msgtype\": 0," +
+                "\"msgtype\": 1," +
                 "\"systype\": 1001," +
                 "\"sysid\": 1," +
                 "\"connectid\": 1," +

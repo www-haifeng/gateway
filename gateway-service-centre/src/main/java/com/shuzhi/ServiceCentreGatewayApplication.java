@@ -9,6 +9,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,7 +32,7 @@ import java.util.Set;
  * @描述： 网关服务
  *
  */
-
+@Slf4j
 @SpringBootApplication
 @EnableScheduling
 @EnableJpaAuditing
@@ -40,8 +41,8 @@ public class ServiceCentreGatewayApplication {
         ConfigurableApplicationContext context = SpringApplication.run(ServiceCentreGatewayApplication.class, args);
 
         //开启websocket服务端
-        TCPServer tcpServer = context.getBean(TCPServer.class);
-        tcpServer.start();
+        //TCPServer tcpServer = context.getBean(TCPServer.class);
+        //tcpServer.start();
         //socketClientCreate
     }
 

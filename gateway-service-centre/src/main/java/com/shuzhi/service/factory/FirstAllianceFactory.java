@@ -32,9 +32,10 @@ public class FirstAllianceFactory {
     */
     public void firstAllianceConnection(String typeGroupCode,Class clazz,String url,TGatewayConfigEntity tGatewayConfigEntity,String sessionId){
         Session session = WebSocketUtil.socketClientCreate(WSClientService.class, url);
+        log.info("首次建立session返回结果"+session);
         if(session != null){
             if(StringUtil.isNotEmpty(sessionId)){
-                SessionRepository.removeCaches(session.getId());
+                SessionRepository.removeCaches(sessionId);
             }
 
             WebSocketEntity entity = new WebSocketEntity();

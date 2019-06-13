@@ -1,24 +1,30 @@
 package com.shuzhi.conusmer;
 
 import com.rabbitmq.client.Channel;
+import com.shuzhi.entity.WebSocketEntity;
+import com.shuzhi.enums.TypeGropCodeEnums;
+import com.shuzhi.service.factory.SendMessageFactory;
+import com.shuzhi.util.SessionRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.*;
 import org.springframework.amqp.support.AmqpHeaders;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
-import org.springframework.messaging.handler.annotation.Headers;
-import org.springframework.messaging.handler.annotation.Payload;
+
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
+
 /**
 * @Program: rabbitmq接收方法
 * @Description: 
 * @Author: YuJQ
 * @Create: 2019/6/4 16:40
 **/
-
+@Slf4j
 @Component
 public class RabbitReceiver {
-
+	@Autowired
+	private SendMessageFactory sendMessageFactory;
 	/**
 	 * @Description: 监听上报主题
 	 * @Param :
@@ -38,8 +44,11 @@ public class RabbitReceiver {
 	@RabbitHandler
 	public void upMessage(Message message, Channel channel) throws Exception {
 		try {
-			System.err.println("--------------------------------------");
-			System.err.println("upMessage消费端Payload: " + message.getPayload());
+
+			log.info("收到上报主题"+message.getPayload().toString());
+			WebSocketEntity entity = (WebSocketEntity) SessionRepository.getChannelCache(String.valueOf(TypeGropCodeEnums.upMessage.getCode()));
+			sendMessageFactory.sendMessage(entity);
+
 			Long deliveryTag = (Long) message.getHeaders().get(AmqpHeaders.DELIVERY_TAG);
 			//手工ACK
 			channel.basicAck(deliveryTag, false);
@@ -66,8 +75,10 @@ public class RabbitReceiver {
 	@RabbitHandler
 	public void lowerControlMessage(Message message, Channel channel) throws Exception {
 		try {
-			System.err.println("--------------------------------------");
-			System.err.println("lowerControlMessage消费端Payload: " + message.getPayload());
+			log.info("监听下控主题"+message.getPayload().toString());
+			WebSocketEntity entity = (WebSocketEntity) SessionRepository.getChannelCache(String.valueOf(TypeGropCodeEnums.lowerControlMessage.getCode()));
+			sendMessageFactory.sendMessage(entity);
+
 			Long deliveryTag = (Long) message.getHeaders().get(AmqpHeaders.DELIVERY_TAG);
 			//手工ACK
 			channel.basicAck(deliveryTag, false);
@@ -94,8 +105,10 @@ public class RabbitReceiver {
 	@RabbitHandler
 	public void wifiMessage(Message message, Channel channel) throws Exception {
 		try {
-			System.err.println("--------------------------------------");
-			System.err.println("wifiMessage消费端Payload: " + message.getPayload());
+			log.info("监听WIFI主题"+message.getPayload().toString());
+			WebSocketEntity entity = (WebSocketEntity) SessionRepository.getChannelCache(String.valueOf(TypeGropCodeEnums.wifiMessage.getCode()));
+			sendMessageFactory.sendMessage(entity);
+
 			Long deliveryTag = (Long) message.getHeaders().get(AmqpHeaders.DELIVERY_TAG);
 			//手工ACK
 			channel.basicAck(deliveryTag, false);
@@ -122,8 +135,10 @@ public class RabbitReceiver {
 	@RabbitHandler
 	public void alarmMessage(Message message, Channel channel) throws Exception {
 		try {
-			System.err.println("--------------------------------------");
-			System.err.println("alarmMessage消费端Payload: " + message.getPayload());
+			log.info("监听告警主题"+message.getPayload().toString());
+			WebSocketEntity entity = (WebSocketEntity) SessionRepository.getChannelCache(String.valueOf(TypeGropCodeEnums.alarmMessage.getCode()));
+			sendMessageFactory.sendMessage(entity);
+
 			Long deliveryTag = (Long) message.getHeaders().get(AmqpHeaders.DELIVERY_TAG);
 			//手工ACK
 			channel.basicAck(deliveryTag, false);

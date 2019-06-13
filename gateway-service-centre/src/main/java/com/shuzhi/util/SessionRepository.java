@@ -30,6 +30,7 @@ public class SessionRepository {
 
 	public static void addKeyValue(Integer type,String key,String value){
 		Map<String,String> map = new HashMap<>();
+		map.put(key,value);
 		codeSocketName.put(type,map);
 	}
 
