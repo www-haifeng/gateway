@@ -2,8 +2,11 @@ package com.shuzhi.thread.scheduler;
 
 import com.shuzhi.conusmer.WSClientService;
 import com.shuzhi.entity.TGatewayConfigEntity;
+import com.shuzhi.entity.TReportingInforHistoryEntity;
 import com.shuzhi.entity.WebSocketEntity;
+import com.shuzhi.enums.TypeGropCodeEnums;
 import com.shuzhi.pojo.MessagePojo;
+import com.shuzhi.service.TReportingInforHistoryService;
 import com.shuzhi.service.factory.FirstAllianceFactory;
 import com.shuzhi.service.factory.SendMessageFactory;
 import com.shuzhi.thread.FixedThreadPool;
@@ -28,7 +31,8 @@ import java.util.concurrent.ExecutorService;
 @Slf4j
 @Component
 public class SchedulerSendFailTask {
-
+    @Autowired
+    private TReportingInforHistoryService tReportingInforHistoryService;
     @Autowired
     private SendMessageFactory sendMessageFactory;
 
@@ -41,8 +45,14 @@ public class SchedulerSendFailTask {
         if(!sendFailCaches.isEmpty() ){
             for (Map.Entry<Integer, Object> map: sendFailCaches.entrySet()) {
                 WebSocketEntity wsEntity = (WebSocketEntity) map.getValue();
-                if( SchedulerSendFailTask.timeComparison(wsEntity.getSendTimeStamp(),ConstantUtils.EXPIRE_STIME) &&SchedulerSendFailTask.sendCount(wsEntity.getSendCount()) && SchedulerSendFailTask.timeComparison(wsEntity.getSendTimeStamp(),wsEntity.getExpiresTimeStamp())){
-                    sendMessageFactory.sendMessage(wsEntity);
+                //如果大于发送次数 就存入导数据库中
+                if(!SchedulerSendFailTask.timeComparison(wsEntity.getSendTimeStamp(),ConstantUtils.EXPIRE_STIME) && !SchedulerSendFailTask.sendCount(wsEntity.getSendCount())  && !SchedulerSendFailTask.timeComparison(wsEntity.getSendTimeStamp(),wsEntity.getExpiresTimeStamp())){
+                    TReportingInforHistoryEntity entity = SchedulerSendFailTask.getEntity(wsEntity);
+                    tReportingInforHistoryService.save( entity);
+
+                }else if(SchedulerSendFailTask.timeComparison(wsEntity.getSendTimeStamp(),ConstantUtils.EXPIRE_STIME) && SchedulerSendFailTask.sendCount(wsEntity.getSendCount())  && SchedulerSendFailTask.timeComparison(wsEntity.getSendTimeStamp(),wsEntity.getExpiresTimeStamp())){
+                        sendMessageFactory.sendMessage(wsEntity);
+
                 }
             }
         }
@@ -62,5 +72,26 @@ public class SchedulerSendFailTask {
             sendFailCaches.remove(messagePojo.getMsgid().hashCode());
         }
 
+    }
+
+    private static TReportingInforHistoryEntity getEntity( WebSocketEntity wsEntity){
+        TGatewayConfigEntity tGatewayConfigEntity = wsEntity.getTGatewayConfigEntity();
+        String  sysid = tGatewayConfigEntity.getSysId();
+        String systype = tGatewayConfigEntity.getSysType();
+        String msgType = tGatewayConfigEntity.getTypeGroupCode();
+        String msgName =  tGatewayConfigEntity.getDescribe();
+        String connectid =  tGatewayConfigEntity.getConnectId();
+        String data = wsEntity.getMessage();
+
+
+        TReportingInforHistoryEntity entity = new TReportingInforHistoryEntity();
+        entity.setMsgName(msgName);
+        entity.setSysid(sysid);
+        entity.setSystype(systype);
+        entity.setTimestamp(new Date());
+        entity.setMsgType(msgType);
+        entity.setConnectid(connectid);
+        entity.setData(data);
+        return entity;
     }
 }

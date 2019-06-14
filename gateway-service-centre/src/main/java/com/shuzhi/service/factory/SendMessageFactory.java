@@ -34,8 +34,7 @@ import java.util.concurrent.ExecutorService;
 public class SendMessageFactory {
 
 
-    @Autowired
-    private TReportingInforHistoryService tReportingInforHistoryService;
+
 
     @Autowired
     private RabbitSender rabbitSender;
@@ -76,6 +75,8 @@ public class SendMessageFactory {
                         if(messagePojo != null){
                             //下控
                             if(ConstantUtils.KYE_1 ==Integer.parseInt(messagePojo.getMsgtype()) ){
+                                //纪纯平台发来的 原始下控数据
+                                String rabbitMqMessage = wsEntity.getMessage();
                                 MessagePojo pojo = MessageFactoryModelUtil.messagePojoModel(key, ConstantUtils.KYE_2,wsEntity.getTGatewayConfigEntity().getSysType(),wsEntity.getTGatewayConfigEntity().getSysId(),wsEntity.getTGatewayConfigEntity().getConnectId());
                                 pojo.setMsgid(messagePojo.getMsgid());
                                 wsEntity.setMessage(JsonConvertBeanUtil.bean2json(pojo));
@@ -92,10 +93,10 @@ public class SendMessageFactory {
                                     String topic = SessionRepository.codeSocketNameValue(Integer.parseInt(messagePojo.getType()));
                                     //放入到mq中
                                     try {
-                                        rabbitSender.send(exchange,topic,wsEntity.getMessage());
-                                        log.info("下控命令,发送mq成功,交换机="+exchange +" 主题="+topic+" 消息="+wsEntity.getMessage());
+                                        rabbitSender.send(exchange,topic,rabbitMqMessage);
+                                        log.info("下控命令,发送mq成功,交换机="+exchange +" 主题="+topic+" 消息="+rabbitMqMessage);
                                     } catch (Exception e) {
-                                        log.info("下控命令,发送mq失败,交换机="+exchange +" 主题="+topic+" 消息="+wsEntity.getMessage());
+                                        log.info("下控命令,发送mq失败,交换机="+exchange +" 主题="+topic+" 消息="+rabbitMqMessage);
                                     }
                                 }else{
                                     log.info("下控回执消息发送失败,可能交换机路由不存在");
@@ -117,17 +118,7 @@ public class SendMessageFactory {
 
         }
 
-    private static TReportingInforHistoryEntity getEntity(String msgName,String sysid,String systype,String msgType ,String connectid,String data){
-            TReportingInforHistoryEntity entity = new TReportingInforHistoryEntity();
-            entity.setMsgName(msgName);
-            entity.setSysid(sysid);
-            entity.setSystype(systype);
-            entity.setTimestamp(new Date());
-            entity.setMsgType(msgType);
-            entity.setConnectid(connectid);
-            entity.setData(data);
-            return entity;
-        }
+
 
        private static void addSendFailCache(WebSocketEntity wsEntity) {
            wsEntity.setExpiresTimeStamp(ConstantUtils.EXPIRE_STIME_STAMP);
