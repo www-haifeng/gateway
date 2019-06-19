@@ -7,7 +7,7 @@ package com.shuzhi.enums;
 **/
 public enum TypeTopicQueneEnums {
 
-    abloomy(1001, "韵盛发"), spon(1002, "世邦"), tecnon(1003, "太龙");
+    abloomy(1001, "韵盛发"), spon(1002, "世邦"), tecnon(1003, "太龙"),lonbon(1004,"来邦");
     private String info;
     private int code;
 
