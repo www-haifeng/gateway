@@ -3,6 +3,7 @@ package com.shuzhi.common;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.*;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 /**
@@ -12,6 +13,7 @@ import org.springframework.web.client.RestTemplate;
  * @params
  * @return
  */
+@Component
 public class HttpCommandUtils {
     private final static Logger logger = LoggerFactory.getLogger(HttpCommandUtils.class);
 
@@ -20,7 +22,7 @@ public class HttpCommandUtils {
      * @Author: YHF
      * @date 2019/6/6
      */
-    public static String postHTTP(String url,String jsondata){
+    public String postHTTP(String url,String jsondata){
         //设置请求头信息
         HttpHeaders headers = new HttpHeaders();
         MediaType type = MediaType.parseMediaType("application/json; charset=UTF-8");
@@ -32,13 +34,13 @@ public class HttpCommandUtils {
         try {
             ResponseEntity<String> result = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
             logger.info("接收到请求返回数据"+result.getBody());
-            String encoding = EncodingUtil.getEncoding(result.getBody());
+           /* String encoding = EncodingUtil.getEncoding(result.getBody());
             if ("未识别编码格式".equals(encoding)){
                 return result.getBody();
             }else{
                 return new String(result.getBody().getBytes(encoding),"UTF-8");
-            }
-
+            }*/
+            return result.getBody();
         }catch (Exception e){
             logger.error("请求出错,详细信息:"+ e.getMessage());
             return null;

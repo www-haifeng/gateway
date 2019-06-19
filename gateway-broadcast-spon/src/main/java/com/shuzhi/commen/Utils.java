@@ -40,8 +40,8 @@ public class Utils {
      * @Author: YHF
      * @date 2019/6/10
      */
-    public static String  getTimeStamp(){
-        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS").format(new Date());
+    public String  getTimeStamp(){
+        return new SimpleDateFormat("yyyy-MM-dd T HH:mm:ss:SSS").format(new Date());
     }
 
     /**
@@ -70,7 +70,7 @@ public class Utils {
         return shaStr;
     }
 
-    private static String addPwd(String inputStr) {
+    private String addPwd(String inputStr) {
         BigInteger sha = null;
         System.out.println("=======加密前的数据:" + inputStr);
         byte[] inputData = inputStr.getBytes();
@@ -87,7 +87,7 @@ public class Utils {
     }
 
     /**对字符串进行MD5编码*/
-    private static String encodeByMD5(String originString){
+    private String encodeByMD5(String originString){
         if (originString!=null) {
             try {
                 //创建具有指定算法名称的信息摘要
@@ -109,7 +109,7 @@ public class Utils {
      * @param b 字节数组
      * @return 十六进制字符串
      */
-    private static String byteArrayToHexString(byte[] b){
+    private String byteArrayToHexString(byte[] b){
         StringBuffer resultSb = new StringBuffer();
         for(int i=0;i<b.length;i++){
             resultSb.append(byteToHexString(b[i]));
@@ -118,7 +118,7 @@ public class Utils {
     }
 
     //将一个字节转化成十六进制形式的字符串
-    private static String byteToHexString(byte b){
+    private String byteToHexString(byte b){
         int n = b;
         if(n<0)
             n=256+n;

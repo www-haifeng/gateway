@@ -3,8 +3,8 @@ package com.shuzhi.common;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shuzhi.cache.Cache;
-import com.shuzhi.dao.MessageData;
-import com.shuzhi.dao.SystemInfoData;
+import com.shuzhi.entity.MessageData;
+import com.shuzhi.entity.SystemInfoData;
 import com.shuzhi.entity.CommandInfo;
 import com.shuzhi.entity.DeviceInfo;
 import com.shuzhi.entity.command.*;
@@ -36,6 +36,8 @@ public class CommandUtils {
     private Utils utils;
     @Autowired
     private ObjectMapper mapper;
+    @Autowired
+    private HttpCommandUtils httpCommandUtils;
     /**
      * @Description:匹配数据指令
      * @Author: YHF
@@ -61,11 +63,11 @@ public class CommandUtils {
             //获取设备缓存
             DeviceInfo deviceInfo = Cache.deviceInfoMap.get(messageData.getDid());
             if (commandInfo == null){
-                logger.error("未查询到太龙灯杆屏cmdid为:"+messageData.getCmdid()+"的命令,放弃请求");
+                logger.error("未查询到灯杆屏设备cmdid为:"+messageData.getCmdid()+"的命令,放弃请求");
                 return;
             }
             if (deviceInfo == null){
-                logger.error("未查询到控制卡为编号为:"+messageData.getDid()+"的太龙灯杆屏设备,放弃请求");
+                logger.error("未查询到控制卡为编号为:"+messageData.getDid()+"的灯杆屏设备,放弃请求");
                 return;
             }
             //获取url
@@ -139,7 +141,7 @@ public class CommandUtils {
                         //加载H5需要先启动xwalk
                         String xwalkStart = "{ \"type\": \"startActivity\",\"apk\": \"com.xixun.xy.xwalk\"}";
                         //调用xwalk
-                        String startStutas = HttpCommandUtils.postHTTP(url, xwalkStart);
+                        String startStutas = httpCommandUtils.postHTTP(url, xwalkStart);
                         if (!StringUtils.isEmpty(startStutas)){
                             JsonNode typeJson = mapper.readTree(startStutas).get("_type");
                             if ("success".equals(typeJson.traverse(mapper).readValueAs(String.class))){
@@ -168,6 +170,9 @@ public class CommandUtils {
                         break;
                     case "downFileToLocal":
                         //下载文件 等待与世邦广播一起特殊处理
+                        DownFileToLocal downFileToLocal = mapper.readValue(jsonParentNode.path("msg").path("data").toString(), DownFileToLocal.class);
+                        downFileToLocal.setType("downloadFileToLocal");
+                        commandService.commandServiceString(url, downFileToLocal.toString(),systemInfoData);
                         break;
                     case "delFileToLocal":
                         //删除内存中的文件

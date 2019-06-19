@@ -3,6 +3,7 @@ package com.shuzhi.commen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.*;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 /**
@@ -12,6 +13,7 @@ import org.springframework.web.client.RestTemplate;
  * @params
  * @return
  */
+@Component
 public class HttpCommandUtils {
     private final static Logger logger = LoggerFactory.getLogger(HttpCommandUtils.class);
 
@@ -20,7 +22,7 @@ public class HttpCommandUtils {
      * @Author: YHF
      * @date 2019/6/6
      */
-    public static String postHTTP(String url,String jsondata){
+    public String postHTTP(String url,String jsondata){
         //设置请求头信息
         HttpHeaders headers = new HttpHeaders();
         MediaType type = MediaType.parseMediaType("application/x-www-form-urlencoded;charset=UTF-8");

@@ -20,6 +20,9 @@ public class ConfigData {
     //命令回执使用 失败命令码 为com.shuzhi.entity.MessageRevertData 中code提供
     private int failedCode;
 
+    //命令回执消息类型
+    private int msgtypeCommandReturn;
+
     public String getName() {
         return name;
     }
@@ -50,5 +53,13 @@ public class ConfigData {
 
     public void setFailedCode(int failedCode) {
         this.failedCode = failedCode;
+    }
+
+    public int getMsgtypeCommandReturn() {
+        return msgtypeCommandReturn;
+    }
+
+    public void setMsgtypeCommandReturn(int msgtypeCommandReturn) {
+        this.msgtypeCommandReturn = msgtypeCommandReturn;
     }
 }

@@ -1,25 +1,16 @@
 package com.shuzhi.entity.command;
 
 public class AddMediaData {
-    private String filename;
-    private String filepath;
+    private String file;
     private String subpath;
     private String unformat;
 
-    public String getFilename() {
-        return filename;
+    public String getFile() {
+        return file;
     }
 
-    public void setFilename(String filename) {
-        this.filename = filename;
-    }
-
-    public String getFilepath() {
-        return filepath;
-    }
-
-    public void setFilepath(String filepath) {
-        this.filepath = filepath;
+    public void setFile(String file) {
+        this.file = file;
     }
 
     public String getSubpath() {

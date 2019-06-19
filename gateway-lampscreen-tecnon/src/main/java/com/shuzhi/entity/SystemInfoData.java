@@ -1,4 +1,4 @@
-package com.shuzhi.dao;
+package com.shuzhi.entity;
 
 public class SystemInfoData {
     //报文消息id
