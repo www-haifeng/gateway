@@ -33,4 +33,8 @@ public enum TypeGropCodeEnums {
         return null;
     }
 
+   /* public static void main(String[] args) {
+        System.out.println(TypeGropCodeEnums.stateOf(1).getInfo());
+    }
+*/
 }

@@ -13,7 +13,8 @@ public class ConstantUtils {
     public static final String   KYE_MESSAGE="message";
     public static final String   KYE_MSG="msg";
     public static final String   KYE_TIME_STAMP="timestamp";
-    public static final Long   EXPIRE_STIME_STAMP=5*1000L; //默认是5秒
+    public static final Long   EXPIRE_STIME_STAMP=6*1000L; //默认是5秒
+    public static final Long   EXPIRE_STIME=3*1000L; //默认是3秒 重复发送限制
     public static final Integer   SEND_COUNT=2; //默认是5秒
 
 

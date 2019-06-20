@@ -12,6 +12,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 /**
@@ -22,27 +23,25 @@ import java.util.List;
 **/
 public class WebSocketUtil {
     private final static Logger logger = LoggerFactory.getLogger(WebSocketUtil.class);
+    private final static AtomicInteger atomicInteger = new AtomicInteger(0);
     public static Session socketClientCreate(Class clazz,String url) {
-
+        Session session =null;
         try {
                 WebSocketContainer container = ContainerProvider.getWebSocketContainer();
-                Session session = container.connectToServer(clazz, new URI(url));
-                return session;
-
+                 session = container.connectToServer(clazz, new URI(url));
+                atomicInteger.set(0);
         }  catch (Exception e) {
-            logger.info("websocket创建连接失败");
-        }finally {
-            return null;
-        }
-        /*
-        while (true) {
-            for (int i = 0; i < num; ++i) {
-                Session session = clientList.get(i);
-                session.getBasicRemote().sendText("client+" + i);
+            atomicInteger.incrementAndGet();
+            logger.info("websocket创建连接失败, Class:"+clazz+", 地址:"+url +",连接次数:"+atomicInteger.get());
+            try {
+                Thread.sleep(Long.parseLong(1000 * atomicInteger.get()+""));
+            } catch (InterruptedException e1) {
+                e1.printStackTrace();
             }
-            Thread.sleep(2000);
+            logger.info(atomicInteger.get() +"秒后 websocket重新创建连接 Class:"+clazz+", 地址:"+url);
+            WebSocketUtil.socketClientCreate(clazz,url);
         }
-        */
+        return session;
 
     }
 }

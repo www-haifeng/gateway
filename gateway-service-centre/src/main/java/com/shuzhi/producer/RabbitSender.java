@@ -22,6 +22,7 @@ import java.util.Map;
 @Component
 public class RabbitSender {
 
+
     //自动注入RabbitTemplate模板类
     @Autowired
     private RabbitTemplate rabbitTemplate;

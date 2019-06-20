@@ -7,7 +7,7 @@ package com.shuzhi.enums;
 **/
 public enum TypeTopicExchangeEnums {
 
-    wifiexchange(1001, "WiFi设备"), bcexchange(1002, "广播设备"), lightexchange(1003, "灯杆屏设备");
+    wifiexchange(1001, "WiFi设备"), bcexchange(1002, "广播设备"), lightexchange(1003, "灯杆屏设备"),alarmexchange(1004,"来邦");
     private String info;
     private int code;
 

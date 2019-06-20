@@ -21,7 +21,7 @@ public class JsonConvertBeanUtil {
       try {
           BeanUtils.copyProperties(obj, map);
       } catch (Exception e) {
-          e.printStackTrace();
+
       }
       return obj;
   }
@@ -34,7 +34,7 @@ public class JsonConvertBeanUtil {
     public static Object json2Object(String json, Class beanClz) {
         return JSONObject.parseObject(json, beanClz);
     }
-//
+
 //    public static void main(String[] args) {
 //    String json = "{"+
 //            "	\"msgid\": \"550e8400-e29b-41d4-a716-446655440000\","+
@@ -54,6 +54,9 @@ public class JsonConvertBeanUtil {
 //            "	}"+
 //            "}";
 //        MessagePojo bean = (MessagePojo) json2Object(json,MessagePojo.class);
+//        System.out.println(bean);
+//        JsonConvertBeanUtil.copyProperties(bean,bean.getMsg());
+//
 //        System.out.println(bean);
 //
 //

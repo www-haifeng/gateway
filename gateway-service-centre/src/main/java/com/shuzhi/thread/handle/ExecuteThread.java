@@ -3,7 +3,10 @@ package com.shuzhi.thread.handle;
 import com.shuzhi.entity.WebSocketEntity;
 import com.shuzhi.util.ConstantUtils;
 
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 
 /**
 * @Program: 线程执行
@@ -16,27 +19,25 @@ public class ExecuteThread {
 
 
     //发送
-    public static void executeSendThread(ExecutorService executorService,WebSocketEntity webSocketEntity) {
-        executorService.execute(new Runnable()  {
-            @Override
-            public void run(){
-                    if(webSocketEntity.getSession().isOpen()){
-                        webSocketEntity.getSession().getAsyncRemote().sendText(webSocketEntity.getMessage());
-                    }
-
-            }
-        });
-    }
-    //接收
-//    public static void executeReceiveThread(ExecutorService executorService,WebSocketEntity webSocketEntity){
-//        executorService.execute(new Runnable() {
+    public static  Boolean executeSendThread(ExecutorService executorService,WebSocketEntity webSocketEntity) {
+        Future<Boolean> future = executorService.submit(new TaskThread(webSocketEntity));
+        boolean flug = false;
+        try {
+             flug = future.get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return  flug;
+//       executorService.execute(new Runnable()  {
 //            @Override
-//            public void run() {
-//                if(webSocketEntity.getSession().isOpen()){
-//                    webSocketEntity.getSession().getAsyncRemote().sendText(webSocketEntity.getReceiveMessage());
-//                }
+//            public void run(){
+//                    if(webSocketEntity.getSession().isOpen()){
+//                        webSocketEntity.getSession().getAsyncRemote().sendText(webSocketEntity.getMessage());
+//                    }
 //            }
 //        });
-//    }
+
+    }
+
 
 }
