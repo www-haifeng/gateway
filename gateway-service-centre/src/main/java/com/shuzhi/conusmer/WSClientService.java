@@ -8,7 +8,7 @@ import com.shuzhi.service.factory.SendMessageFactory;
 import com.shuzhi.thread.scheduler.SchedulerSendFailTask;
 import com.shuzhi.util.*;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+
 
 import javax.websocket.*;
 
