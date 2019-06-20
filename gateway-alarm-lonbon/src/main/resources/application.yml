@@ -10,10 +10,10 @@ spring:
     username: postgres
     password: 123456
   rabbitmq: #RabbitMQ相关的配置
-      host: 192.168.8.150
-      port: 5672
-      username: guest
-      password: guest
+    host: 192.168.8.150
+    port: 5672
+    username: guest
+    password: guest
   jpa:
     show-sql: true
     hibernate:
@@ -31,21 +31,14 @@ redis:
   pool.min-idle: 10
   keytimeout: 2000
   timeout: 2000
-tcp:
-  port: 8090
-boss:
-  thread:
-    count: 2
-worker:
-  thread:
-    count: 2
-so:
-  keepalive: true
-  backlog: 100
-websocket:
-  path: /websocket
 
 jna:
   serverIp: 192.168.8.235
   serverPort: 0
   dllpath: E:/lb_sdk_universal.dll
+
+gateway:
+  key: 123456
+  msgcode: 1001
+  exchange: alarmexchange
+  routingKey: lowerControlMessage

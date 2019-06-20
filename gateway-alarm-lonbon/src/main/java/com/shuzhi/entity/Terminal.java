@@ -30,7 +30,8 @@ public class Terminal {
      */
     private String model;
 
-    public Terminal(){}
+    public Terminal() {
+    }
 
     public int getTerminalType() {
         return terminalType;

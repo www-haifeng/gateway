@@ -11,9 +11,11 @@ import java.util.List;
  **/
 @Service
 public class Action_param extends Structure {
-    public static class ByReference extends Action_param implements Structure.ByReference{}
+    public static class ByReference extends Action_param implements Structure.ByReference {
+    }
 
-    public static class ByValue extends Action_param implements Structure.ByValue{}
+    public static class ByValue extends Action_param implements Structure.ByValue {
+    }
 
     public int sender = 1;
     public int receiver = 100;
@@ -21,7 +23,7 @@ public class Action_param extends Structure {
     public byte[] SessionId = new byte[128];
     public int broadId = 1000;
     public byte[] rdFile = new byte[512];
-    public int atmTerNum=0;
+    public int atmTerNum = 0;
 
     @Override
     protected List getFieldOrder() {

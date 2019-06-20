@@ -1,7 +1,6 @@
 package com.shuzhi.service.impl;
 
 import com.sun.jna.Structure;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,11 +10,13 @@ import java.util.List;
  **/
 public class TerminalInfo extends Structure {
 
-    public static class ByReference extends TerminalInfo implements Structure.ByReference{}
+    public static class ByReference extends TerminalInfo implements Structure.ByReference {
+    }
 
-    public static class ByValue extends TerminalInfo implements Structure.ByValue{}
+    public static class ByValue extends TerminalInfo implements Structure.ByValue {
+    }
 
-    public int terminalType =1000;
+    public int terminalType = 1000;
     public int displayNum = 1000;
     public byte[] netAddr = new byte[32];
     public byte[] name = new byte[128];
