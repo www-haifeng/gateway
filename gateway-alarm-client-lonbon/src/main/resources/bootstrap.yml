@@ -1,8 +1,0 @@
-server:
-  port: 8090 #服务端口
-spring:
-  application:
-    name: gateway-alarm-client-lonbon #指定服务名
-
-
-
