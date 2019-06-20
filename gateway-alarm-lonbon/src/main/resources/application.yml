@@ -1,0 +1,44 @@
+server:
+  port: 8004 #服务端口
+# pgsql 属性配置
+spring:
+  application:
+    name: gateway-alarm-service-lonbon #指定服务名
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://192.168.8.150:5432/gateways?currentSchema=public&autoReconnect=true
+    username: postgres
+    password: 123456
+  rabbitmq: #RabbitMQ相关的配置
+    host: 192.168.8.150
+    port: 5672
+    username: guest
+    password: guest
+  jpa:
+    show-sql: true
+    hibernate:
+      database-platform: org.hibernate.dialect.PostgreSQLDialect
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      hibernate:
+        temp:
+          use_jdbc_metadata_defaults: false
+redis:
+  host: 192.168.8.150
+  port: 6379
+  pool.max-idle: 10
+  pool.min-idle: 10
+  keytimeout: 2000
+  timeout: 2000
+
+jna:
+  serverIp: 192.168.8.235
+  serverPort: 0
+  dllpath: E:/lb_sdk_universal.dll
+
+gateway:
+  key: 123456
+  msgcode: 1001
+  exchange: alarmexchange
+  routingKey: lowerControlMessage
