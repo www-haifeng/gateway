@@ -6,6 +6,7 @@ import com.shuzhi.dao.FactoryIdRepository;
 import com.shuzhi.dao.LonBonEventDao;
 import com.shuzhi.dao.TGatewayConfigEntityRepository;
 import com.shuzhi.entity.*;
+import com.shuzhi.ftp.FTPUtils;
 import com.shuzhi.producer.RabbitSender;
 import com.shuzhi.service.CLonBonLib;
 import com.shuzhi.service.impl.Action_param;
@@ -13,6 +14,7 @@ import com.shuzhi.service.impl.LonBon;
 import com.shuzhi.util.JsonConvertBeanUtil;
 import com.shuzhi.util.ToolUtils;
 import com.sun.jna.Pointer;
+import org.apache.commons.net.ftp.FTPFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,7 @@ import javax.annotation.Resource;
 import java.io.UnsupportedEncodingException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -43,7 +46,13 @@ public class LonBonScheduled {
     @Value("${gateway.key}")
     private String key;
     @Autowired
+    FactoryIdRepository factoryIdRepository;
+    @Autowired
     TGatewayConfigEntityRepository tGatewayConfigEntity;
+    @Autowired
+    FTPUtils ftpUtils;
+
+
     /**
      * 事件
      */
@@ -73,13 +82,14 @@ public class LonBonScheduled {
                     @Override
                     public void run() {
                         try {
-                            TGatewayConfigEntity gc = tGatewayConfigEntity.getOne(Long.parseLong("5"));
+                            TDeviceFactoryEntity deviceFactoryEntity = factoryIdRepository.findByMqTypeAndMqSubType("alarmexchange","lonbon");
+                            TGatewayConfigEntity gatewayConfigEntity = tGatewayConfigEntity.findByTypeGroupCode("4");
                             //构建上报报文
                             // @TODO 修改
-                            MessageData messageData = new MessageData(1004,1004,tLonbonEventEntity.getSender() + "","qwer","",tLonbonEventEntity);
+                            MessageData messageData = new MessageData(deviceFactoryEntity.getType(),deviceFactoryEntity.getSubtype(),tLonbonEventEntity.getSender() + "","infoid","",tLonbonEventEntity);
                             String msgts = Utils.getTimeStamp();
                             // @TODO 修改
-                            SystemInfoData systemInfoData = new SystemInfoData(ToolUtils.generateUUID()+"",4,1004,gc.getSysId(),gc.getConnectId(),"",msgts,messageData);
+                            SystemInfoData systemInfoData = new SystemInfoData(ToolUtils.generateUUID()+"",4,deviceFactoryEntity.getType(),gatewayConfigEntity.getSysId(),gatewayConfigEntity.getConnectId(),"",msgts,messageData);
                             String sign = ToolUtils.getBussesSha(systemInfoData.getMsgid()+key+ToolUtils.md5Hex(systemInfoData.getMsg().toString())+msgts);
                             systemInfoData.setSign(sign);
 
@@ -114,6 +124,25 @@ public class LonBonScheduled {
             }
         }, null);
         System.out.println(LocalDateTime.now() + "回调事件-----事件--------返回值：" + ret);
+    }
+
+    /**
+     * 文件是否上传
+     */
+//    @Scheduled(fixedRate = 1000)
+    public void uploadFile() {
+        List<TLonbonEventEntity> lonbonList = lonBonEventDao.findAllByRdFileAndAtmNum();
+
+        lonbonList.stream().forEachOrdered(tLonbonEventEntity -> {
+            String fileName = tLonbonEventEntity.getRdFile();
+            try {
+                boolean fileFlag = ftpUtils.existFiles(fileName);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            System.out.println(LocalDateTime.now() + "================fileName："+fileName);
+        });
+        System.out.println(LocalDateTime.now() + "uploadFile-----在线状态--------uploadFile：");
     }
 
     /**
