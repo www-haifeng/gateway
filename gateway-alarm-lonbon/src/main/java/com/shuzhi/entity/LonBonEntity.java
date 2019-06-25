@@ -1,9 +1,6 @@
 package com.shuzhi.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
-
-import java.util.List;
 
 /**
  * Created by ztt on 2019/6/17
@@ -20,4 +17,6 @@ public class LonBonEntity {
     private String bcid;//广播组序号
     private int displaynum;//指定设备终端的编号
     private int errorid;//错误ID
+    private String rdfile;//文件
+    private String uploadaddr;//长传地址
 }

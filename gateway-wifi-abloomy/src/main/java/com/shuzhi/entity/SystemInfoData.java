@@ -1,4 +1,4 @@
-package com.shuzhi.dao;
+package com.shuzhi.entity;
 
 public class SystemInfoData {
     //报文消息id
@@ -17,6 +17,20 @@ public class SystemInfoData {
     private String msgts;
     //报文数据信息
     private Object msg;
+
+    public SystemInfoData() {
+    }
+
+    public SystemInfoData(String msgid, int msgtype, int systype, int sysid, int connectid, String sign, String msgts, Object msg) {
+        this.msgid = msgid;
+        this.msgtype = msgtype;
+        this.systype = systype;
+        this.sysid = sysid;
+        this.connectid = connectid;
+        this.sign = sign;
+        this.msgts = msgts;
+        this.msg = msg;
+    }
 
     public String getMsgid() {
         return msgid;

@@ -2,10 +2,13 @@ package com.shuzhi.entity.command;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 public class ModifyTaskInfo {
     private String taskname;
-    private int isdisable;
-    private int level;
+    private Integer isdisable;
+    private Integer level;
     private String creator = "admin";
     private String triggers;
     private String commands;
@@ -20,19 +23,19 @@ public class ModifyTaskInfo {
         this.taskname = taskname;
     }
 
-    public int getIsdisable() {
+    public Integer getIsdisable() {
         return isdisable;
     }
 
-    public void setIsdisable(int isdisable) {
+    public void setIsdisable(Integer isdisable) {
         this.isdisable = isdisable;
     }
 
-    public int getLevel() {
+    public Integer getLevel() {
         return level;
     }
 
-    public void setLevel(int level) {
+    public void setLevel(Integer level) {
         this.level = level;
     }
 
@@ -71,6 +74,29 @@ public class ModifyTaskInfo {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();
+        try {
+            sb.append("jsondata%5Btaskname%5D=")
+                    .append(URLEncoder.encode((taskname), "utf-8"));
+            sb.append("&jsondata%5Bisdisable%5D=")
+                    .append(isdisable);
+            sb.append("&jsondata%5Blevel%5D=")
+                    .append(level);
+            sb.append("&jsondata%5Bcreator%5D=")
+                    .append(URLEncoder.encode((creator), "utf-8"));
+            sb.append("&jsondata%5Btriggers%5D=")
+                    .append(URLEncoder.encode((triggers), "utf-8"));
+            sb.append("&jsondata%5Bcommands%5D=")
+                    .append(URLEncoder.encode((commands), "utf-8"));
+            sb.append("&jsondata%5BtaskId%5D=")
+                    .append(URLEncoder.encode((taskId), "utf-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return sb.toString();
+    }
+/* @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder();
         sb.append("jsondata%5Btaskname%5D=")
                 .append(taskname);
         sb.append("&jsondata%5Bisdisable%5D=")
@@ -86,5 +112,5 @@ public class ModifyTaskInfo {
         sb.append("&jsondata%5BtaskId%5D=")
                 .append(taskId);
         return sb.toString();
-    }
+    }*/
 }

@@ -16,6 +16,8 @@ public class TLonbonOnlineEntity {
     private Timestamp createTime;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "t_lonbon_online_id_seq")
+    @SequenceGenerator(sequenceName = "t_lonbon_online_id_seq", name = "t_lonbon_online_id_seq", allocationSize = 1)
     @Column(name = "id")
     public long getId() {
         return id;

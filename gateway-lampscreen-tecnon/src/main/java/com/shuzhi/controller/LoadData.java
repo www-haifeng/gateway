@@ -28,9 +28,9 @@ import java.util.List;
 public class LoadData implements ApplicationRunner {
     private final static Logger logger = LoggerFactory.getLogger(LoadData.class);
     @Autowired
-    public DeviceInfoDao deviceInfoDao;
+    private DeviceInfoDao deviceInfoDao;
     @Autowired
-    public CommandInfoDao commandInfoDao;
+    private CommandInfoDao commandInfoDao;
     @Autowired
     ConfigData configData;
     /**

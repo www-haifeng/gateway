@@ -36,6 +36,8 @@ public class CommandService {
     private RabbitSender rabbitSender;
     @Autowired
     private Utils utils;
+    @Autowired
+    private HttpCommandUtils httpCommandUtils;
 
     /**
      * @Description: 统一处理请求
@@ -45,7 +47,7 @@ public class CommandService {
     public void commandService(String url,String commandJSON,SystemInfoData systemInfoData){
         try {
             //调用请求
-            String resultJSON = HttpCommandUtils.postHTTP(url, commandJSON);
+            String resultJSON = httpCommandUtils.postHTTP(url, commandJSON);
             logger.info("请求返回结果:"+resultJSON);
             commandSend(resultJSON,systemInfoData);
         } catch (Exception e) {
@@ -58,14 +60,14 @@ public class CommandService {
      * @Author: YHF
      * @date 2019/6/6
      */
-    private void commandSend(String resultJSON, SystemInfoData systemInfoData){
-            String timeStamp = Utils.getTimeStamp();
+    public void commandSend(String resultJSON, SystemInfoData systemInfoData){
+            String timeStamp = utils.getTimeStamp();
             //命令正确执行
             if (resultJSON !=null && !"".equals(resultJSON)){
                 MessageRevertData messageRevertData = utils.getMessageRevertData(configData.getSeccussCode(), timeStamp, resultJSON);
                 String mrdJSON = messageRevertData.toString();
                 systemInfoData.setMsgts(timeStamp);
-                systemInfoData.setMsgtype(4);
+                systemInfoData.setMsgtype(configData.getMsgtypeCommandReturn());
                 systemInfoData.setMsg(mrdJSON);
 
                 systemInfoData.setSign(utils.getSignVerify(systemInfoData));

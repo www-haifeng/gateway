@@ -15,8 +15,6 @@ import java.util.List;
 @Service("LonBon")
 public class LonBon {
     public CLonBonLib INSTANCE;
-    private TerminalInfo terminalInfo;
-
     @Value("${jna.serverIp}")
     private String serverIp;
     @Value("${jna.serverPort}")
@@ -137,6 +135,7 @@ public class LonBon {
      * @return 0 成功，其他失败。（如果对讲系统中对讲数量比 count 多，那么函数返回失败，且 count 返回实际的数量。）
      */
     public int lb_getTerminalInfos(String svrIp, List<Terminal> terList, int maxCount) throws UnsupportedEncodingException {
+        TerminalInfo terminalInfo = new TerminalInfo();
         TerminalInfo[] terminalInfos = (TerminalInfo[]) terminalInfo.toArray(maxCount);
         IntByReference count = new IntByReference();
         count.setValue(0);

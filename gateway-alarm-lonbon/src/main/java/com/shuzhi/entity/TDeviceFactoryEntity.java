@@ -129,8 +129,8 @@ public class TDeviceFactoryEntity {
                 Objects.equals(factoryName, that.factoryName) &&
                 Objects.equals(serverIp, that.serverIp) &&
                 Objects.equals(serverPort, that.serverPort) &&
-                Objects.equals(describe, that.describe)&&
-                Objects.equals(mqType, that.mqType)&&
+                Objects.equals(describe, that.describe) &&
+                Objects.equals(mqType, that.mqType) &&
                 Objects.equals(mqSubType, that.mqSubType);
     }
 

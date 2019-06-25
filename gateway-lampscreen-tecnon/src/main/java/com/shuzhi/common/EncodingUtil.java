@@ -1,12 +1,15 @@
 package com.shuzhi.common;
 
+import org.springframework.stereotype.Component;
+
 /**
  * @Description: 返回数据编码格式处理工具
  * @Author: YHF
  * @date 2019/6/11
  */
+@Component
 public class EncodingUtil {
-    public static String getEncoding(String str) {
+    public String getEncoding(String str) {
         String encode;
 
         encode = "UTF-16";

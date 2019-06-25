@@ -1,17 +1,20 @@
 package com.shuzhi.entity.command;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 public class ExeRealPlayFile {
     private String rtype;
     private String param1;
-    private int param2;
-    private int param3;
+    private String param2;
+    private Integer param3;
     private String param4;
     private String param5;
-    private int param6;
-    private int param7;
-    private int param8;
-    private int param9;
-    private int param10;
+    private Integer param6;
+    private Integer param7;
+    private Integer param8;
+    private Integer param9;
+    private Integer param10;
     private String extdata;
 
     public String getRtype() {
@@ -30,19 +33,19 @@ public class ExeRealPlayFile {
         this.param1 = param1;
     }
 
-    public int getParam2() {
+    public String getParam2() {
         return param2;
     }
 
-    public void setParam2(int param2) {
+    public void setParam2(String param2) {
         this.param2 = param2;
     }
 
-    public int getParam3() {
+    public Integer getParam3() {
         return param3;
     }
 
-    public void setParam3(int param3) {
+    public void setParam3(Integer param3) {
         this.param3 = param3;
     }
 
@@ -62,43 +65,43 @@ public class ExeRealPlayFile {
         this.param5 = param5;
     }
 
-    public int getParam6() {
+    public Integer getParam6() {
         return param6;
     }
 
-    public void setParam6(int param6) {
+    public void setParam6(Integer param6) {
         this.param6 = param6;
     }
 
-    public int getParam7() {
+    public Integer getParam7() {
         return param7;
     }
 
-    public void setParam7(int param7) {
+    public void setParam7(Integer param7) {
         this.param7 = param7;
     }
 
-    public int getParam8() {
+    public Integer getParam8() {
         return param8;
     }
 
-    public void setParam8(int param8) {
+    public void setParam8(Integer param8) {
         this.param8 = param8;
     }
 
-    public int getParam9() {
+    public Integer getParam9() {
         return param9;
     }
 
-    public void setParam9(int param9) {
+    public void setParam9(Integer param9) {
         this.param9 = param9;
     }
 
-    public int getParam10() {
+    public Integer getParam10() {
         return param10;
     }
 
-    public void setParam10(int param10) {
+    public void setParam10(Integer param10) {
         this.param10 = param10;
     }
 
@@ -109,7 +112,42 @@ public class ExeRealPlayFile {
     public void setExtdata(String extdata) {
         this.extdata = extdata;
     }
+
     @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder();
+        try {
+            sb.append("jsondata%5Brtype%5D=")
+                    .append(URLEncoder.encode((rtype), "utf-8"));
+            sb.append("&jsondata%5Bparam1%5D=")
+                    .append(URLEncoder.encode((param1), "utf-8"));
+            sb.append("&jsondata%5Bparam2%5D=")
+                    .append(URLEncoder.encode((param2), "utf-8"));
+            sb.append("&jsondata%5Bparam3%5D=")
+                    .append(param3);
+            sb.append("&jsondata%5Bparam4%5D=")
+                    .append(URLEncoder.encode((param4), "utf-8"));
+            sb.append("&jsondata%5Bparam5%5D=")
+                    .append(URLEncoder.encode((param5), "utf-8"));
+            sb.append("&jsondata%5Bparam6%5D=")
+                    .append(param6);
+            sb.append("&jsondata%5Bparam7%5D=")
+                    .append(param7);
+            sb.append("&jsondata%5Bparam8%5D=")
+                    .append(param8);
+            sb.append("&jsondata%5Bparam9%5D=")
+                    .append(param9);
+            sb.append("&jsondata%5Bparam10%5D=")
+                    .append(param10);
+            sb.append("&jsondata%5Bextdata%5D=")
+                    .append(URLEncoder.encode((extdata), "utf-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return sb.toString();
+    }
+
+    /*@Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();
         sb.append("jsondata%5Brtype%5D=")
@@ -137,5 +175,5 @@ public class ExeRealPlayFile {
         sb.append("&jsondata%5Bextdata%5D=")
                 .append(extdata);
         return sb.toString();
-    }
+    }*/
 }

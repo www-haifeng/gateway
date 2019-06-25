@@ -13,9 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 
 /**
  *功能描述 命令工具
@@ -33,6 +30,8 @@ public class CommandUtils {
     private Utils utils;
     @Autowired
     private ObjectMapper mapper;
+    @Autowired
+    private FtpUtil ftpUtil;
     /**
      * @Description:匹配数据指令
      * @Author: YHF
@@ -54,6 +53,12 @@ public class CommandUtils {
 
             //if (signVerify){
                 CommandInfo commandInfo = Cache.commandMap.get(messageData.getCmdid());
+
+                if (commandInfo == null){
+                    logger.error("未查询到广播设备cmdid为:"+messageData.getCmdid()+"的命令,放弃请求");
+                    return;
+                }
+
                 //获取url
                 String url = "http://"+commandInfo.getTdeviceFactoryEntity().getServerIp()+":"+commandInfo.getTdeviceFactoryEntity().getServerPort()+commandInfo.getTmsgInfoEntity().getInterfaceId();
 
@@ -107,21 +112,11 @@ public class CommandUtils {
                         commandService.commandService(url, gmd.toString(),systemInfoData);
                         break;
                     case "/php/addmediadata.php":
+                        //添加媒体文件
                         AddMediaData amd = mapper.readValue(jsonParentNode.path("msg").path("data").toString(), AddMediaData.class);
-                        try{
-
-                            //添加媒体文件 待处理
-                            FileInputStream in=new FileInputStream(new File(amd.getFilename()+amd.getFilepath()));
-                            boolean result = FtpUtil.uploadFile("192.168.8.150", "", "", 8090, amd.getFilepath(), amd.getFilename(),in);
-                            if (result){
-
-                            }else {
-                                logger.error("文件上传出错!");
-                            }
-                        } catch (FileNotFoundException e){
-                            e.printStackTrace();
-                            System.out.println(e);
-                        }
+                        ftpUtil.connectServer("192.168.8.150",21,"shuzhi","shuzhi","/");
+                        String resultStr = ftpUtil.uploadMediaFile(amd, url);
+                        commandService.commandSend(resultStr,systemInfoData);
                         break;
                     case "/php/delmediadata.php":
                         DelMediaData dmd = mapper.readValue(jsonParentNode.path("msg").path("data").toString(), DelMediaData.class);

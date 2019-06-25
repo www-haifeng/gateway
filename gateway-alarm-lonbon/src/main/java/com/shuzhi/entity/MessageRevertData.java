@@ -1,6 +1,8 @@
 package com.shuzhi.entity;
+
 /**
  * 功能描述 消息回执二层数据
+ *
  * @author YHF
  * @date 2019/6/6
  * @params
@@ -17,10 +19,10 @@ public class MessageRevertData {
     public MessageRevertData() {
     }
 
-    public MessageRevertData(String timestamp,int code,ResultDataEntity data) {
-       this.timestamp = timestamp;
-       this.code = code;
-       this.data = data;
+    public MessageRevertData(String timestamp, int code, ResultDataEntity data) {
+        this.timestamp = timestamp;
+        this.code = code;
+        this.data = data;
     }
 
     public String getTimestamp() {

@@ -1,13 +1,12 @@
 package com.shuzhi.service;
 
 import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shuzhi.common.ConfigData;
 import com.shuzhi.common.HttpCommandUtils;
 import com.shuzhi.common.Utils;
-import com.shuzhi.dao.SystemInfoData;
+import com.shuzhi.entity.SystemInfoData;
 import com.shuzhi.entity.MessageRevertData;
 import com.shuzhi.entity.commandResult.*;
 import com.shuzhi.producer.RabbitSender;
@@ -17,8 +16,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 /**
  * 功能描述 命令业务逻辑处理
@@ -39,6 +36,8 @@ public class CommandService {
     private Utils utils;
     @Autowired
     private ObjectMapper mapper;
+    @Autowired
+    private HttpCommandUtils httpCommandUtils;
 
     /**
      * @Description: 统一处理请求 返回Boolean类型
@@ -48,7 +47,7 @@ public class CommandService {
     public void commandServiceBoolean(String url, String commandJSON, SystemInfoData systemInfoData){
         try {
             //调用请求
-            String resultJSON = HttpCommandUtils.postHTTP(url, commandJSON);
+            String resultJSON = httpCommandUtils.postHTTP(url, commandJSON);
             //结果集中包含Boolean 处理成统一协议格式
             JsonNode jsonNode = mapper.readTree(resultJSON).get("result");
             //取出返回结果
@@ -75,7 +74,7 @@ public class CommandService {
     public void commandServiceInteger(String url, String commandJSON, SystemInfoData systemInfoData){
         try {
             //调用请求
-            String resultJSON = HttpCommandUtils.postHTTP(url, commandJSON);
+            String resultJSON = httpCommandUtils.postHTTP(url, commandJSON);
             //结果集中包含Boolean 处理成统一协议格式
             JsonNode jsonNode = mapper.readTree(resultJSON).get("result");
             //取出返回结果
@@ -98,7 +97,7 @@ public class CommandService {
     public void commandServiceString(String url, String commandJSON, SystemInfoData systemInfoData){
         try {
             //调用请求
-            String resultJSON = HttpCommandUtils.postHTTP(url, commandJSON);
+            String resultJSON = httpCommandUtils.postHTTP(url, commandJSON);
             //结果集中包含Boolean 处理成统一协议格式
             JsonNode jsonNode = mapper.readTree(resultJSON).get("_type");
             //取出返回结果
@@ -121,7 +120,7 @@ public class CommandService {
     public void commandServiceClass(String url, String commandJSON, SystemInfoData systemInfoData,String commandType){
         try {
             //调用请求
-            String resultJSON = HttpCommandUtils.postHTTP(url, commandJSON);
+            String resultJSON = httpCommandUtils.postHTTP(url, commandJSON);
             if ("queryLoaclFileSize".equals(commandType)){
                 QueryLoaclFileSizeResult qlfsr = mapper.readValue(resultJSON, QueryLoaclFileSizeResult.class);
                 logger.info("请求返回结果:"+qlfsr.toString());
@@ -215,13 +214,13 @@ public class CommandService {
      * @date 2019/6/6
      */
     private void commandSend(String resultJSON, SystemInfoData systemInfoData){
-            String timeStamp = Utils.getTimeStamp();
+            String timeStamp = utils.getTimeStamp();
             //命令正确执行
             if (resultJSON !=null && !"".equals(resultJSON)){
                 MessageRevertData messageRevertData = utils.getMessageRevertData(configData.getSeccussCode(), timeStamp, resultJSON);
                 String mrdJSON = messageRevertData.toString();
                 systemInfoData.setMsgts(timeStamp);
-                systemInfoData.setMsgtype(4);
+                systemInfoData.setMsgtype(configData.getMsgtypeCommandReturn());
                 systemInfoData.setMsg(mrdJSON);
 
                 systemInfoData.setSign(utils.getSignVerify(systemInfoData));
@@ -241,7 +240,7 @@ public class CommandService {
                 systemInfoData.setSign(utils.getSignVerify(systemInfoData));
                 String commandRevertJSON = systemInfoData.toString();
                 try {
-                    rabbitSender.send("lowerTest",commandRevertJSON);
+                    rabbitSender.send("lowerControlMessage",commandRevertJSON);
                     logger.error("命令执行失败，请查看原因:"+commandRevertJSON);
                 } catch (Exception e) {
                     e.printStackTrace();

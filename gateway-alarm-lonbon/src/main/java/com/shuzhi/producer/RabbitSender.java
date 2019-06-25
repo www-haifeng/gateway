@@ -1,5 +1,6 @@
 package com.shuzhi.producer;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.connection.CorrelationData;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.core.RabbitTemplate.ConfirmCallback;
@@ -8,11 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
-* @Program: RabbitSender
-* @Description: 
-* @Author: YuJQ
-* @Create: 2019/6/4 17:41
-**/
+ * @Program: RabbitSender
+ * @Description:
+ * @Author: YuJQ
+ * @Create: 2019/6/4 17:41
+ **/
+@Slf4j
 @Component
 public class RabbitSender {
 
@@ -24,10 +26,10 @@ public class RabbitSender {
     final ConfirmCallback confirmCallback = new ConfirmCallback() {
         @Override
         public void confirm(CorrelationData correlationData, boolean ack, String cause) {
-            System.err.println("correlationData: " + correlationData);
-            System.err.println("ack: " + ack);
-            if(!ack){
-                System.err.println("异常处理....");
+            log.info("correlationData: " + correlationData);
+            log.info("ack: " + ack);
+            if (!ack) {
+                log.info("异常处理....");
             }
         }
     };
@@ -37,7 +39,7 @@ public class RabbitSender {
         @Override
         public void returnedMessage(org.springframework.amqp.core.Message message, int replyCode, String replyText,
                                     String exchange, String routingKey) {
-            System.err.println("return exchange: " + exchange + ", routingKey: "
+            log.info("return exchange: " + exchange + ", routingKey: "
                     + routingKey + ", replyCode: " + replyCode + ", replyText: " + replyText);
         }
     };
@@ -51,8 +53,6 @@ public class RabbitSender {
         //为空为默认  交换机
         rabbitTemplate.convertAndSend("alarmMessage", topic, objMessage, correlationData);
     }
-
-
 
 
 }
