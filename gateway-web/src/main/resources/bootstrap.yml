@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: gateway-web #指定服务名
+
+
+
