@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor//生成无参构造函数
 @Builder
 public class MessageData {
-//    private int overtime;
+    //    private int overtime;
     private int type;
     private int subtype;
     private String did;

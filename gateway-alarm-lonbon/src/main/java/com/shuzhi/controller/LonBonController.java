@@ -1,15 +1,13 @@
 package com.shuzhi.controller;
 
-import com.shuzhi.entity.Terminal;
 import com.shuzhi.service.impl.LonBon;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import java.io.UnsupportedEncodingException;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by ztt on 2019/6/11
@@ -22,6 +20,19 @@ public class LonBonController {
     //    int terNum = 111002;
     @Resource(name = "LonBon")
     private LonBon lonBon;
+
+    //这个变量用于装cookies信息
+    private static Cookie cookie;
+
+    /**
+     * ajaxtest
+     */
+    @RequestMapping("/ajaxtest")
+    public String ajaxtest(HttpServletResponse response) {
+        cookie = new Cookie("login", "true");  //对比入参数据
+        response.addCookie(cookie);
+        return "true";
+    }
 
     /**
      * 接听

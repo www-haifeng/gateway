@@ -140,7 +140,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>1.3.5.RELEASE</version>
                 <configuration>
-                    <classifier>exec</classifier>
+<!--                    <classifier>exec</classifier>-->
                     <mainClass>com.shuzhi.AlarmLonbonApplication</mainClass>
                 </configuration>
                 <executions>

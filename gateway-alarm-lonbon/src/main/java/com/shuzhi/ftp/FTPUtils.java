@@ -1,6 +1,7 @@
 package com.shuzhi.ftp;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPFileFilter;
@@ -13,6 +14,7 @@ import java.util.StringTokenizer;
 
 /**
  * Created by ztt on 2019/6/21
+ *
  * @Description:
  */
 @Slf4j
@@ -252,14 +254,20 @@ public class FTPUtils {
         getFTPClient();
         boolean flag = false;
         try {
-            String path = dir.substring(0,dir.lastIndexOf("/"));
+            String path = dir.substring(0, dir.lastIndexOf("/"));
             String fileName = dir.substring(dir.lastIndexOf("/") + 1);
-            boolean change = ftpClient.changeWorkingDirectory(ftpProperties.getBaseUrl()+"/" + dir);
-            String reply =  ftpClient.getReplyString().substring(0,3);
-            boolean change1 = ftpClient.changeWorkingDirectory( dir);
-            String reply1 =  ftpClient.getReplyString().substring(0,3);
-            System.out.println("reply=========================="+reply);
-//            flag = ftpClient;
+            boolean change = ftpClient.changeWorkingDirectory(ftpProperties.getBaseUrl() + "/" + path);
+            if (change) {
+                // 检验文件是否存在
+                InputStream is = ftpClient.retrieveFileStream(new String(fileName.getBytes("GBK"), FTP.DEFAULT_CONTROL_ENCODING));
+                if (ftpClient.getReplyCode() == 200) {
+                    flag = true;
+                }
+                if (is != null) {
+                    is.close();
+                }
+                ftpClient.disconnect();
+            }
         } catch (Throwable thr) {
             thr.printStackTrace();
         }
