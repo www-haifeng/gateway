@@ -47,7 +47,10 @@ public class RabbitReceiver {
 
 			log.info("收到上报主题"+message.getPayload().toString());
 			WebSocketEntity entity = (WebSocketEntity) SessionRepository.getChannelCache(String.valueOf(TypeGropCodeEnums.upMessage.getCode()));
-			sendMessageFactory.sendMessage(entity);
+			if(entity != null){
+				entity.setMessage(message.getPayload().toString());
+				sendMessageFactory.sendMessage(entity);
+			}
 
 			Long deliveryTag = (Long) message.getHeaders().get(AmqpHeaders.DELIVERY_TAG);
 			//手工ACK
@@ -77,7 +80,10 @@ public class RabbitReceiver {
 		try {
 			log.info("监听下控主题"+message.getPayload().toString());
 			WebSocketEntity entity = (WebSocketEntity) SessionRepository.getChannelCache(String.valueOf(TypeGropCodeEnums.lowerControlMessage.getCode()));
-			sendMessageFactory.sendMessage(entity);
+			if(entity != null){
+				entity.setMessage(message.getPayload().toString());
+				sendMessageFactory.sendMessage(entity);
+			}
 
 			Long deliveryTag = (Long) message.getHeaders().get(AmqpHeaders.DELIVERY_TAG);
 			//手工ACK
@@ -107,7 +113,10 @@ public class RabbitReceiver {
 		try {
 			log.info("监听WIFI主题"+message.getPayload().toString());
 			WebSocketEntity entity = (WebSocketEntity) SessionRepository.getChannelCache(String.valueOf(TypeGropCodeEnums.wifiMessage.getCode()));
-			sendMessageFactory.sendMessage(entity);
+			if(entity != null){
+				entity.setMessage(message.getPayload().toString());
+				sendMessageFactory.sendMessage(entity);
+			}
 
 			Long deliveryTag = (Long) message.getHeaders().get(AmqpHeaders.DELIVERY_TAG);
 			//手工ACK
@@ -137,7 +146,10 @@ public class RabbitReceiver {
 		try {
 			log.info("监听告警主题"+message.getPayload().toString());
 			WebSocketEntity entity = (WebSocketEntity) SessionRepository.getChannelCache(String.valueOf(TypeGropCodeEnums.alarmMessage.getCode()));
-			sendMessageFactory.sendMessage(entity);
+			if(entity != null){
+				entity.setMessage(message.getPayload().toString());
+				sendMessageFactory.sendMessage(entity);
+			}
 
 			Long deliveryTag = (Long) message.getHeaders().get(AmqpHeaders.DELIVERY_TAG);
 			//手工ACK

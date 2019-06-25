@@ -59,9 +59,9 @@ public class WSClientService {
     @OnClose
     public void onClose(Session session) {
         //先获取entity 信息
-        String code =  SessionRepository.getSessionChannelCache(session.getId());
-        WebSocketEntity entity = (WebSocketEntity) SessionRepository.getChannelCache(code);
-        TGatewayConfigEntity tGatewayConfigEntity = entity.getTGatewayConfigEntity();
+  //      String code =  SessionRepository.getSessionChannelCache(session.getId());
+       // WebSocketEntity entity = (WebSocketEntity) SessionRepository.getChannelCache(code);
+       // TGatewayConfigEntity tGatewayConfigEntity = entity.getTGatewayConfigEntity();
 //        //删除缓存map
 //        SessionRepository.removeCaches(session.getId());
         //重新建立连接

@@ -6,10 +6,7 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -24,7 +21,9 @@ import java.util.Date;
 @TypeDefs({ @TypeDef(name = "StringJsonObject", typeClass = StringJsonUserType.class) })
 public class TReportingInforHistoryEntity {
     @Id
-    private int id;
+    @GeneratedValue(strategy= GenerationType.SEQUENCE,generator="t_reporting_infor_history_seq")
+    @SequenceGenerator(sequenceName="t_reporting_infor_history_seq", name="t_reporting_infor_history_seq",allocationSize = 1)
+    private Integer id;
 
     @Column(name = "msg_type")
     private String msgType;

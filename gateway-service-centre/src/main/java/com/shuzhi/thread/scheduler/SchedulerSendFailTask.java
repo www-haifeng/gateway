@@ -49,6 +49,7 @@ public class SchedulerSendFailTask {
                 if(!SchedulerSendFailTask.timeComparison(wsEntity.getSendTimeStamp(),ConstantUtils.EXPIRE_STIME) && !SchedulerSendFailTask.sendCount(wsEntity.getSendCount())  && !SchedulerSendFailTask.timeComparison(wsEntity.getSendTimeStamp(),wsEntity.getExpiresTimeStamp())){
                     TReportingInforHistoryEntity entity = SchedulerSendFailTask.getEntity(wsEntity);
                     tReportingInforHistoryService.save( entity);
+                    sendFailCaches.remove(map.getKey());
 
                 }else if(SchedulerSendFailTask.timeComparison(wsEntity.getSendTimeStamp(),ConstantUtils.EXPIRE_STIME) && SchedulerSendFailTask.sendCount(wsEntity.getSendCount())  && SchedulerSendFailTask.timeComparison(wsEntity.getSendTimeStamp(),wsEntity.getExpiresTimeStamp())){
                         sendMessageFactory.sendMessage(wsEntity);
