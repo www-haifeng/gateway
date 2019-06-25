@@ -1,11 +1,11 @@
 package com.shuzhi.service.impl;
 
-import com.shuzhi.model.SysResource;
-import com.shuzhi.model.SysRoleResource;
-import com.shuzhi.model.SysUserRole;
-import com.shuzhi.repository.SysResourceRepository;
-import com.shuzhi.repository.SysRoleResourceRepository;
-import com.shuzhi.repository.SysUserRoleRepository;
+import com.shuzhi.entity.SysResource;
+import com.shuzhi.entity.SysRoleResource;
+import com.shuzhi.entity.SysUserRole;
+import com.shuzhi.dao.SysResourceRepository;
+import com.shuzhi.dao.SysRoleResourceRepository;
+import com.shuzhi.dao.SysUserRoleRepository;
 import com.shuzhi.service.SysResourceService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;

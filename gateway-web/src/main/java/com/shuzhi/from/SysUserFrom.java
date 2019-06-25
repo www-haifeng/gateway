@@ -1,6 +1,6 @@
 package com.shuzhi.from;
 
-import com.shuzhi.model.SysRole;
+import com.shuzhi.entity.SysRole;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;

@@ -2,8 +2,8 @@ package com.shuzhi.config;
 
 import com.shuzhi.enums.ForbiddenEnum;
 import com.shuzhi.enums.REnum;
-import com.shuzhi.model.SysUser;
-import com.shuzhi.repository.SysResourceRepository;
+import com.shuzhi.entity.SysUser;
+import com.shuzhi.dao.SysResourceRepository;
 import com.shuzhi.service.SysResourceService;
 import com.shuzhi.service.SysUserService;
 import com.shuzhi.utils.ShiroUtil;

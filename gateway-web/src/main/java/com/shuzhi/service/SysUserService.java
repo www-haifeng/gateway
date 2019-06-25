@@ -1,7 +1,7 @@
 package com.shuzhi.service;
 
 import com.shuzhi.from.SysUserFrom;
-import com.shuzhi.model.SysUser;
+import com.shuzhi.entity.SysUser;
 import com.shuzhi.vo.R;
 import org.springframework.data.domain.Pageable;
 

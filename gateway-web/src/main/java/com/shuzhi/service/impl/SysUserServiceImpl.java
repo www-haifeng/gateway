@@ -2,12 +2,12 @@ package com.shuzhi.service.impl;
 
 import com.shuzhi.enums.REnum;
 import com.shuzhi.from.SysUserFrom;
-import com.shuzhi.model.SysRole;
-import com.shuzhi.model.SysUser;
-import com.shuzhi.model.SysUserRole;
-import com.shuzhi.repository.SysRoleRepository;
-import com.shuzhi.repository.SysUserRepository;
-import com.shuzhi.repository.SysUserRoleRepository;
+import com.shuzhi.entity.SysRole;
+import com.shuzhi.entity.SysUser;
+import com.shuzhi.entity.SysUserRole;
+import com.shuzhi.dao.SysRoleRepository;
+import com.shuzhi.dao.SysUserRepository;
+import com.shuzhi.dao.SysUserRoleRepository;
 import com.shuzhi.service.SysUserService;
 import com.shuzhi.utils.JPAUtil;
 import com.shuzhi.utils.RUtil;

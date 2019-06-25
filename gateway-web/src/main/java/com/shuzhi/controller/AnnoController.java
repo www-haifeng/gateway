@@ -2,7 +2,7 @@ package com.shuzhi.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.shuzhi.enums.REnum;
-import com.shuzhi.model.SysUser;
+import com.shuzhi.entity.SysUser;
 import com.shuzhi.service.SysUserService;
 import com.shuzhi.utils.Assert;
 import com.shuzhi.utils.RUtil;

@@ -1,7 +1,7 @@
 package com.shuzhi.vo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.shuzhi.model.SysRole;
+import com.shuzhi.entity.SysRole;
 import lombok.Data;
 
 import java.util.List;

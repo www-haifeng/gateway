@@ -1,6 +1,6 @@
 package com.shuzhi.service;
 
-import com.shuzhi.model.SysResource;
+import com.shuzhi.entity.SysResource;
 
 import java.util.Set;
 

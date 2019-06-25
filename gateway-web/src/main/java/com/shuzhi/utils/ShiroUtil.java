@@ -1,6 +1,6 @@
 package com.shuzhi.utils;
 
-import com.shuzhi.model.SysUser;
+import com.shuzhi.entity.SysUser;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 import org.apache.shiro.crypto.hash.SimpleHash;

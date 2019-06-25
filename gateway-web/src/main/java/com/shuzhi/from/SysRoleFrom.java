@@ -1,6 +1,6 @@
 package com.shuzhi.from;
 
-import com.shuzhi.model.SysResource;
+import com.shuzhi.entity.SysResource;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
