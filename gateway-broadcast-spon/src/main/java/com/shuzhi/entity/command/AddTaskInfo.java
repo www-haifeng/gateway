@@ -1,8 +1,8 @@
 package com.shuzhi.entity.command;
 
-import com.sun.deploy.net.URLEncoder;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 public class AddTaskInfo {
     private String taskname;
