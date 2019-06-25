@@ -1,34 +1,37 @@
 package com.shuzhi.entity.command;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 public class SetTerminal {
-    private int tid;
+    private Integer tid;
     private String tname;
-    private int tbcoutv;
-    private int tbcinv;
-    private int ttalkoutv;
-    private int ttalkinv;
-    private int tbcttype;
-    private int bctrecvtype;
-    private int tterminallevel;
-    private int tcalltimeout;
+    private Integer tbcoutv;
+    private Integer tbcinv;
+    private Integer ttalkoutv;
+    private Integer ttalkinv;
+    private Integer tbcttype;
+    private Integer bctrecvtype;
+    private Integer tterminallevel;
+    private Integer tcalltimeout;
     private String tcalltarget1;
     private String tcalltarget2;
-    private int tbctlevel;
-    private int ttalklevel;
-    private int tmonlevel;
-    private int tmeetinglevel;
+    private Integer tbctlevel;
+    private Integer ttalklevel;
+    private Integer tmonlevel;
+    private Integer tmeetinglevel;
     private String tbctlist;
     private String ttalklist;
     private String tmonlist;
     private String tmeetinglist;
     private String trtspurl;
-    private int tpass;
+    private Integer tpass;
 
-    public int getTid() {
+    public Integer getTid() {
         return tid;
     }
 
-    public void setTid(int tid) {
+    public void setTid(Integer tid) {
         this.tid = tid;
     }
 
@@ -40,67 +43,67 @@ public class SetTerminal {
         this.tname = tname;
     }
 
-    public int getTbcoutv() {
+    public Integer getTbcoutv() {
         return tbcoutv;
     }
 
-    public void setTbcoutv(int tbcoutv) {
+    public void setTbcoutv(Integer tbcoutv) {
         this.tbcoutv = tbcoutv;
     }
 
-    public int getTbcinv() {
+    public Integer getTbcinv() {
         return tbcinv;
     }
 
-    public void setTbcinv(int tbcinv) {
+    public void setTbcinv(Integer tbcinv) {
         this.tbcinv = tbcinv;
     }
 
-    public int getTtalkoutv() {
+    public Integer getTtalkoutv() {
         return ttalkoutv;
     }
 
-    public void setTtalkoutv(int ttalkoutv) {
+    public void setTtalkoutv(Integer ttalkoutv) {
         this.ttalkoutv = ttalkoutv;
     }
 
-    public int getTtalkinv() {
+    public Integer getTtalkinv() {
         return ttalkinv;
     }
 
-    public void setTtalkinv(int ttalkinv) {
+    public void setTtalkinv(Integer ttalkinv) {
         this.ttalkinv = ttalkinv;
     }
 
-    public int getTbcttype() {
+    public Integer getTbcttype() {
         return tbcttype;
     }
 
-    public void setTbcttype(int tbcttype) {
+    public void setTbcttype(Integer tbcttype) {
         this.tbcttype = tbcttype;
     }
 
-    public int getBctrecvtype() {
+    public Integer getBctrecvtype() {
         return bctrecvtype;
     }
 
-    public void setBctrecvtype(int bctrecvtype) {
+    public void setBctrecvtype(Integer bctrecvtype) {
         this.bctrecvtype = bctrecvtype;
     }
 
-    public int getTterminallevel() {
+    public Integer getTterminallevel() {
         return tterminallevel;
     }
 
-    public void setTterminallevel(int tterminallevel) {
+    public void setTterminallevel(Integer tterminallevel) {
         this.tterminallevel = tterminallevel;
     }
 
-    public int getTcalltimeout() {
+    public Integer getTcalltimeout() {
         return tcalltimeout;
     }
 
-    public void setTcalltimeout(int tcalltimeout) {
+    public void setTcalltimeout(Integer tcalltimeout) {
         this.tcalltimeout = tcalltimeout;
     }
 
@@ -120,35 +123,35 @@ public class SetTerminal {
         this.tcalltarget2 = tcalltarget2;
     }
 
-    public int getTbctlevel() {
+    public Integer getTbctlevel() {
         return tbctlevel;
     }
 
-    public void setTbctlevel(int tbctlevel) {
+    public void setTbctlevel(Integer tbctlevel) {
         this.tbctlevel = tbctlevel;
     }
 
-    public int getTtalklevel() {
+    public Integer getTtalklevel() {
         return ttalklevel;
     }
 
-    public void setTtalklevel(int ttalklevel) {
+    public void setTtalklevel(Integer ttalklevel) {
         this.ttalklevel = ttalklevel;
     }
 
-    public int getTmonlevel() {
+    public Integer getTmonlevel() {
         return tmonlevel;
     }
 
-    public void setTmonlevel(int tmonlevel) {
+    public void setTmonlevel(Integer tmonlevel) {
         this.tmonlevel = tmonlevel;
     }
 
-    public int getTmeetinglevel() {
+    public Integer getTmeetinglevel() {
         return tmeetinglevel;
     }
 
-    public void setTmeetinglevel(int tmeetinglevel) {
+    public void setTmeetinglevel(Integer tmeetinglevel) {
         this.tmeetinglevel = tmeetinglevel;
     }
 
@@ -192,15 +195,68 @@ public class SetTerminal {
         this.trtspurl = trtspurl;
     }
 
-    public int getTpass() {
+    public Integer getTpass() {
         return tpass;
     }
 
-    public void setTpass(int tpass) {
+    public void setTpass(Integer tpass) {
         this.tpass = tpass;
     }
 
     @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder();
+        sb.append("jsondata%5Btid%5D=")
+                .append(tid);
+        try {
+            sb.append("&jsondata%5Btname%5D=")
+                    .append(URLEncoder.encode((tname), "utf-8"));
+            sb.append("&jsondata%5Btbcoutv%5D=")
+                    .append(tbcoutv);
+            sb.append("&jsondata%5Btbcinv%5D=")
+                    .append(tbcinv);
+            sb.append("&jsondata%5Bttalkoutv%5D=")
+                    .append(ttalkoutv);
+            sb.append("&jsondata%5Bttalkinv%5D=")
+                    .append(ttalkinv);
+            sb.append("&jsondata%5Btbcttype%5D=")
+                    .append(tbcttype);
+            sb.append("&jsondata%5Bbctrecvtype%5D=")
+                    .append(bctrecvtype);
+            sb.append("&jsondata%5Btterminallevel%5D=")
+                    .append(tterminallevel);
+            sb.append("&jsondata%5Btcalltimeout%5D=")
+                    .append(tcalltimeout);
+            sb.append("&jsondata%5Btcalltarget1%5D=")
+                    .append(URLEncoder.encode((tcalltarget1), "utf-8"));
+            sb.append("&jsondata%5Btcalltarget2%5D=")
+                    .append(URLEncoder.encode((tcalltarget2), "utf-8"));
+            sb.append("&jsondata%5Btbctlevel%5D=")
+                    .append(tbctlevel);
+            sb.append("&jsondata%5Bttalklevel%5D=")
+                    .append(ttalklevel);
+            sb.append("&jsondata%5Btmonlevel%5D=")
+                    .append(tmonlevel);
+            sb.append("&jsondata%5Btmeetinglevel%5D=")
+                    .append(tmeetinglevel);
+            sb.append("&jsondata%5Btbctlist%5D=")
+                    .append(URLEncoder.encode((tbctlist), "utf-8"));
+            sb.append("&jsondata%5Bttalklist%5D=")
+                    .append(URLEncoder.encode((ttalklist), "utf-8"));
+            sb.append("&jsondata%5Btmonlist%5D=")
+                    .append(URLEncoder.encode((tmonlist), "utf-8"));
+            sb.append("&jsondata%5Btmeetinglist%5D=")
+                    .append(URLEncoder.encode((tmeetinglist), "utf-8"));
+            sb.append("&jsondata%5Btrtspurl%5D=")
+                    .append(URLEncoder.encode((trtspurl), "utf-8"));
+            sb.append("&jsondata%5Btpass%5D=")
+                    .append(tpass);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return sb.toString();
+    }
+/* @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();
         sb.append("jsondata%5Btid%5D=")
@@ -248,5 +304,5 @@ public class SetTerminal {
         sb.append("&jsondata%5Btpass%5D=")
                 .append(tpass);
         return sb.toString();
-    }
+    }*/
 }

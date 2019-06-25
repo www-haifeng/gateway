@@ -2,30 +2,33 @@ package com.shuzhi.entity.command;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 public class GetTaskData {
     @JsonProperty("pageindex")
-    private int pageIndex;
+    private Integer pageIndex;
 
     @JsonProperty("pagecount")
-    private int pageCount;
+    private Integer pageCount;
 
     private String dir;
 
     private String user = "admin";
 
-    public int getPageIndex() {
+    public Integer getPageIndex() {
         return pageIndex;
     }
 
-    public void setPageIndex(int pageIndex) {
+    public void setPageIndex(Integer pageIndex) {
         this.pageIndex = pageIndex;
     }
 
-    public int getPageCount() {
+    public Integer getPageCount() {
         return pageCount;
     }
 
-    public void setPageCount(int pageCount) {
+    public void setPageCount(Integer pageCount) {
         this.pageCount = pageCount;
     }
 
@@ -52,10 +55,27 @@ public class GetTaskData {
                 .append(pageIndex);
         sb.append("&jsondata%5BpageCount%5D=")
                 .append(pageCount);
+        try {
+            sb.append("&jsondata%5Bdir%5D=")
+                    .append(URLEncoder.encode((dir), "utf-8"));
+            sb.append("&jsondata%5Buser%5D=")
+                    .append(URLEncoder.encode((user), "utf-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return sb.toString();
+    }
+/*@Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder();
+        sb.append("jsondata%5BpageIndex%5D=")
+                .append(pageIndex);
+        sb.append("&jsondata%5BpageCount%5D=")
+                .append(pageCount);
         sb.append("&jsondata%5Bdir%5D=")
                 .append(dir);
         sb.append("&jsondata%5Buser%5D=")
                 .append(user);
         return sb.toString();
-    }
+    }*/
 }

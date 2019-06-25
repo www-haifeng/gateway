@@ -1,49 +1,49 @@
 package com.shuzhi.entity.command;
 
 public class SetTerVolume {
-    private int terid;
-    private int talkinv;
-    private int talkoutv;
-    private int bcinv;
-    private int bcoutv;
+    private Integer terid;
+    private Integer talkinv;
+    private Integer talkoutv;
+    private Integer bcinv;
+    private Integer bcoutv;
 
-    public int getTerid() {
+    public Integer getTerid() {
         return terid;
     }
 
-    public void setTerid(int terid) {
+    public void setTerid(Integer terid) {
         this.terid = terid;
     }
 
-    public int getTalkinv() {
+    public Integer getTalkinv() {
         return talkinv;
     }
 
-    public void setTalkinv(int talkinv) {
+    public void setTalkinv(Integer talkinv) {
         this.talkinv = talkinv;
     }
 
-    public int getTalkoutv() {
+    public Integer getTalkoutv() {
         return talkoutv;
     }
 
-    public void setTalkoutv(int talkoutv) {
+    public void setTalkoutv(Integer talkoutv) {
         this.talkoutv = talkoutv;
     }
 
-    public int getBcinv() {
+    public Integer getBcinv() {
         return bcinv;
     }
 
-    public void setBcinv(int bcinv) {
+    public void setBcinv(Integer bcinv) {
         this.bcinv = bcinv;
     }
 
-    public int getBcoutv() {
+    public Integer getBcoutv() {
         return bcoutv;
     }
 
-    public void setBcoutv(int bcoutv) {
+    public void setBcoutv(Integer bcoutv) {
         this.bcoutv = bcoutv;
     }
 

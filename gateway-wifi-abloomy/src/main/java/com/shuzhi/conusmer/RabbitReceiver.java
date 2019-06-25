@@ -27,7 +27,7 @@ public class RabbitReceiver {
 	@Autowired
 	private CommandUtils commandUtils;
 
-	@RabbitListener(queues="wifiMessage")
+	@RabbitListener(queues="abloomy")
 	@RabbitHandler
 	public void commandMessage(Message message, Channel channel) throws Exception {
 		System.out.println("消费端Payload: " + message.getPayload());

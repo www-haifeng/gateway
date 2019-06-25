@@ -18,6 +18,9 @@ public class SystemInfoData {
     //报文数据信息
     private Object msg;
 
+    public SystemInfoData() {
+    }
+
     public SystemInfoData(String msgid, int msgtype, int systype, int sysid, int connectid, String sign, String msgts, Object msg) {
         this.msgid = msgid;
         this.msgtype = msgtype;

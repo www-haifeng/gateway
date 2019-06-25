@@ -152,7 +152,7 @@ public class CommandService {
 
         Cache.wifi.add(wifi);
 
-        if (Cache.wifi.size() >= 2){
+        if (Cache.wifi.size() >= 50){
             sendWiFiStylet(Cache.wifi.toJSONString(),Cache.deviceInfoMap.get(apMac));
             Cache.wifi.clear();
         }
@@ -167,7 +167,7 @@ public class CommandService {
         SystemInfoData sid = new SystemInfoData(msgid,configData.getMsgtypeReportMsg(),configData.getSystype(),configData.getSysid(),configData.getConnectid(),"",msgts,wsm.toString());
         sid.setSign(utils.getSignVerify(sid));
         try {
-            rabbitSender.send("abloomy",sid.toString(),"wifiexchange");
+            rabbitSender.send("wifiMessage",sid.toString(),"wifiMessage");
             logger.info("上报探针数据:"+sid.toString());
         } catch (Exception e) {
             logger.error("数据发送出错",e);

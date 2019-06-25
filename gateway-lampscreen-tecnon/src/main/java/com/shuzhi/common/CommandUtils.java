@@ -51,7 +51,7 @@ public class CommandUtils {
             //解析第一层json 转换成对象
             SystemInfoData systemInfoData = mapper.readValue(data, SystemInfoData.class);
 
-            //解析第二层json
+            //解析第二层jsone
             MessageData messageData = mapper.readValue(jsonParentNode.path("msg").toString(), MessageData.class);
 
             //判断数据中sign校验

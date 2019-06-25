@@ -1,6 +1,10 @@
 package com.shuzhi.entity.command;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 /*
  * 功能描述 《应用网关-广播协议1.2 获取终端信息(模糊)》
  * @author YHF
@@ -11,10 +15,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class GetZoneTerminalData {
     
     @JsonProperty("pageindex")
-    private int pageIndex;
+    private Integer pageIndex;
     
     @JsonProperty("pagecount")
-    private int pageCount;
+    private Integer pageCount;
     
     @JsonProperty("groupname")
     private String groupName;
@@ -26,21 +30,21 @@ public class GetZoneTerminalData {
 
     private String user = "admin";
 
-    private int simple;
+    private Integer simple;
 
-    public int getAgeIndex() {
+    public Integer getAgeIndex() {
         return pageIndex;
     }
 
-    public void setAgeIndex(int ageIndex) {
+    public void setAgeIndex(Integer ageIndex) {
         this.pageIndex = ageIndex;
     }
 
-    public int getPageCount() {
+    public Integer getPageCount() {
         return pageCount;
     }
 
-    public void setPageCount(int pageCount) {
+    public void setPageCount(Integer pageCount) {
         this.pageCount = pageCount;
     }
 
@@ -68,23 +72,46 @@ public class GetZoneTerminalData {
         this.user = user;
     }
 
-    public int getSimple() {
+    public Integer getSimple() {
         return simple;
     }
 
-    public void setSimple(int simple) {
+    public void setSimple(Integer simple) {
         this.simple = simple;
     }
 
-    public int getPageIndex() {
+    public Integer getPageIndex() {
         return pageIndex;
     }
 
-    public void setPageIndex(int pageIndex) {
+    public void setPageIndex(Integer pageIndex) {
         this.pageIndex = pageIndex;
     }
 
     @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder();
+        sb.append("jsondata%5BpageIndex%5D=")
+                .append(pageIndex);
+        sb.append("&jsondata%5BpageCount%5D=")
+                .append(pageCount);
+        try {
+            sb.append("&jsondata%5BgroupName%5D=")
+                    .append(URLEncoder.encode((groupName), "utf-8"));
+            sb.append("&jsondata%5Buser%5D=")
+                    .append(URLEncoder.encode((user), "utf-8"));
+            sb.append("&jsondata%5BshowType%5D=")
+                    .append(URLEncoder.encode((showType), "utf-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        sb.append("&jsondata%5Bsimple%5D=")
+                .append(simple);
+        return sb.toString();
+    }
+
+
+    /* @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();
         sb.append("jsondata%5BpageIndex%5D=")
@@ -100,5 +127,5 @@ public class GetZoneTerminalData {
         sb.append("&jsondata%5Bsimple%5D=")
                 .append(simple);
         return sb.toString();
-    }
+    }*/
 }

@@ -41,7 +41,7 @@ public class Utils {
      * @date 2019/6/10
      */
     public String  getTimeStamp(){
-        return new SimpleDateFormat("yyyy-MM-dd T HH:mm:ss:SSS").format(new Date());
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS").format(new Date());
     }
 
     /**
