@@ -219,6 +219,7 @@ public class FTPUtils {
         getFTPClient();
         FTPFile[] files = new FTPFile[0];
         try {
+            ftpClient.changeWorkingDirectory(dir);
             files = ftpClient.listFiles(dir);
         } catch (Throwable thr) {
             thr.printStackTrace();
