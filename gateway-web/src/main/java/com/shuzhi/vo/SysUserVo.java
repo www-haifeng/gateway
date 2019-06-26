@@ -37,7 +37,12 @@ public class SysUserVo {
     /**
      * 是否禁用 0：否；1：是
      */
-    private String forbidden;
+    private Integer forbidden;
+
+    /**
+     * 是否使用按钮 0：没有；1：有
+     */
+    private Integer authority;
 
     /**
      * 用户角色

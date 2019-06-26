@@ -12,6 +12,12 @@ spring:
       port: 5672
       username: guest
       password: guest
+  jpa:
+    show-sql: true
+    hibernate:
+      database-platform: org.hibernate.dialect.PostgreSQLDialect
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
 redis:
   host: 192.168.8.150
   port: 6379
