@@ -15,5 +15,5 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME) //注解在哪个阶段执行
 @Documented //生成文档
 public @interface  LogInfo {
-    String value() default "";
+    String decription() default "";
 }

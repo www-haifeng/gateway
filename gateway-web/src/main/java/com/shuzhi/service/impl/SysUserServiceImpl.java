@@ -84,13 +84,13 @@ public class SysUserServiceImpl implements SysUserService {
         log.info("用户基本信息保存：sysUserSave = {}"+sysUserSave);
 
         /*用户对应角色保存*/
-        List<SysUserRole> sysUserRoles = new ArrayList<>();
-        sysUserFrom.getSysRoles().forEach(o->{
-            SysUserRole sysUserRole = new SysUserRole();
-            sysUserRole.setUserId(sysUserSave.getId());
-            sysUserRole.setRoleId(o.getId());
-            sysUserRoles.add(sysUserRole);
-        });
+//        List<SysUserRole> sysUserRoles = new ArrayList<>();
+//        sysUserFrom.getSysRoles().forEach(o->{
+//            SysUserRole sysUserRole = new SysUserRole();
+//            sysUserRole.setUserId(sysUserSave.getId());
+//            sysUserRole.setRoleId(o.getId());
+//            sysUserRoles.add(sysUserRole);
+//        });
        // List<SysUserRole> sysUserRolesSave = sysUserRoleRepository.save(sysUserRoles);
         //log.info("用户角色保存：sysUserRolesSave = {}"+sysUserRolesSave);
         return RUtil.success();
@@ -128,7 +128,8 @@ public class SysUserServiceImpl implements SysUserService {
 
         /*查询用户基本信息*/
         SysUserVo sysUserVo = new SysUserVo();
-        SysUser sysUser = sysUserRepository.findOne(id);
+      //  SysUser sysUser = sysUserRepository.findOne(id);
+        SysUser sysUser = sysUserRepository.getOne(id);
         BeanUtils.copyProperties(sysUser,sysUserVo);
         sysUserVo.setPassword("*********");
         log.info("用户基本信息：sysUser = {}"+sysUser);
@@ -156,7 +157,7 @@ public class SysUserServiceImpl implements SysUserService {
     public R updateUser(SysUserFrom sysUserFrom) {
 
         /*判断用户有没有修改账号*/
-        if(!sysUserRepository.findOne(sysUserFrom.getId()).getAccount().equals(sysUserFrom.getAccount())){
+        if(!sysUserRepository.getOne(sysUserFrom.getId()).getAccount().equals(sysUserFrom.getAccount())){
             /*用户修改账号*/
 
             /*判断该账号是否存在*/
@@ -183,13 +184,13 @@ public class SysUserServiceImpl implements SysUserService {
        // sysUserRoleRepository.deleteByUserId(sysUserFrom.getId());
 
         /*添加用户角色*/
-        List<SysUserRole> sysUserRoles = new ArrayList<>();
-        sysUserFrom.getSysRoles().forEach(o->{
-            SysUserRole sysUserRole = new SysUserRole();
-            sysUserRole.setRoleId(o.getId());
-            sysUserRole.setUserId(sysUserFrom.getId());
-            sysUserRoles.add(sysUserRole);
-        });
+//        List<SysUserRole> sysUserRoles = new ArrayList<>();
+//        sysUserFrom.getSysRoles().forEach(o->{
+//            SysUserRole sysUserRole = new SysUserRole();
+//            sysUserRole.setRoleId(o.getId());
+//            sysUserRole.setUserId(sysUserFrom.getId());
+//            sysUserRoles.add(sysUserRole);
+//        });
       //  List<SysUserRole> sysUserRolesSave = sysUserRoleRepository.save(sysUserRoles);
       //  log.info("用户角色：sysUserRolesSave = {}"+sysUserRolesSave);
         return RUtil.success();
@@ -203,7 +204,7 @@ public class SysUserServiceImpl implements SysUserService {
     @Override
     public R delectUser(Integer id) {
       //  sysUserRoleRepository.deleteByUserId(id);
-        sysUserRepository.delete(id);
+        sysUserRepository.deleteById(id);
         return RUtil.success();
     }
 }

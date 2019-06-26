@@ -59,7 +59,7 @@ public class SysResourceServiceImpl implements SysResourceService {
 
         /*获取权限标识符*/
         Set<String> prems = new HashSet<>();
-        List<SysResource> sysResources = sysResourceRepository.findAll(resourceIds);
+        List<SysResource> sysResources = sysResourceRepository.findAllById(resourceIds);
 //        sysResources.forEach(o->{
 //            if(StringUtils.isNoneBlank(o.getPerms())){
 //                prems.add(o.getPerms());

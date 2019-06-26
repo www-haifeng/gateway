@@ -67,7 +67,7 @@ public class SysRoleServiceImpl implements SysRoleService {
             sysRoleResource.setResourceId(o.getId());
             sysRoleResources.add(sysRoleResource);
         });
-        List<SysRoleResource> sysRoleResourcesSave = sysRoleResourceRepository.save(sysRoleResources);
+        List<SysRoleResource> sysRoleResourcesSave = sysRoleResourceRepository.saveAll(sysRoleResources);
         log.info("角色资源保存：sysRoleResourcesSave = {}"+sysRoleResourcesSave);
 
         return RUtil.success();
@@ -103,7 +103,7 @@ public class SysRoleServiceImpl implements SysRoleService {
 
         /*查询角色基本信息*/
         SysRoleVo sysRoleVo = new SysRoleVo();
-        SysRole sysRole = sysRoleRepository.findOne(id);
+        SysRole sysRole = sysRoleRepository.getOne(id);
         BeanUtils.copyProperties(sysRole,sysRoleVo);
 
         /*取出resourceId*/
@@ -114,7 +114,7 @@ public class SysRoleServiceImpl implements SysRoleService {
         });
 
         /*查询该角色拥有资源*/
-        List<SysResource> sysResources = sysResourceRepository.findAll(sysResourceIds);
+        List<SysResource> sysResources = sysResourceRepository.findAllById(sysResourceIds);
         sysRoleVo.setSysResources(sysResources);
 
         log.info("角色详情：sysRoleVo = {}"+sysRoleVo);
@@ -148,7 +148,7 @@ public class SysRoleServiceImpl implements SysRoleService {
             sysRoleResource.setRoleId(sysRoleFrom.getId());
             sysRoleResources.add(sysRoleResource);
         });
-        List<SysRoleResource> sysRoleResourcesSave = sysRoleResourceRepository.save(sysRoleResources);
+        List<SysRoleResource> sysRoleResourcesSave = sysRoleResourceRepository.saveAll(sysRoleResources);
         log.info("资源更新：sysRoleResourcesSave = {}"+sysRoleResourcesSave);
 
         return RUtil.success();
@@ -161,7 +161,7 @@ public class SysRoleServiceImpl implements SysRoleService {
      */
     @Override
     public R deleteRole(Integer id){
-        sysRoleRepository.delete(id);
+        sysRoleRepository.deleteById(id);
 
         /*资源删除*/
         sysRoleResourceRepository.deleteByRoleId(id);
