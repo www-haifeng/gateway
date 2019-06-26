@@ -39,7 +39,7 @@ public interface LonBonEventDao extends JpaRepository<TLonbonEventEntity, Long> 
      */
     @Modifying
     @Query(value = "UPDATE t_lonbon_event set state = 1,upload_time = ?1 WHERE rd_file = ?2 and state = 0;", nativeQuery = true)
-    int updateAtmnum(Timestamp timestamp, String rdfile);
+    int updateFileStatus(Timestamp timestamp, String rdfile);
 
     /**
      * 查询文件上传状态

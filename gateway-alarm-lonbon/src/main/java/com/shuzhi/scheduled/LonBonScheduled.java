@@ -177,7 +177,7 @@ public class LonBonScheduled {
                     if (file.isFile()) {
                         //文件已上传
                         if (file.getName().equals(fileName)) {
-                            lonBonEventDao.updateAtmnum(new Timestamp(System.currentTimeMillis()), rdFile);
+                            lonBonEventDao.updateFileStatus(new Timestamp(System.currentTimeMillis()), rdFile);
                             Map map = new HashMap();
                             map.put("sessionid", tLonbonEventMap.get("session_id"));
                             map.put("rdfile", rdFile);
