@@ -150,7 +150,7 @@ public class LonBonScheduled {
      * 文件是否已上传
      */
     @Transactional
-    @Scheduled(fixedRate = 30000)
+    @Scheduled(cron = "${scheduled.uploadFile}")
     public void uploadFile() {
         //查询数据库中未上传文件列表 已排重
         List<Map> lonbonList = lonBonEventDao.findAllByRdFileAndAtmNum();
@@ -213,9 +213,9 @@ public class LonBonScheduled {
      * 在线状态
      * 0 表示不在线, 非 0 表示在线.
      */
-    @Scheduled(fixedRate = 60000)
-    public void onlineStat() {
-        //获取数据库中全部设备
+    @Scheduled(cron = "${scheduled.onlineState}")
+    public void onlineState() {
+        //获取数据库中全部设备 0 主机 1 分机
         List<TDeviceLonBonEntity> deviceLonBonEntityList = tdr.getAllByDeviceTypeIn(new int[]{0, 1});
         // 查看设备在线设备
         deviceLonBonEntityList.stream().forEachOrdered(tDeviceLonBonEntity -> {

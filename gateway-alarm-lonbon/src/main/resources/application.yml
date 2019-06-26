@@ -42,3 +42,7 @@ gateway:
   msgcode: 1001
   exchange: alarmexchange
   routingKey: lowerControlMessage
+
+scheduled:
+  uploadFile: 0 * * * * ?
+  onlineState: 0 * * * * ?
