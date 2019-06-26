@@ -57,7 +57,7 @@ public class HttpCommandUtils {
         try {
             String httpJSON = getHttp("http://" + configData.getIp() + ":" + configData.getPort() + "/account/hash/" + configData.getUserhash());
             JSONArray data = mapper.readTree(httpJSON).get("data").traverse(mapper).readValueAs(JSONArray.class);
-            Cache.accesstoken = mapper.readTree(data.getJSONObject(0).toString()).get("accesstoken").traverse(mapper).readValueAs(String.class)+"/";
+            Cache.accesstoken = mapper.readTree(data.getJSONObject(0).toString()).get("accesstoken").traverse(mapper).readValueAs(String.class);
             logger.info("更新令牌成功:"+Cache.accesstoken);
         } catch (Exception e) {
             this.getAccessToken();

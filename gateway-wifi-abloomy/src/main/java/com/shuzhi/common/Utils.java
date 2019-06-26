@@ -152,11 +152,15 @@ public class Utils {
         StringBuilder sb = new StringBuilder();
         for (Map.Entry<String, Object> m : map.entrySet()) {
             if ( !"".equals(m.getValue()) && "null" != m.getValue() && null != m.getValue()){
+                sb.append("/");
                 sb.append( m.getKey());
                 sb.append("/");
                 sb.append(m.getValue());
                 sb.append("/");
             }
+        }
+        if (sb.length() < 1){
+            return "";
         }
         String replaceStr = sb.toString().replace("[", "[\"").replace("]", "\"]");
         return replaceStr.substring(0,replaceStr.length()-1);
