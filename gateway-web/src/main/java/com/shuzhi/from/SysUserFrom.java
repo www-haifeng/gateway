@@ -48,8 +48,15 @@ public class SysUserFrom {
      */
     @Digits(integer=1,fraction=0,message = "必须为整数")
     @Range(min = 0,max = 1,message = "等级系数在1或2之间")
-    private String forbidden;
+    private Integer forbidden;
 
+
+    /**
+     * 是否禁用 0：否；1：是
+     */
+    @Digits(integer=1,fraction=0,message = "必须为整数")
+    @Range(min = 0,max = 1,message = "是否有按钮权限")
+    private Integer authority;
     /**
      * 用户角色
      */

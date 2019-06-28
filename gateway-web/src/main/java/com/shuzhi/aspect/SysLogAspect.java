@@ -1,14 +1,24 @@
 package com.shuzhi.aspect;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.shuzhi.annotation.LogInfo;
+import com.shuzhi.entity.SysLog;
+import com.shuzhi.entity.SysUser;
+import com.shuzhi.service.SysLogService;
+import com.shuzhi.utils.ConstantUtils;
+import org.apache.shiro.SecurityUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
+import java.util.Date;
 
 /**
 * @Program: SysLogAspect
@@ -19,7 +29,7 @@ import java.lang.reflect.Method;
 @Aspect
 @Component
 public class SysLogAspect {
-   /* @Autowired
+    @Autowired
     private SysLogService sysLogService;
 
     //定义切点 @Pointcut
@@ -39,34 +49,22 @@ public class SysLogAspect {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         //获取切入点所在的方法
         Method method = signature.getMethod();
-
+        SysUser sysUser = (SysUser) SecurityUtils.getSubject().getPrincipal();
         //获取操作
-        MyLog myLog = method.getAnnotation(MyLog.class);
-        if (myLog != null) {
-            String value = myLog.value();
-            sysLog.setOperation(value);//保存获取的操作
-        }
-
-        //获取请求的类名
         String className = joinPoint.getTarget().getClass().getName();
-        //获取请求的方法名
-        String methodName = method.getName();
-        sysLog.setMethod(className + "." + methodName);
+        String methodName = signature.getName();
+        String username = sysUser.getAccount();
+        String value = "";
+        LogInfo logInfo = method.getAnnotation(LogInfo.class);
+        if (logInfo != null) {
+             value = logInfo.decription();
+        }
+        sysLog.setDescribe("登录人："+username+" 调用"+className + "." + methodName + " " +value);
+        sysLog.setTimestamp(new Date());
+        sysLog.setLogType("系统日志");
 
-        //请求的参数
-        Object[] args = joinPoint.getArgs();
-        //将参数所在的数组转换成json
-        String params = JSON.toJSONString(args);
-        sysLog.setParams(params);
-
-        sysLog.setCreateDate(new Date());
-        //获取用户名
-        sysLog.setUsername(ShiroUtils.getUserEntity().getUsername());
-        //获取用户ip地址
-        HttpServletRequest request = HttpContextUtils.getHttpServletRequest();
-        sysLog.setIp(IPUtils.getIpAddr(request));
-
+        sysLog.setServerType(ConstantUtils.LOG_SYSTEM);
         //调用service保存SysLog实体类到数据库
-        sysLogService.save(sysLog);
-    }*/
+        sysLogService.saveSysLog(sysLog);
+    }
 }

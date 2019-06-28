@@ -1,5 +1,6 @@
 package com.shuzhi.controller;
 
+import com.shuzhi.annotation.LogInfo;
 import com.shuzhi.enums.REnum;
 import com.shuzhi.exception.SystemException;
 import com.shuzhi.from.SysUserFrom;
@@ -33,6 +34,7 @@ public class SysUserController {
      * @param bindingResult
      * @return
      */
+    @LogInfo(decription = "新增用户")
     //@RequiresPermissions("sys:user:insert")
     @PostMapping("/saveUser")
     public R saveUser(@Valid @RequestBody SysUserFrom sysUserFrom,
@@ -53,6 +55,7 @@ public class SysUserController {
      * @param name
      * @return
      */
+    @LogInfo(decription = "查询用户列表")
    // @RequiresPermissions("sys:user:list")
     @GetMapping("/selectUserList")
     public R selectUserList(@RequestParam(value = "page", defaultValue = "0") Integer page,
@@ -69,6 +72,7 @@ public class SysUserController {
      * @return
      */
     //@RequiresPermissions("sys:user:detail")
+    @LogInfo(decription = "查询用户详情")
     @GetMapping("/selectUserDetail")
     public R selectUserDetail(@RequestParam(value = "id",required = false) Integer id){
 
@@ -83,6 +87,7 @@ public class SysUserController {
      * @return
      */
    // @RequiresPermissions("sys:user:update")
+    @LogInfo(decription = "更新用户")
     @PutMapping("/updateUser")
     public R updateUser(@Valid @RequestBody SysUserFrom sysUserFrom,
                         BindingResult bindingResult){
@@ -103,6 +108,7 @@ public class SysUserController {
      * @return
      */
     //@RequiresPermissions("sys:user:delete")
+    @LogInfo(decription = "删除用户")
     @DeleteMapping("/deleteUser/{id}")
     public R deleteUser(@PathVariable Integer id){
         return sysUserService.delectUser(id);
