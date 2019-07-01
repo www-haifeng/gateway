@@ -14,6 +14,12 @@ spring:
     port: 5672
     username: guest
     password: guest
+    listener:
+            simple:
+              acknowledge-mode: manual
+              concurrency: 5
+              max-concurrency: 10
+          connection-timeout: 15000
   jpa:
     show-sql: true
     hibernate:

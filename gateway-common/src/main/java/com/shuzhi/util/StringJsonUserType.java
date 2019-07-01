@@ -90,7 +90,7 @@ public class StringJsonUserType implements UserType {
      * @param st      a JDBC prepared statement
      * @param value   the object to write
      * @param index   statement parameter index
-     * @param session
+     * @param
      * @throws org.hibernate.HibernateException
      *
      * @throws SQLException
