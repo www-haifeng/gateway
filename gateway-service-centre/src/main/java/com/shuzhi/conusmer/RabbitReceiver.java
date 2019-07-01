@@ -43,18 +43,18 @@ public class RabbitReceiver {
 	)
 	@RabbitHandler
 	public void upMessage(Message message, Channel channel) throws Exception {
-		try {
+
 
 			log.info("收到上报主题"+message.getPayload().toString());
+			Long deliveryTag = (Long) message.getHeaders().get(AmqpHeaders.DELIVERY_TAG);
+			//手工ACK
+			channel.basicAck(deliveryTag, false);
+		try {
 			WebSocketEntity entity = (WebSocketEntity) SessionRepository.getChannelCache(String.valueOf(TypeGropCodeEnums.upMessage.getCode()));
 			if(entity != null){
 				entity.setMessage(message.getPayload().toString());
 				sendMessageFactory.sendMessage(entity);
 			}
-
-			Long deliveryTag = (Long) message.getHeaders().get(AmqpHeaders.DELIVERY_TAG);
-			//手工ACK
-			channel.basicAck(deliveryTag, false);
 		}catch (Exception e){
 
 		}
@@ -77,17 +77,19 @@ public class RabbitReceiver {
 	)
 	@RabbitHandler
 	public void lowerControlMessage(Message message, Channel channel) throws Exception {
-		try {
+
 			log.info("监听下控主题"+message.getPayload().toString());
+			Long deliveryTag = (Long) message.getHeaders().get(AmqpHeaders.DELIVERY_TAG);
+			//手工ACK
+			channel.basicAck(deliveryTag, false);
+		try {
 			WebSocketEntity entity = (WebSocketEntity) SessionRepository.getChannelCache(String.valueOf(TypeGropCodeEnums.lowerControlMessage.getCode()));
 			if(entity != null){
 				entity.setMessage(message.getPayload().toString());
 				sendMessageFactory.sendMessage(entity);
 			}
 
-			Long deliveryTag = (Long) message.getHeaders().get(AmqpHeaders.DELIVERY_TAG);
-			//手工ACK
-			channel.basicAck(deliveryTag, false);
+
 		}catch (Exception e){
 
 		}
@@ -110,17 +112,18 @@ public class RabbitReceiver {
 	)
 	@RabbitHandler
 	public void wifiMessage(Message message, Channel channel) throws Exception {
-		try {
+
 			log.info("监听WIFI主题"+message.getPayload().toString());
+			Long deliveryTag = (Long) message.getHeaders().get(AmqpHeaders.DELIVERY_TAG);
+			//手工ACK
+			channel.basicAck(deliveryTag, false);
+		try {
 			WebSocketEntity entity = (WebSocketEntity) SessionRepository.getChannelCache(String.valueOf(TypeGropCodeEnums.wifiMessage.getCode()));
 			if(entity != null){
 				entity.setMessage(message.getPayload().toString());
 				sendMessageFactory.sendMessage(entity);
 			}
 
-			Long deliveryTag = (Long) message.getHeaders().get(AmqpHeaders.DELIVERY_TAG);
-			//手工ACK
-			channel.basicAck(deliveryTag, false);
 		}catch (Exception e){
 
 		}
@@ -143,17 +146,19 @@ public class RabbitReceiver {
 	)
 	@RabbitHandler
 	public void alarmMessage(Message message, Channel channel) throws Exception {
-		try {
+
 			log.info("监听告警主题"+message.getPayload().toString());
+			Long deliveryTag = (Long) message.getHeaders().get(AmqpHeaders.DELIVERY_TAG);
+			System.out.println(deliveryTag+"=================channel"+channel);
+			//手工ACK
+			channel.basicAck(deliveryTag, false);
+		try {
 			WebSocketEntity entity = (WebSocketEntity) SessionRepository.getChannelCache(String.valueOf(TypeGropCodeEnums.alarmMessage.getCode()));
 			if(entity != null){
 				entity.setMessage(message.getPayload().toString());
 				sendMessageFactory.sendMessage(entity);
 			}
 
-			Long deliveryTag = (Long) message.getHeaders().get(AmqpHeaders.DELIVERY_TAG);
-			//手工ACK
-			channel.basicAck(deliveryTag, false);
 		}catch (Exception e){
 
 		}
