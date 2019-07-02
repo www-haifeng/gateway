@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -37,9 +38,15 @@ public class SysDataDictionaryGroupServiceImpl implements SysDataDictionaryGroup
 
     @Override
     public R selectDictionaryGroup(Integer id) {
-        Optional<SysDataDictionaryGroup> sysDataDictionaryGroupRepositoryById = sysDataDictionaryGroupRepository.findById(id);
-        log.info("配置基本信息：sysDataDictionaryGroupRepositoryById = {}"+sysDataDictionaryGroupRepositoryById);
-        return  RUtil.success(sysDataDictionaryGroupRepositoryById);
+        if(id != null){
+            Optional<SysDataDictionaryGroup> sysDataDictionaryGroupRepositoryById = sysDataDictionaryGroupRepository.findById(id);
+            log.info("配置基本信息：sysDataDictionaryGroupRepositoryById = {}"+sysDataDictionaryGroupRepositoryById);
+            return  RUtil.success(sysDataDictionaryGroupRepositoryById);
+        }else {
+            List<SysDataDictionaryGroup> sysDataDictionaryGroupRepositoryAll = sysDataDictionaryGroupRepository.findAll();
+            log.info("配置基本信息：sysDataDictionaryGroupRepositoryAll = {}"+sysDataDictionaryGroupRepositoryAll);
+            return RUtil.success(sysDataDictionaryGroupRepositoryAll);
+        }
     }
 
     @Override

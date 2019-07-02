@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -37,9 +38,15 @@ public class SysDataDictionaryServiceImpl implements SysDataDictionaryService {
 
     @Override
     public R selectDictionary(Integer id) {
-        Optional<SysDataDictionary> sysDataDictionaryRepositoryOne = sysDataDictionaryRepository.findById(id);
-        log.info("配置基本信息：sysDataDictionaryRepositoryOne = {}"+sysDataDictionaryRepositoryOne);
-        return  RUtil.success(sysDataDictionaryRepositoryOne);
+        if(id != null){
+            Optional<SysDataDictionary> sysDataDictionaryRepositoryOne = sysDataDictionaryRepository.findById(id);
+            log.info("配置基本信息：sysDataDictionaryRepositoryOne = {}"+sysDataDictionaryRepositoryOne);
+            return  RUtil.success(sysDataDictionaryRepositoryOne);
+        }else {
+            List<SysDataDictionary> sysDataDictionaryRepositoryAll = sysDataDictionaryRepository.findAll();
+            log.info("配置基本信息：sysDataDictionaryRepositoryAll = {}"+sysDataDictionaryRepositoryAll);
+            return RUtil.success(sysDataDictionaryRepositoryAll);
+        }
     }
 
     @Override
