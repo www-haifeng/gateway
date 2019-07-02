@@ -53,10 +53,11 @@ public class SysDeviceAbloomyController {
      */
     //@RequiresPermissions("sys:device:list")
     //@LogInfo(decription = "查询韵盛发设备配置wifi")
-    @GetMapping("/selectAbloomyList/{id}")
-    public R selectAbloomyList(@PathVariable("id") Integer id){
+    //@GetMapping("/selectAbloomyList/{id}")
+    @RequestMapping(value = {"/selectAbloomyList/{id}", "/selectAbloomyList/"},method = RequestMethod.GET)
+    public R selectAbloomyList(@PathVariable(required = false) Integer id){
 
-        Assert.isNull(id,"id不能为空");
+        //Assert.isNull(id,"id不能为空");
         return sysDeviceAbloomyService.selectAbloomyList(id);
     }
 

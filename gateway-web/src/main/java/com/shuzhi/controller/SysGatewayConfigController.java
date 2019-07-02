@@ -50,10 +50,11 @@ public class SysGatewayConfigController {
      */
     //@RequiresPermissions("sys:config:list")
     //@LogInfo(decription = "查询网关配置")
-    @GetMapping("/selectConfigList/{id}")//id = 1
-    public R selectConfigList( @PathVariable("id") Integer id){
+    //@GetMapping("/selectConfigList/{id}")//id = 1
+    @RequestMapping(value = {"/selectConfigList/{id}", "/selectConfigList/"},method = RequestMethod.GET)
+    public R selectConfigList( @PathVariable(required = false) Integer id){
 
-        Assert.isNull(id,"id不能为空");
+        //Assert.isNull(id,"id不能为空");
         return sysGatewayConfigService.selectConfigList(id);
     }
 

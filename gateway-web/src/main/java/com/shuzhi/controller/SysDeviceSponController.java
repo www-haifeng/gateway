@@ -52,10 +52,11 @@ public class SysDeviceSponController {
      */
     //@RequiresPermissions("sys:device:list")
     //@LogInfo(decription = "查询世邦设备配置")
-    @GetMapping("/selectSponList/{id}")
-    public R selectSponList(@PathVariable("id") Integer id){
+    //@GetMapping("/selectSponList/{id}")
+    @RequestMapping(value = {"/selectSponList/{id}", "/selectSponList/"},method = RequestMethod.GET)
+    public R selectSponList(@PathVariable(required = false) Integer id){
 
-        Assert.isNull(id,"id不能为空");
+        //Assert.isNull(id,"id不能为空");
         return sysDeviceSponService.selectSponList(id);
     }
 

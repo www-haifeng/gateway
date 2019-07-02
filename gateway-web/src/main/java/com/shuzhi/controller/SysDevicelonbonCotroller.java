@@ -52,10 +52,11 @@ public class SysDevicelonbonCotroller {
      */
     //@RequiresPermissions("sys:device:list")
     //@LogInfo(decription = "查询来邦设备配置")
-    @GetMapping("/selectlonbonList/{id}")
-    public R selectlonbonList(@PathVariable("id") Integer id){
+    //@GetMapping("/selectlonbonList/{id}")
+    @RequestMapping(value = {"/selectlonbonList/{id}", "/selectlonbonList/"},method = RequestMethod.GET)
+    public R selectlonbonList(@PathVariable(required = false) Integer id){
 
-        Assert.isNull(id,"id不能为空");
+        //Assert.isNull(id,"id不能为空");
         return sysDevicelonbonService.selectlonbonList(id);
     }
 
