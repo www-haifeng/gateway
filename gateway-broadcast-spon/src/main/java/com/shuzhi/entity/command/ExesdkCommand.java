@@ -10,7 +10,6 @@ public class ExesdkCommand {
     private Integer isstop;
     private String user = "admin";
     private String extdata;
-    private String hasvideo;
 
     public String getSource() {
         return source;
@@ -60,14 +59,6 @@ public class ExesdkCommand {
         this.extdata = extdata;
     }
 
-    public String getHasvideo() {
-        return hasvideo;
-    }
-
-    public void setHasvideo(String hasvideo) {
-        this.hasvideo = hasvideo;
-    }
-
   /*  @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();
@@ -104,8 +95,6 @@ public class ExesdkCommand {
                     .append(URLEncoder.encode((user), "utf-8"));
             sb.append("&jsondata%5Bextdata%5D=")
                     .append(URLEncoder.encode((extdata), "utf-8"));
-            sb.append("&jsondata%5Bhasvideo%5D=")
-                    .append(URLEncoder.encode((hasvideo), "utf-8"));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
