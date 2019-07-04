@@ -18,7 +18,7 @@
         <module>gateway-lampscreen-tecnon</module>
         <module>gateway-service-centre</module>
         <module>gateway-alarm-lonbon</module>
-        <module>gateway-lcd-hanpon</module>
+        <module>gateway-lcd-hobo</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
