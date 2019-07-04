@@ -10,23 +10,10 @@ import java.io.Serializable;
 public class DeviceInfo implements Serializable {
 
     private TDeviceFactoryEntity tdeviceFactoryEntity;
-    private TDeviceSponEntity tdeviceSponEntity;
+    private TDeviceHoboEntity tdeviceSponEntity;
 
     public DeviceInfo() {
 
-    }
-
-    public DeviceInfo(TDeviceFactoryEntity tdeviceFactoryEntity) {
-        this.tdeviceFactoryEntity = tdeviceFactoryEntity;
-    }
-
-    public DeviceInfo(TDeviceSponEntity tdeviceSponEntity) {
-        this.tdeviceSponEntity = tdeviceSponEntity;
-    }
-
-    public DeviceInfo(TDeviceFactoryEntity tdeviceFactoryEntity, TDeviceSponEntity tdeviceSponEntity) {
-        this.tdeviceFactoryEntity = tdeviceFactoryEntity;
-        this.tdeviceSponEntity = tdeviceSponEntity;
     }
 
     public TDeviceFactoryEntity getTdeviceFactoryEntity() {
@@ -37,11 +24,16 @@ public class DeviceInfo implements Serializable {
         this.tdeviceFactoryEntity = tdeviceFactoryEntity;
     }
 
-    public TDeviceSponEntity getTdeviceSponEntity() {
+    public TDeviceHoboEntity getTdeviceSponEntity() {
         return tdeviceSponEntity;
     }
 
-    public void setTdeviceSponEntity(TDeviceSponEntity tdeviceSponEntity) {
+    public void setTdeviceSponEntity(TDeviceHoboEntity tdeviceSponEntity) {
+        this.tdeviceSponEntity = tdeviceSponEntity;
+    }
+
+    public DeviceInfo(TDeviceFactoryEntity tdeviceFactoryEntity, TDeviceHoboEntity tdeviceSponEntity) {
+        this.tdeviceFactoryEntity = tdeviceFactoryEntity;
         this.tdeviceSponEntity = tdeviceSponEntity;
     }
 }

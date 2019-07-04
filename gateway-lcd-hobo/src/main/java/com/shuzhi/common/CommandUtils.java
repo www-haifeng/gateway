@@ -60,7 +60,7 @@ public class CommandUtils {
                 CommandInfo commandInfo = Cache.commandMap.get(messageData.getCmdid());
 
                 if (commandInfo == null){
-                    logger.error("未查询到广播设备cmdid为:"+messageData.getCmdid()+"的命令,放弃请求");
+                    logger.error("未查询到lcd设备cmdid为:"+messageData.getCmdid()+"的命令,放弃请求");
                     return;
                 }
 
@@ -70,35 +70,35 @@ public class CommandUtils {
                 //匹配命令
                 switch (commandInfo.getTmsgInfoEntity().getInterfaceId()){
 
-                    case "/api/apiselclient.vs":
+                    case "/vs/api/apiselclient.vs":
                         commandService.commandService(getCommandUrl(jsonParentNode,url), systemInfoData);
                         break;
 
-                    case "/api/apiselzxclient.vs":
+                    case "/vs/api/apiselzxclient.vs":
                         commandService.commandService(getCommandUrl(jsonParentNode,url), systemInfoData);
                         break;
 
-                    case "/api/apisellxclient.vs":
+                    case "/vs/api/apisellxclient.vs":
                         commandService.commandService(getCommandUrl(jsonParentNode,url), systemInfoData);
                         break;
 
-                    case "/api/apirestart.vs":
+                    case "/vs/api/apirestart.vs":
                         commandService.commandService(getCommandUrl(jsonParentNode,url), systemInfoData);
                         break;
 
-                    case "/api/apirouse.vs":
+                    case "/vs/api/apirouse.vs":
                         commandService.commandService(getCommandUrl(jsonParentNode,url), systemInfoData);
                         break;
 
-                    case "/api/apistandby.vs":
+                    case "/vs/api/apistandby.vs":
                         commandService.commandService(getCommandUrl(jsonParentNode,url), systemInfoData);
                         break;
 
-                    case "/api/apinewds.vs":
+                    case "/vs/api/apinewds.vs":
                         commandService.commandService(getCommandUrl(jsonParentNode,url), systemInfoData);
                         break;
 
-                    case "/api/apivolset.vs":
+                    case "/vs/api/apivolset.vs":
                         commandService.commandService(getCommandUrl(jsonParentNode,url),systemInfoData);
                         break;
 
@@ -115,10 +115,12 @@ public class CommandUtils {
         }
     }
 
+
     /**
-     * @Description: 封装参数
-     * @Author: YHF
-     * @date 2019/6/14
+     * 拼接参数到url 上
+     * @param jsonParentNode ：json串node
+     * @param url ：参数前边的url
+     * @return
      */
     private String getCommandUrl(JsonNode jsonParentNode, String url){
 

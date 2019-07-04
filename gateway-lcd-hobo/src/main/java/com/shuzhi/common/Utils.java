@@ -1,7 +1,12 @@
 package com.shuzhi.common;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shuzhi.entity.MessageRevertData;
 import com.shuzhi.entity.SystemInfoData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
@@ -22,6 +27,7 @@ public class Utils {
 
     private static final String KEY_SHA = "SHA";
 
+    private final static Logger logger = LoggerFactory.getLogger(Utils.class);
     /**
      * @Description:封装命令回执message层
      * @Author: YHF
@@ -31,7 +37,13 @@ public class Utils {
         MessageRevertData mrd = new MessageRevertData();
         mrd.setCode(code);
         mrd.setTimestamp(timestamp);
-        mrd.setData(data);
+        try {
+            JSONArray objects = JSONArray.parseArray(data);
+            JSONObject jsonObject = objects.getJSONObject(0);
+            mrd.setData(jsonObject.toJSONString());
+        }catch (Exception e){
+            logger.error("命令执行返回结果集解析失败");
+        }
         return mrd;
     }
 
