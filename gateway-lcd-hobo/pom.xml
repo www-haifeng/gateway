@@ -8,9 +8,9 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 	<groupId>com.shuzhi</groupId>
-	<artifactId>gateway-lcd-hanpon</artifactId>
+	<artifactId>gateway-lcd-hobo</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>gateway-lcd-hanpon</name>
+	<name>gateway-lcd-hobo</name>
 	<description>汉邦设备接口</description>
 
 
@@ -117,7 +117,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<mainClass>com.shuzhi.GatewayLcdHanponApplication</mainClass>
+					<mainClass>com.shuzhi.GatewayLcdHoboApplication</mainClass>
 				</configuration>
 				<executions>
 					<execution>

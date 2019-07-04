@@ -23,6 +23,11 @@ public class ConfigData {
     //命令回执消息类型
     private int msgtypeCommandReturn;
 
+    //账号 密码
+    private String account;
+
+    private String password;
+
     public String getName() {
         return name;
     }
@@ -61,5 +66,21 @@ public class ConfigData {
 
     public void setMsgtypeCommandReturn(int msgtypeCommandReturn) {
         this.msgtypeCommandReturn = msgtypeCommandReturn;
+    }
+
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

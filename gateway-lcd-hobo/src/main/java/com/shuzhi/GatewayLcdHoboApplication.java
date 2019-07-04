@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class GatewayLcdHanponApplication {
+public class GatewayLcdHoboApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(GatewayLcdHanponApplication.class, args);
+		SpringApplication.run(GatewayLcdHoboApplication.class, args);
 	}
 
 }

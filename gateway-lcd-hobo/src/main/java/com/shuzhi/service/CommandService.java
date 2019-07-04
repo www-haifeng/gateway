@@ -37,10 +37,10 @@ public class CommandService {
      * @Author: YHF
      * @date 2019/6/10
      */
-    public void commandService(String url,String commandJSON,SystemInfoData systemInfoData){
+    public void commandService(String url,SystemInfoData systemInfoData){
         try {
             //调用请求
-            String resultJSON = httpCommandUtils.postHTTP(url, commandJSON);
+            String resultJSON = httpCommandUtils.getHttp(url);
             logger.info("请求返回结果:"+resultJSON);
             commandSend(resultJSON,systemInfoData);
         } catch (Exception e) {

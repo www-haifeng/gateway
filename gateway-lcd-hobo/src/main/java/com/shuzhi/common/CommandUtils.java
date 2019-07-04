@@ -13,6 +13,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+import java.util.Map;
+
 
 /**
  *功能描述 命令工具
@@ -30,6 +33,8 @@ public class CommandUtils {
     private Utils utils;
     @Autowired
     private ObjectMapper mapper;
+    @Autowired
+    private ConfigData configData;
     @Autowired
     private FtpUtil ftpUtil;
     /**
@@ -64,10 +69,39 @@ public class CommandUtils {
 
                 //匹配命令
                 switch (commandInfo.getTmsgInfoEntity().getInterfaceId()){
-                    case "/php/exesdkcommand.php":
-                        ExesdkCommand ec = mapper.readValue(jsonParentNode.path("msg").path("data").toString(), ExesdkCommand.class);
-                        commandService.commandService(url, ec.toString(),systemInfoData);
+
+                    case "/api/apiselclient.vs":
+                        commandService.commandService(getCommandUrl(jsonParentNode,url), systemInfoData);
                         break;
+
+                    case "/api/apiselzxclient.vs":
+                        commandService.commandService(getCommandUrl(jsonParentNode,url), systemInfoData);
+                        break;
+
+                    case "/api/apisellxclient.vs":
+                        commandService.commandService(getCommandUrl(jsonParentNode,url), systemInfoData);
+                        break;
+
+                    case "/api/apirestart.vs":
+                        commandService.commandService(getCommandUrl(jsonParentNode,url), systemInfoData);
+                        break;
+
+                    case "/api/apirouse.vs":
+                        commandService.commandService(getCommandUrl(jsonParentNode,url), systemInfoData);
+                        break;
+
+                    case "/api/apistandby.vs":
+                        commandService.commandService(getCommandUrl(jsonParentNode,url), systemInfoData);
+                        break;
+
+                    case "/api/apinewds.vs":
+                        commandService.commandService(getCommandUrl(jsonParentNode,url), systemInfoData);
+                        break;
+
+                    case "/api/apivolset.vs":
+                        commandService.commandService(getCommandUrl(jsonParentNode,url),systemInfoData);
+                        break;
+
                         default:
                             logger.error("没有找到对应请求命令,请查证");
                             break;
@@ -80,4 +114,30 @@ public class CommandUtils {
             logger.error("数据出错请查看",e);
         }
     }
+
+    /**
+     * @Description: 封装参数
+     * @Author: YHF
+     * @date 2019/6/14
+     */
+    private String getCommandUrl(JsonNode jsonParentNode, String url){
+
+        try {
+            Map<String, Object> map  = mapper.readValue(jsonParentNode.path("msg").path("data").toString(), Map.class);
+            //维度查询
+            StringBuilder sb = new StringBuilder();
+            //获取url
+            sb.append(url);
+            sb.append("?account=");
+            sb.append(configData.getAccount());
+            sb.append("&password=");
+            sb.append(configData.getPassword());
+            sb.append(utils.mapToCommandStr(map));
+            return sb.toString();
+        } catch (IOException e) {
+            logger.error("数据出错请查看",e);
+            return null;
+        }
+    }
+
 }

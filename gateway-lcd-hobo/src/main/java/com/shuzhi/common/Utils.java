@@ -10,6 +10,7 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 
 @Component
 @EnableConfigurationProperties(ConfigData.class)
@@ -127,5 +128,23 @@ public class Utils {
         return hexDigits[d1] + hexDigits[d2];
     }
 
+
+    /**
+     * 将map中的数据拼接到url上
+     * @param map
+     * @return
+     */
+    public String mapToCommandStr(Map<String, Object> map){
+        StringBuilder sb = new StringBuilder();
+        for (Map.Entry<String, Object> m : map.entrySet()) {
+            if ( !"".equals(m.getValue()) && "null" != m.getValue() && null != m.getValue()){
+                sb.append("&");
+                sb.append( m.getKey());
+                sb.append("=");
+                sb.append(m.getValue());
+            }
+        }
+        return sb.toString();
+    }
 
 }

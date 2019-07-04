@@ -27,7 +27,7 @@ public class RabbitReceiver {
 	@Autowired
 	private CommandUtils commandUtils;
 
-	@RabbitListener(queues="spon")
+	@RabbitListener(queues="hobo")
 	@RabbitHandler
 	public void commandMessage(Message message, Channel channel) throws Exception {
 		System.out.println("消费端Payload: " + message.getPayload());
