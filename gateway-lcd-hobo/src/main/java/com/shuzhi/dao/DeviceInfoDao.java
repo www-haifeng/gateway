@@ -15,8 +15,8 @@ import java.util.List;
  */
 
 public interface DeviceInfoDao extends JpaRepository<TDeviceHoboEntity, Long> {
-//
-//    @Query(value = "select new com.shuzhi.entity.DeviceInfo(tdf,tds) from TDeviceSponEntity tds , TDeviceFactoryEntity tdf where tds.factoryId = tdf.id ")
-//    public List<DeviceInfo> findDeviceInfo();
+
+    @Query(value = "select new com.shuzhi.entity.DeviceInfo(tdf,tds) from TDeviceHoboEntity tds , TDeviceFactoryEntity tdf where tds.factoryId = tdf.id ")
+    public List<DeviceInfo> findDeviceInfo();
 
 }

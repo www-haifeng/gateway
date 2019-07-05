@@ -10,10 +10,15 @@ import java.io.Serializable;
 public class DeviceInfo implements Serializable {
 
     private TDeviceFactoryEntity tdeviceFactoryEntity;
-    private TDeviceHoboEntity tdeviceSponEntity;
+    private TDeviceHoboEntity tdeviceHoboEntity;
 
     public DeviceInfo() {
 
+    }
+
+    public DeviceInfo(TDeviceFactoryEntity tdeviceFactoryEntity, TDeviceHoboEntity tdeviceHoboEntity) {
+        this.tdeviceFactoryEntity = tdeviceFactoryEntity;
+        this.tdeviceHoboEntity = tdeviceHoboEntity;
     }
 
     public TDeviceFactoryEntity getTdeviceFactoryEntity() {
@@ -24,16 +29,11 @@ public class DeviceInfo implements Serializable {
         this.tdeviceFactoryEntity = tdeviceFactoryEntity;
     }
 
-    public TDeviceHoboEntity getTdeviceSponEntity() {
-        return tdeviceSponEntity;
+    public TDeviceHoboEntity getTdeviceHoboEntity() {
+        return tdeviceHoboEntity;
     }
 
-    public void setTdeviceSponEntity(TDeviceHoboEntity tdeviceSponEntity) {
-        this.tdeviceSponEntity = tdeviceSponEntity;
-    }
-
-    public DeviceInfo(TDeviceFactoryEntity tdeviceFactoryEntity, TDeviceHoboEntity tdeviceSponEntity) {
-        this.tdeviceFactoryEntity = tdeviceFactoryEntity;
-        this.tdeviceSponEntity = tdeviceSponEntity;
+    public void setTdeviceHoboEntity(TDeviceHoboEntity tdeviceHoboEntity) {
+        this.tdeviceHoboEntity = tdeviceHoboEntity;
     }
 }
