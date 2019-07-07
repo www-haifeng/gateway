@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -37,9 +38,15 @@ public class SysDeviceSponServiceImpl implements SysDeviceSponService {
 
     @Override
     public R selectSponList(Integer id) {
-        Optional<SysDeviceSpon> sysDeviceSponRepositoryOne = sysDeviceSponRepository.findById(id);
-        log.info("配置基本信息：sysDeviceSponRepositoryOne = {}"+sysDeviceSponRepositoryOne);
-        return RUtil.success(sysDeviceSponRepositoryOne);
+        if(id != null){
+            Optional<SysDeviceSpon> sysDeviceSponRepositoryOne = sysDeviceSponRepository.findById(id);
+            log.info("配置基本信息：sysDeviceSponRepositoryOne = {}"+sysDeviceSponRepositoryOne);
+            return RUtil.success(sysDeviceSponRepositoryOne);
+        }else {
+            List<SysDeviceSpon> sysDeviceSponRepositoryAll = sysDeviceSponRepository.findAll();
+            log.info("配置基本信息：sysDeviceSponRepositoryAll = {}"+sysDeviceSponRepositoryAll);
+            return RUtil.success(sysDeviceSponRepositoryAll);
+        }
     }
 
     @Override

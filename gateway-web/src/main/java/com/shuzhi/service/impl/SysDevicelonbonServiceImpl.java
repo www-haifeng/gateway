@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -37,9 +38,15 @@ public class SysDevicelonbonServiceImpl implements SysDevicelonbonService {
 
     @Override
     public R selectlonbonList(Integer id) {
-        Optional<SysDevicelonbon> sysDevicelonbonRepositoryOne = sysDevicelonbonRepository.findById(id);
-        log.info("配置基本信息：sysDevicelonbonRepositoryOne = {}"+sysDevicelonbonRepositoryOne);
-        return  RUtil.success(sysDevicelonbonRepositoryOne);
+        if(id != null){
+            Optional<SysDevicelonbon> sysDevicelonbonRepositoryOne = sysDevicelonbonRepository.findById(id);
+            log.info("配置基本信息：sysDevicelonbonRepositoryOne = {}"+sysDevicelonbonRepositoryOne);
+            return  RUtil.success(sysDevicelonbonRepositoryOne);
+        }else {
+            List<SysDevicelonbon> sysDevicelonbonRepositoryAll = sysDevicelonbonRepository.findAll();
+            log.info("配置基本信息：sysDevicelonbonRepositoryAll = {}"+sysDevicelonbonRepositoryAll);
+            return RUtil.success(sysDevicelonbonRepositoryAll);
+        }
     }
 
     @Override

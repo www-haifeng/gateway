@@ -52,10 +52,11 @@ public class SysDataDictionaryGroupController {
      */
     //@RequiresPermissions("sys:dictionary:list")
     //@LogInfo(decription = "查询数据字典组管理")
-    @GetMapping("/selectDictionaryGroupList/{id}")
-    public R selectDictionaryGroupList(@PathVariable("id") Integer id){
+    //@GetMapping("/selectDictionaryGroupList/{id}")
+    @RequestMapping(value = {"/selectDictionaryGroupList/{id}", "/selectDictionaryGroupList/"},method = RequestMethod.GET)
+    public R selectDictionaryGroupList(@PathVariable(required = false) Integer id){
 
-        Assert.isNull(id,"id不能为空");
+        //Assert.isNull(id,"id不能为空");
         return sysDataDictionaryGroupService.selectDictionaryGroup(id);
     }
 

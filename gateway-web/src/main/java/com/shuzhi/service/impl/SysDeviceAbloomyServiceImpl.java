@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -37,9 +38,15 @@ public class SysDeviceAbloomyServiceImpl implements SysDeviceAbloomyService {
 
     @Override
     public R selectAbloomyList(Integer id) {
-        Optional<SysDeviceAbloomy> sysDeviceAbloomyRepositoryOne = sysDeviceAbloomyRepository.findById(id);
-        log.info("配置基本信息：sysDeviceAbloomyRepositoryOne = {}"+sysDeviceAbloomyRepositoryOne);
-        return  RUtil.success(sysDeviceAbloomyRepositoryOne);
+        if(id != null){
+            Optional<SysDeviceAbloomy> sysDeviceAbloomyRepositoryOne = sysDeviceAbloomyRepository.findById(id);
+            log.info("配置基本信息：sysDeviceAbloomyRepositoryOne = {}"+sysDeviceAbloomyRepositoryOne);
+            return  RUtil.success(sysDeviceAbloomyRepositoryOne);
+        }else {
+            List<SysDeviceAbloomy> sysDeviceAbloomyRepositoryAll = sysDeviceAbloomyRepository.findAll();
+            log.info("配置基本信息：sysDeviceAbloomyRepositoryAll = {}"+sysDeviceAbloomyRepositoryAll);
+            return RUtil.success(sysDeviceAbloomyRepositoryAll);
+        }
     }
 
     @Override

@@ -99,6 +99,7 @@ public class CommandService {
         String mrdJSON = messageRevertData.toString();
         systemInfoData.setMsgts(timeStamp);
         systemInfoData.setMsg(mrdJSON);
+        systemInfoData.setMsgtype(configData.getMsgtypeCommandReturn());
         systemInfoData.setSign(utils.getSignVerify(systemInfoData));
         String commandRevertJSON = systemInfoData.toString();
         try {

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -37,9 +38,16 @@ public class SysDeviceTecnonServiceImpl implements SysDeviceTecnonService {
 
     @Override
     public R selectConfigList(Integer id) {
-        Optional<SysDeviceTecnon> sysDeviceTecnonRepositoryOne = sysDeviceTecnonRepository.findById(id);
-        log.info("配置基本信息：sysDeviceTecnonRepositoryOne = {}"+sysDeviceTecnonRepositoryOne);
-        return RUtil.success(sysDeviceTecnonRepositoryOne);
+        if(id != null){
+            Optional<SysDeviceTecnon> sysDeviceTecnonRepositoryOne = sysDeviceTecnonRepository.findById(id);
+            log.info("配置基本信息：sysDeviceTecnonRepositoryOne = {}"+sysDeviceTecnonRepositoryOne);
+            return RUtil.success(sysDeviceTecnonRepositoryOne);
+        }else {
+            List<SysDeviceTecnon> sysDeviceTecnonRepositoryAll = sysDeviceTecnonRepository.findAll();
+            log.info("配置基本信息：sysDeviceTecnonRepositoryAll = {}"+sysDeviceTecnonRepositoryAll);
+            return RUtil.success(sysDeviceTecnonRepositoryAll);
+        }
+
     }
 
     @Override

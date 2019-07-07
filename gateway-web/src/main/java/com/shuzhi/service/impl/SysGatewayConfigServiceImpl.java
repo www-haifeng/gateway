@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -37,9 +38,15 @@ public class SysGatewayConfigServiceImpl implements SysGatewayConfigService {
 
     @Override
     public R selectConfigList(Integer id) {
-        Optional<SysGatewayConfig> sysGatewayConfigRepositoryOne = sysGatewayConfigRepository.findById(id);
-        log.info("配置基本信息：sysGatewayConfigRepositoryOne = {}"+sysGatewayConfigRepositoryOne);
-        return  RUtil.success(sysGatewayConfigRepositoryOne);
+        if(id != null){
+            Optional<SysGatewayConfig> sysGatewayConfigRepositoryOne = sysGatewayConfigRepository.findById(id);
+            log.info("配置基本信息：sysGatewayConfigRepositoryOne = {}"+sysGatewayConfigRepositoryOne);
+            return  RUtil.success(sysGatewayConfigRepositoryOne);
+        }else {
+            List<SysGatewayConfig> sysGatewayConfigRepositoryAll = sysGatewayConfigRepository.findAll();
+            log.info("配置基本信息：sysGatewayConfigRepositoryAll = {}"+sysGatewayConfigRepositoryAll);
+            return RUtil.success(sysGatewayConfigRepositoryAll);
+        }
     }
 
     @Override

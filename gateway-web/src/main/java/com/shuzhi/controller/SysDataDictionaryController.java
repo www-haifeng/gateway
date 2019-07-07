@@ -54,10 +54,11 @@ public class SysDataDictionaryController {
      */
     //@RequiresPermissions("sys:dictionary:list")
     //@LogInfo(decription = "查询数据字典管理")
-    @GetMapping("/selectDictionaryList/{id}")
-    public R selectDictionaryList(@PathVariable("id") Integer id){
+    //@GetMapping("/selectDictionaryList/{id}")
+    @RequestMapping(value = {"/selectDictionaryList/{id}", "/selectDictionaryList/"},method = RequestMethod.GET)
+    public R selectDictionaryList(@PathVariable(required = false) Integer id){
 
-        Assert.isNull(id,"id不能为空");
+        //Assert.isNull(id,"id不能为空");
         return sysDataDictionaryService.selectDictionary(id);
     }
 

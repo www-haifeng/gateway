@@ -52,10 +52,11 @@ public class SysDeviceTecnonController {
      */
     //@RequiresPermissions("sys:device:list")
     //@LogInfo(decription = "查询太隆设备配置")
-    @GetMapping("/selectTecnonList/{id}")
-    public R selectTecnonList(@PathVariable("id") Integer id){
+    //@GetMapping("/selectTecnonList/{id}")
+    @RequestMapping(value = {"/selectTecnonList/{id}", "/selectTecnonList/"},method = RequestMethod.GET)
+    public R selectTecnonList(@PathVariable(required = false) Integer id){
 
-        Assert.isNull(id,"id不能为空");
+        //Assert.isNull(id,"id不能为空");
         return sysDeviceTecnonService.selectConfigList(id);
     }
 

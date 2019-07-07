@@ -86,7 +86,7 @@ public class SendMessageFactory {
                                 boolean flug = ExecuteThread.executeSendThread(executorService,wsEntity);
 
                                 if (flug) {
-                                    log.info("下控回执消息发送成功");
+                                    log.info("下控回执消息发送,状态：成功，内容："+wsEntity.getMessage());
                                     messagePojo= (MessagePojo) JsonConvertBeanUtil.copyProperties(messagePojo,messagePojo.getMsg());
 
                                     String exchange = SessionRepository.codeSocketNameKey(Integer.parseInt(messagePojo.getType()));
@@ -103,14 +103,13 @@ public class SendMessageFactory {
                                 }
 
                             }else {
-                                //不发控制命令 都是拼好发送
                                // try{
                                 SendMessageFactory.addSendFailCache(wsEntity);
                                 SessionRepository.sendFailCache.put(messagePojo.getMsgid().hashCode(),wsEntity);
                                 ExecutorService executorService=FixedThreadPool.getThreadChannelCache(wsEntity.getTGatewayConfigEntity().getTypeGroupCode());
                                 boolean flug = ExecuteThread.executeSendThread(executorService,wsEntity);
                                 if(flug){
-                                    log.info("不发控制命令 都是拼好发送成功");
+                                    log.info("消息发送成功,内容："+wsEntity.getMessage());
                                 }
                             }
                         }

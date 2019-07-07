@@ -53,7 +53,7 @@ public class SchedulerHeartBeatTask {
                         //发送判断
                         //回执校验判断
                         boolean flug = ExecuteThread.executeSendThread(executorService,wsEntity);
-                        log.info("心跳线程发送结果 : " +flug);
+                        log.info("心跳线程发送结果 : " +flug+" 内容："+wsEntity.getMessage());
                         if (!flug) {
                             TGatewayConfigEntity tGatewayConfigEntity = wsEntity.getTGatewayConfigEntity();
                             //没有发送成功   发送重新连接请求
