@@ -13,6 +13,10 @@ spring:
       username: guest
       password: guest
   jpa:
+    properties:
+      hibernate:
+        temp:
+          use_jdbc_metadata_defaults: false
     show-sql: true
     hibernate:
       database-platform: org.hibernate.dialect.PostgreSQLDialect
