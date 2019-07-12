@@ -108,7 +108,7 @@ public class GetSingLeterminalData {
                 .append(pageCount);
         try {
             sb.append("&jsondata%5BgroupName%5D=")
-                    .append(URLEncoder.encode((groupName), "utf-8"));
+                    .append(groupName);
             sb.append("&jsondata%5BshowType%5D=")
                     .append(URLEncoder.encode((showType), "utf-8"));
             sb.append("&jsondata%5Buser%5D=")

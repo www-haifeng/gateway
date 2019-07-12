@@ -41,7 +41,7 @@ redis:
 jna:
   serverIp: 192.168.8.235
   serverPort: 0
-  dllpath: E:/lb_sdk_universal.dll
+  dllpath: D:/lb_sdk_universal.dll
 
 gateway:
   key: 123456

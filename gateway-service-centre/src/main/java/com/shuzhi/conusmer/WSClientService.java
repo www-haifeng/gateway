@@ -31,11 +31,12 @@ public class WSClientService {
 
     @OnMessage
     public void onMessage(Session session,String message) {
+        log.info("接收客户端消息----" + message);
         WebSocketEntity entity = null;
         try {
             //获取相应的通道
             String code =  SessionRepository.getSessionChannelCache(session.getId());
-             entity = (WebSocketEntity) SessionRepository.getChannelCache(code);
+            entity = (WebSocketEntity) SessionRepository.getChannelCache(code);
             entity.setMessage(message);
             MessagePojo messagePojo = (MessagePojo) JsonConvertBeanUtil.json2Object(message, MessagePojo.class);
 

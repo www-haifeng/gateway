@@ -88,11 +88,12 @@ public class SendMessageFactory {
                                 if (flug) {
                                     log.info("下控回执消息发送,状态：成功，内容："+wsEntity.getMessage());
                                     messagePojo= (MessagePojo) JsonConvertBeanUtil.copyProperties(messagePojo,messagePojo.getMsg());
-
-                                    String exchange = SessionRepository.codeSocketNameKey(Integer.parseInt(messagePojo.getType()));
-                                    String topic = SessionRepository.codeSocketNameValue(Integer.parseInt(messagePojo.getType()));
+                                    String exchange = "";
+                                    String topic = "";
                                     //放入到mq中
                                     try {
+                                        exchange = SessionRepository.codeSocketNameKey(Integer.parseInt(messagePojo.getType()));
+                                        topic = SessionRepository.codeSocketNameValue(Integer.parseInt(messagePojo.getType()));
                                         rabbitSender.send(exchange,topic,rabbitMqMessage);
                                         log.info("下控命令,发送mq成功,交换机="+exchange +" 主题="+topic+" 消息="+rabbitMqMessage);
                                     } catch (Exception e) {

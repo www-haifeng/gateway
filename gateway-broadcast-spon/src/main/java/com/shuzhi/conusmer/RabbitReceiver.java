@@ -30,7 +30,7 @@ public class RabbitReceiver {
 	@RabbitListener(queues="spon")
 	@RabbitHandler
 	public void commandMessage(Message message, Channel channel) throws Exception {
-		System.out.println("消费端Payload: " + message.getPayload());
+		logger.info("消费端Payload: " + message.getPayload());
 		Long deliveryTag = (Long)message.getHeaders().get(AmqpHeaders.DELIVERY_TAG);
 		//手工ACK
 		channel.basicAck(deliveryTag, false);
