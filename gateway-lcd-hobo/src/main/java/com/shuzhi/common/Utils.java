@@ -219,7 +219,7 @@ public class Utils {
      * @param deviceId : 设备id
      * @return
      */
-    public String deviceIdToDid(String deviceId) {
+    public static  String deviceIdToDid(String deviceId) {
 
         Map<String, String> deviceInfoMap = Cache.deviceInfoMap;
         for (String did : deviceInfoMap.keySet()) {

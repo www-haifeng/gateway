@@ -19,6 +19,12 @@
       "sourceType": "com.shuzhi.commen.ConfigData"
     },
     {
+      "name": "factory.msgtype-command-return",
+      "type": "java.lang.Integer",
+      "sourceType": "com.shuzhi.commen.ConfigData",
+      "defaultValue": 0
+    },
+    {
       "name": "factory.name",
       "type": "java.lang.String",
       "sourceType": "com.shuzhi.commen.ConfigData"
