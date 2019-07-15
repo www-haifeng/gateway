@@ -1,6 +1,7 @@
 package com.shuzhi.cache;
 
 
+import com.shuzhi.entity.TDeviceFactoryCronEntity;
 import io.netty.channel.ChannelHandlerContext;
 
 import java.util.Map;
@@ -16,4 +17,7 @@ public class Cache {
 
     //缓存客户端channel
     public static Map<String, ChannelHandlerContext> channelCache = new ConcurrentHashMap<String, ChannelHandlerContext>();
+
+    //frt 定时任务缓存
+    public static TDeviceFactoryCronEntity cronEntity ;
 }

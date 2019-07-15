@@ -24,11 +24,15 @@ public class TDeviceFactoryCronEntity {
     /**
      * 厂商名称
      */
-    private String factroyName;
+    private String factoryName;
     /**
      * 定时任务表达式
      */
     private String cron;
+    /**
+     * 是否启动 0 启动 1 不启动
+     */
+    private String startFlag;
     /**
      * 描述
      */
@@ -56,12 +60,12 @@ public class TDeviceFactoryCronEntity {
 
     @Basic
     @Column(name = "factory_name", nullable = true)
-    public String getFactroyName() {
-        return factroyName;
+    public String getFactoryName() {
+        return factoryName;
     }
 
-    public void setFactroyName(String factroyName) {
-        this.factroyName = factroyName;
+    public void setFactoryName(String factoryName) {
+        this.factoryName = factoryName;
     }
 
     @Basic
@@ -72,6 +76,16 @@ public class TDeviceFactoryCronEntity {
 
     public void setCron(String cron) {
         this.cron = cron;
+    }
+
+    @Basic
+    @Column(name = "start_flag", nullable = false)
+    public String getStartFlag() {
+        return startFlag;
+    }
+
+    public void setStartFlag(String startFlag) {
+        this.startFlag = startFlag;
     }
 
     @Basic

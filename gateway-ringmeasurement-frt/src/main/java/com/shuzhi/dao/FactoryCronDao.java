@@ -11,5 +11,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface FactoryCronDao extends JpaRepository<TDeviceFactoryCronEntity, Long> {
 
 
-
+    TDeviceFactoryCronEntity getByFactoryName(String factoryName);
 }

@@ -2,6 +2,7 @@ package com.shuzhi.schedule;
 
 import com.shuzhi.cache.Cache;
 import com.shuzhi.common.ConfigData;
+import com.shuzhi.dao.FactoryCronDao;
 import com.shuzhi.service.CommandService;
 import io.micrometer.core.instrument.util.StringUtils;
 import io.netty.channel.ChannelHandlerContext;
@@ -22,9 +23,7 @@ import java.util.Map;
 public class DynamicScheduleTask implements SchedulingConfigurer {
 
     @Autowired
-    private ConfigData configData;
-    @Autowired
-    private CommandService commandService;
+    private FactoryCronDao factoryCronDao;
 
     @Override
     public void configureTasks(ScheduledTaskRegistrar scheduledTaskRegistrar) {
@@ -42,18 +41,22 @@ public class DynamicScheduleTask implements SchedulingConfigurer {
                                     (byte)0x00,(byte)0x07,(byte)0x00,(byte)0x1C,(byte)0xF5,(byte)0xC2};
                             channelHandlerContext.channel().writeAndFlush(mgsWindSpeed);
                             System.out.println("写入数据完毕");
-                            //commandService.commandService(channelHandlerContext);
+//                            commandService.commandService(channelHandlerContext);
                         //}
                     }
                 },
                 //2.设置执行周期(Trigger)
                 triggerContext -> {
                     //2.2 合法性校验.
-                    if (StringUtils.isEmpty(configData.getCron())) {
-                        // Omitted Code ..
+                    if(Cache.cronEntity==null){
+                        Cache.cronEntity=factoryCronDao.getByFactoryName("富奥通");
                     }
                     //2.3 返回执行周期(Date)
-                    return new CronTrigger(configData.getCron()).nextExecutionTime(triggerContext);
+                    if("0".equals(Cache.cronEntity.getStartFlag())) {
+                        return new CronTrigger(Cache.cronEntity.getCron()).nextExecutionTime(triggerContext);
+                    }else {
+                        return null;
+                    }
                 }
         );
     }
