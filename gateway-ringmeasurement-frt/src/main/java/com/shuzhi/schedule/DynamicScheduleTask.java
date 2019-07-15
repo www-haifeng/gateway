@@ -52,7 +52,7 @@ public class DynamicScheduleTask implements SchedulingConfigurer {
                         Cache.cronEntity=factoryCronDao.getByFactoryName("富奥通");
                     }
                     //2.3 返回执行周期(Date)
-                    if("0".equals(Cache.cronEntity.getStartFlag())) {
+                    if("1".equals(Cache.cronEntity.getStartFlag())) {
                         return new CronTrigger(Cache.cronEntity.getCron()).nextExecutionTime(triggerContext);
                     }else {
                         return null;
