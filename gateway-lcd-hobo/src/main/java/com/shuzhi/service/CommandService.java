@@ -42,7 +42,7 @@ public class CommandService {
             //调用请求
             String resultJSON = httpCommandUtils.getHttp(url);
             logger.info("请求返回结果:"+resultJSON);
-            commandSend(resultJSON,systemInfoData);
+            commandSend(url,resultJSON,systemInfoData);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -53,11 +53,11 @@ public class CommandService {
      * @Author: YHF
      * @date 2019/6/6
      */
-    public void commandSend(String resultJSON, SystemInfoData systemInfoData){
+    public void commandSend(String requestUrl,String resultJSON, SystemInfoData systemInfoData){
             String timeStamp = utils.getTimeStamp();
             //命令正确执行
             if (resultJSON !=null && !"".equals(resultJSON)){
-                MessageRevertData messageRevertData = utils.getMessageRevertData(configData.getSeccussCode(), timeStamp, resultJSON);
+                MessageRevertData messageRevertData = utils.getMessageRevertData(requestUrl,configData.getSeccussCode(), timeStamp, resultJSON);
                 String mrdJSON = messageRevertData.toString();
                 systemInfoData.setMsgts(timeStamp);
                 systemInfoData.setMsgtype(configData.getMsgtypeCommandReturn());
@@ -73,7 +73,7 @@ public class CommandService {
                 }
             }else{
                 //命令执行未成功
-                MessageRevertData messageRevertData = utils.getMessageRevertData(configData.getFailedCode(), timeStamp, resultJSON);
+                MessageRevertData messageRevertData = utils.getMessageRevertData(requestUrl,configData.getFailedCode(), timeStamp, resultJSON);
                 String mrdJSON = messageRevertData.toString();
                 systemInfoData.setMsgts(timeStamp);
                 systemInfoData.setMsg(mrdJSON);

@@ -126,6 +126,11 @@ public class CommandUtils {
 
         try {
             Map<String, Object> map  = mapper.readValue(jsonParentNode.path("msg").path("data").toString(), Map.class);
+            //如果参数有cids，则转换成设备id
+            if(map.containsKey("cids")){
+                String deviceIds = utils.didToDeviceId(map.get("cids").toString());
+                map.put("cids",deviceIds);
+            }
             //维度查询
             StringBuilder sb = new StringBuilder();
             //获取url

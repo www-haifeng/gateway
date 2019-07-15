@@ -13,8 +13,8 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class Cache {
 
-    //设备信息缓存 Key:did
-    public static Map<String, DeviceInfo> deviceInfoMap = new ConcurrentHashMap<>();
+    //设备信息缓存 Key:did value：deviceId
+    public static Map<String, String> deviceInfoMap = new ConcurrentHashMap<>();
     //设备命令缓存 Key:cmdid
     public static Map<String, CommandInfo> commandMap = new ConcurrentHashMap<>();
 }

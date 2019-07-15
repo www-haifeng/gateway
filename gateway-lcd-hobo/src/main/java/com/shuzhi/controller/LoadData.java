@@ -5,6 +5,7 @@ import com.shuzhi.common.ConfigData;
 import com.shuzhi.dao.CommandInfoDao;
 import com.shuzhi.dao.DeviceInfoDao;
 import com.shuzhi.entity.CommandInfo;
+import com.shuzhi.entity.DeviceInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,11 +43,11 @@ public class LoadData implements ApplicationRunner {
       @Override
   public void run(ApplicationArguments args) throws Exception {
           //加载设备信息缓存
-         /* List<DeviceInfo> deviceInfos = deviceInfoDao.findDeviceInfo();
+          List<DeviceInfo> deviceInfos = deviceInfoDao.findDeviceInfo();
           for (DeviceInfo info : deviceInfos) {
-              Cache.deviceInfoMap.put(info.getTdeviceSponEntity().getDid(),info);
+              Cache.deviceInfoMap.put(info.getTdeviceHoboEntity().getDid(),info.getTdeviceHoboEntity().getDeviceId());
           }
-          logger.info("设备信息缓存初始化完毕");*/
+          logger.info("设备信息缓存初始化完毕");
           //加载命令信息缓存
           List<CommandInfo> commandInfos = commandInfoDao.findcommandInfo(configData.getName());
           for (CommandInfo info : commandInfos) {

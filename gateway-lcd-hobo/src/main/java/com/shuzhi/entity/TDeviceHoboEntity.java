@@ -86,6 +86,7 @@ public class TDeviceHoboEntity {
     public void setUrl(String url) {
         this.url = url;
     }
+
     @Basic
     @Column(name = "describe", nullable = true, length = 255)
     public String getDescribe() {

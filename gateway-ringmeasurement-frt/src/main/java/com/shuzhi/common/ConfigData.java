@@ -1,6 +1,5 @@
 package com.shuzhi.common;
 
-
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
@@ -28,6 +27,15 @@ public class ConfigData {
 
     private String password;
 
+    private String cron;
+
+    public String getCron() {
+        return cron;
+    }
+
+    public void setCron(String cron) {
+        this.cron = cron;
+    }
 
     public String getName() {
         return name;
