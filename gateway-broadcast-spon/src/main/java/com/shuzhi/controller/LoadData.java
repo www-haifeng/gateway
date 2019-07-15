@@ -43,11 +43,12 @@ public class LoadData implements ApplicationRunner {
       @Override
   public void run(ApplicationArguments args) throws Exception {
           //加载设备信息缓存
-         /* List<DeviceInfo> deviceInfos = deviceInfoDao.findDeviceInfo();
+          List<DeviceInfo> deviceInfos = deviceInfoDao.findDeviceInfo();
           for (DeviceInfo info : deviceInfos) {
-              Cache.deviceInfoMap.put(info.getTdeviceSponEntity().getDid(),info);
+              Cache.deviceInfoMap.put(info.getTdeviceSponEntity().getDid(),info.getTdeviceSponEntity().getDeviceId());
+              Cache.device_IdMap.put(info.getTdeviceSponEntity().getDeviceId(),info.getTdeviceSponEntity().getDid());
           }
-          logger.info("设备信息缓存初始化完毕");*/
+          logger.info("设备信息缓存初始化完毕");
           //加载命令信息缓存
           List<CommandInfo> commandInfos = commandInfoDao.findcommandInfo(configData.getName());
           for (CommandInfo info : commandInfos) {

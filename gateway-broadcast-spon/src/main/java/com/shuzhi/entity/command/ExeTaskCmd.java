@@ -40,14 +40,10 @@ public class ExeTaskCmd {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();
-        try {
-            sb.append("jsondata%5BtaskId%5D=")
-                    .append(URLEncoder.encode((taskId), "utf-8"));
-            sb.append("&jsondata%5BtaskCommand%5D=")
-                    .append(URLEncoder.encode((taskCommand), "utf-8"));
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+        sb.append("jsondata%5BtaskId%5D=")
+                .append(taskId);
+        sb.append("&jsondata%5BtaskCommand%5D=")
+                .append(taskCommand);
         return sb.toString();
     }
 }

@@ -1,5 +1,7 @@
 package com.shuzhi.entity.command;
 
+import com.shuzhi.commen.Utils;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
@@ -208,52 +210,48 @@ public class SetTerminal {
         final StringBuilder sb = new StringBuilder();
         sb.append("jsondata%5Btid%5D=")
                 .append(tid);
-        try {
-            sb.append("&jsondata%5Btname%5D=")
-                    .append(URLEncoder.encode((tname), "utf-8"));
-            sb.append("&jsondata%5Btbcoutv%5D=")
-                    .append(tbcoutv);
-            sb.append("&jsondata%5Btbcinv%5D=")
-                    .append(tbcinv);
-            sb.append("&jsondata%5Bttalkoutv%5D=")
-                    .append(ttalkoutv);
-            sb.append("&jsondata%5Bttalkinv%5D=")
-                    .append(ttalkinv);
-            sb.append("&jsondata%5Btbcttype%5D=")
-                    .append(tbcttype);
-            sb.append("&jsondata%5Bbctrecvtype%5D=")
-                    .append(bctrecvtype);
-            sb.append("&jsondata%5Btterminallevel%5D=")
-                    .append(tterminallevel);
-            sb.append("&jsondata%5Btcalltimeout%5D=")
-                    .append(tcalltimeout);
-            sb.append("&jsondata%5Btcalltarget1%5D=")
-                    .append(URLEncoder.encode((tcalltarget1), "utf-8"));
-            sb.append("&jsondata%5Btcalltarget2%5D=")
-                    .append(URLEncoder.encode((tcalltarget2), "utf-8"));
-            sb.append("&jsondata%5Btbctlevel%5D=")
-                    .append(tbctlevel);
-            sb.append("&jsondata%5Bttalklevel%5D=")
-                    .append(ttalklevel);
-            sb.append("&jsondata%5Btmonlevel%5D=")
-                    .append(tmonlevel);
-            sb.append("&jsondata%5Btmeetinglevel%5D=")
-                    .append(tmeetinglevel);
-            sb.append("&jsondata%5Btbctlist%5D=")
-                    .append(URLEncoder.encode((tbctlist), "utf-8"));
-            sb.append("&jsondata%5Bttalklist%5D=")
-                    .append(URLEncoder.encode((ttalklist), "utf-8"));
-            sb.append("&jsondata%5Btmonlist%5D=")
-                    .append(URLEncoder.encode((tmonlist), "utf-8"));
-            sb.append("&jsondata%5Btmeetinglist%5D=")
-                    .append(URLEncoder.encode((tmeetinglist), "utf-8"));
-            sb.append("&jsondata%5Btrtspurl%5D=")
-                    .append(URLEncoder.encode((trtspurl), "utf-8"));
-            sb.append("&jsondata%5Btpass%5D=")
-                    .append(tpass);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+        sb.append("&jsondata%5Btname%5D=")
+                .append(Utils.encodeUTF8(tname));
+        sb.append("&jsondata%5Btbcoutv%5D=")
+                .append(tbcoutv);
+        sb.append("&jsondata%5Btbcinv%5D=")
+                .append(tbcinv);
+        sb.append("&jsondata%5Bttalkoutv%5D=")
+                .append(ttalkoutv);
+        sb.append("&jsondata%5Bttalkinv%5D=")
+                .append(ttalkinv);
+        sb.append("&jsondata%5Btbcttype%5D=")
+                .append(tbcttype);
+        sb.append("&jsondata%5Bbctrecvtype%5D=")
+                .append(bctrecvtype);
+        sb.append("&jsondata%5Btterminallevel%5D=")
+                .append(tterminallevel);
+        sb.append("&jsondata%5Btcalltimeout%5D=")
+                .append(tcalltimeout);
+        sb.append("&jsondata%5Btcalltarget1%5D=")
+                .append(Utils.encodeUTF8(tcalltarget1));
+        sb.append("&jsondata%5Btcalltarget2%5D=")
+                .append(Utils.encodeUTF8(tcalltarget2));
+        sb.append("&jsondata%5Btbctlevel%5D=")
+                .append(tbctlevel);
+        sb.append("&jsondata%5Bttalklevel%5D=")
+                .append(ttalklevel);
+        sb.append("&jsondata%5Btmonlevel%5D=")
+                .append(tmonlevel);
+        sb.append("&jsondata%5Btmeetinglevel%5D=")
+                .append(tmeetinglevel);
+        sb.append("&jsondata%5Btbctlist%5D=")
+                .append(Utils.encodeUTF8(tbctlist));
+        sb.append("&jsondata%5Bttalklist%5D=")
+                .append(Utils.encodeUTF8(ttalklist));
+        sb.append("&jsondata%5Btmonlist%5D=")
+                .append(Utils.encodeUTF8(tmonlist));
+        sb.append("&jsondata%5Btmeetinglist%5D=")
+                .append(Utils.encodeUTF8(tmeetinglist));
+        sb.append("&jsondata%5Btrtspurl%5D=")
+                .append(Utils.encodeUTF8(trtspurl));
+        sb.append("&jsondata%5Btpass%5D=")
+                .append(tpass);
         return sb.toString();
     }
 /* @Override

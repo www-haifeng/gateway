@@ -1,12 +1,19 @@
 package com.shuzhi.commen;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.shuzhi.cache.Cache;
 import com.shuzhi.entity.MessageRevertData;
 import com.shuzhi.entity.SystemInfoData;
+import com.shuzhi.util.StringUtil;
+import lombok.Data;
+import org.apache.commons.lang.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Array;
 import java.math.BigInteger;
+import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -20,6 +27,54 @@ public class Utils {
     private final static String[] hexDigits = {"0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F"};
 
     private static final String KEY_SHA = "SHA";
+
+    public static String encodeUTF8(String str){
+        if (StringUtil.isEmpty(str)){
+            return  str;
+        }else {
+            try {
+                return URLEncoder.encode(str, "utf-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+                return str;
+            }
+        }
+    }
+
+    /**
+     * @Description: 下发命令处理did 为deviceid
+     * @Author: YHF
+     * @date 2019/7/14
+     */
+    public String didToDeviceId(String did, String tag){
+        String[] didArr = did.split(tag);
+        if (didArr.length < 1){
+            return null;
+        }
+        for (int i = 0; i < didArr.length ; i++) {
+            if (!StringUtil.isEmpty(Cache.deviceInfoMap.get(didArr[i]))){
+                didArr[i] = Cache.deviceInfoMap.get(didArr[i]);
+            }
+        }
+        return ArrayUtils.toString(didArr).substring(1,ArrayUtils.toString(didArr).length()-1);
+    }
+    /**
+     * @Description: 下发命令处理deviceid 处理为did
+     * @Author: YHF
+     * @date 2019/7/14
+     */
+    public String deviceIdToDid(String deviceId, String tag){
+        String[] didArr = deviceId.split(tag);
+        if (didArr.length < 1){
+            return null;
+        }
+        for (int i = 0; i < didArr.length ; i++) {
+            if (!StringUtil.isEmpty(Cache.device_IdMap.get(didArr[i]))){
+                didArr[i] = Cache.device_IdMap.get(didArr[i]);
+            }
+        }
+        return ArrayUtils.toString(didArr).substring(1,ArrayUtils.toString(didArr).length()-1);
+    }
 
     /**
      * @Description:封装命令回执message层

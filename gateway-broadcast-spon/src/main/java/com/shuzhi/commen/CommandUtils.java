@@ -8,6 +8,7 @@ import com.shuzhi.entity.MessageData;
 import com.shuzhi.entity.SystemInfoData;
 import com.shuzhi.entity.command.*;
 import com.shuzhi.service.CommandService;
+import com.shuzhi.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,23 +68,38 @@ public class CommandUtils {
                     case "/php/getzoneterminaldata.php":
                         //处理命令  转为设备协议
                         GetZoneTerminalData gztd = mapper.readValue(jsonParentNode.path("msg").path("data").toString(), GetZoneTerminalData.class);
-                        commandService.commandService(url, gztd.toString(),systemInfoData);
+                        commandService.commandServiceGetzoneterminaldata(url, gztd.toString(),systemInfoData);
                         break;
                     case "/php/getsingleterminaldata.php":
                         //处理命令  转为设备协议
                         GetSingLeterminalData gsld = mapper.readValue(jsonParentNode.path("msg").path("data").toString(), GetSingLeterminalData.class);
-                        commandService.commandService(url, gsld.toString(),systemInfoData);
+                        String deviceId = utils.didToDeviceId(gsld.getSearchTxt(),",");
+                        if (StringUtil.isEmpty(deviceId)){
+                            logger.info("数据有误请查证,did为空或缺失标识符,");
+                            break;
+                        }
+                        gsld.setSearchTxt(deviceId);
+                        commandService.commandServiceGetzoneterminaldata(url, gsld.toString(),systemInfoData);
                         break;
                     case "/php/setterminal.php":
                         SetTerminal st = mapper.readValue(jsonParentNode.path("msg").path("data").toString(), SetTerminal.class);
+                        st.setTid(Integer.parseInt(Cache.deviceInfoMap.get(st.getTid().toString())));
                         commandService.commandService(url, st.toString(),systemInfoData);
                         break;
                     case "/php/settervolume.php":
                         SetTerVolume stv = mapper.readValue(jsonParentNode.path("msg").path("data").toString(), SetTerVolume.class);
+                        stv.setTerid(Integer.parseInt(Cache.deviceInfoMap.get(stv.getTerid().toString())));
                         commandService.commandService(url, stv.toString(),systemInfoData);
                         break;
                     case "/php/exesdkcommand.php":
                         ExesdkCommand ec = mapper.readValue(jsonParentNode.path("msg").path("data").toString(), ExesdkCommand.class);
+                        ec.setSource(Cache.deviceInfoMap.get(ec.getSource()));
+                        if (ec.getTarget().indexOf("-") != -1){
+                            ec.setTarget(utils.didToDeviceId(ec.getTarget(),"-").replace(",","-"));
+                        }else{
+                            ec.setTarget(Cache.deviceInfoMap.get(ec.getTarget()));
+                        }
+
                         commandService.commandService(url, ec.toString(),systemInfoData);
                         break;
                     case "/php/gettaskdata.php":
@@ -92,14 +108,21 @@ public class CommandUtils {
                         break;
                     case "/php/gettaskinfo.php":
                         GetTaskInfo gti = mapper.readValue(jsonParentNode.path("msg").path("data").toString(), GetTaskInfo.class);
-                        commandService.commandService(url, gti.toString(),systemInfoData);
+
+                        commandService.commandServiceGettaskinfo(url, gti.toString(),systemInfoData);
                         break;
                     case "/php/addtaskinfo.php":
                         AddTaskInfo ati = mapper.readValue(jsonParentNode.path("msg").path("data").toString(), AddTaskInfo.class);
+                        String adddids = ati.getCommands().substring(ati.getCommands().indexOf("idstart")+"idstart".length(),ati.getCommands().indexOf("idend"));
+                        String adddevice_id = utils.didToDeviceId(adddids, "<");
+                        ati.setCommands(ati.getCommands().replaceAll("idstart"+adddids+"idend",adddevice_id));
                         commandService.commandService(url, ati.toString(),systemInfoData);
                         break;
                     case "/php/modifytaskinfo.php":
                         ModifyTaskInfo mti = mapper.readValue(jsonParentNode.path("msg").path("data").toString(), ModifyTaskInfo.class);
+                        String modifydids = mti.getCommands().substring(mti.getCommands().indexOf("idstart")+"idstart".length(),mti.getCommands().indexOf("idend"));
+                        String modifydevice_id = utils.didToDeviceId(modifydids, "<");
+                        mti.setCommands(mti.getCommands().replaceAll("idstart"+modifydids+"idend",modifydevice_id));
                         commandService.commandService(url, mti.toString(),systemInfoData);
                         break;
                     case "/php/exetaskcmd.php":
@@ -124,6 +147,15 @@ public class CommandUtils {
                         break;
                     case "/php/exeRealPlayFile.php":
                         ExeRealPlayFile erpf = mapper.readValue(jsonParentNode.path("msg").path("data").toString(), ExeRealPlayFile.class);
+                        erpf.getParam1();
+                        if (erpf.getParam1().indexOf("<") != -1){
+                            erpf.setParam1(utils.didToDeviceId(erpf.getParam1(),"<").replace(",","<"));
+                        }else{
+                            erpf.setParam1(Cache.deviceInfoMap.get(erpf.getParam1()));
+                        }
+                        if (erpf.getParam3() != 0){
+                            erpf.setParam3(Integer.parseInt(Cache.deviceInfoMap.get(erpf.getParam3().toString())));
+                        }
                         commandService.commandService(url, erpf.toString(),systemInfoData);
                         break;
                         default:

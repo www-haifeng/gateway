@@ -1,5 +1,7 @@
 package com.shuzhi.entity.command;
 
+import com.shuzhi.commen.Utils;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
@@ -116,34 +118,30 @@ public class ExeRealPlayFile {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();
-        try {
-            sb.append("jsondata%5Brtype%5D=")
-                    .append(URLEncoder.encode((rtype), "utf-8"));
-            sb.append("&jsondata%5Bparam1%5D=")
-                    .append(URLEncoder.encode((param1), "utf-8"));
-            sb.append("&jsondata%5Bparam2%5D=")
-                    .append(URLEncoder.encode((param2), "utf-8"));
-            sb.append("&jsondata%5Bparam3%5D=")
-                    .append(param3);
-            sb.append("&jsondata%5Bparam4%5D=")
-                    .append(URLEncoder.encode((param4), "utf-8"));
-            sb.append("&jsondata%5Bparam5%5D=")
-                    .append(URLEncoder.encode((param5), "utf-8"));
-            sb.append("&jsondata%5Bparam6%5D=")
-                    .append(param6);
-            sb.append("&jsondata%5Bparam7%5D=")
-                    .append(param7);
-            sb.append("&jsondata%5Bparam8%5D=")
-                    .append(param8);
-            sb.append("&jsondata%5Bparam9%5D=")
-                    .append(param9);
-            sb.append("&jsondata%5Bparam10%5D=")
-                    .append(param10);
-            sb.append("&jsondata%5Bextdata%5D=")
-                    .append(URLEncoder.encode((extdata), "utf-8"));
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+        sb.append("jsondata%5Brtype%5D=")
+                .append(Utils.encodeUTF8(rtype));
+        sb.append("&jsondata%5Bparam1%5D=")
+                .append(Utils.encodeUTF8(param1));
+        sb.append("&jsondata%5Bparam2%5D=")
+                .append(Utils.encodeUTF8(param2));
+        sb.append("&jsondata%5Bparam3%5D=")
+                .append(param3);
+        sb.append("&jsondata%5Bparam4%5D=")
+                .append(Utils.encodeUTF8(param4));
+        sb.append("&jsondata%5Bparam5%5D=")
+                .append(Utils.encodeUTF8(param5));
+        sb.append("&jsondata%5Bparam6%5D=")
+                .append(param6);
+        sb.append("&jsondata%5Bparam7%5D=")
+                .append(param7);
+        sb.append("&jsondata%5Bparam8%5D=")
+                .append(param8);
+        sb.append("&jsondata%5Bparam9%5D=")
+                .append(param9);
+        sb.append("&jsondata%5Bparam10%5D=")
+                .append(param10);
+        sb.append("&jsondata%5Bextdata%5D=")
+                .append(Utils.encodeUTF8(extdata));
         return sb.toString();
     }
 

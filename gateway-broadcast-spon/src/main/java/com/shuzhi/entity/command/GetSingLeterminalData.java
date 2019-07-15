@@ -1,6 +1,7 @@
 package com.shuzhi.entity.command;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.shuzhi.commen.Utils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -21,7 +22,7 @@ public class GetSingLeterminalData {
     private Integer pageCount;
 
     @JsonProperty("groupname")
-    private String groupName;
+    private String groupName = "*";
 
 
     @JsonProperty("showtype")
@@ -106,20 +107,16 @@ public class GetSingLeterminalData {
                 .append(pageIndex);
         sb.append("&jsondata%5BpageCount%5D=")
                 .append(pageCount);
-        try {
-            sb.append("&jsondata%5BgroupName%5D=")
-                    .append(groupName);
-            sb.append("&jsondata%5BshowType%5D=")
-                    .append(URLEncoder.encode((showType), "utf-8"));
-            sb.append("&jsondata%5Buser%5D=")
-                    .append(URLEncoder.encode((user), "utf-8"));
-            sb.append("&jsondata%5BsearchTxt%5D=")
-                    .append(URLEncoder.encode((searchTxt), "utf-8"));
-            sb.append("&jsondata%5Bsimple%5D=")
-                    .append(simple);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+        sb.append("&jsondata%5BgroupName%5D=")
+                .append(groupName);
+        sb.append("&jsondata%5BshowType%5D=")
+                .append(Utils.encodeUTF8(showType));
+        sb.append("&jsondata%5Buser%5D=")
+                .append(Utils.encodeUTF8(user));
+        sb.append("&jsondata%5BsearchTxt%5D=")
+                .append(Utils.encodeUTF8(searchTxt));
+        sb.append("&jsondata%5Bsimple%5D=")
+                .append(simple);
         return sb.toString();
     }
 /*@Override

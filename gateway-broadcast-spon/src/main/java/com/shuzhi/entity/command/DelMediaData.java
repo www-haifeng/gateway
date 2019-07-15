@@ -1,6 +1,7 @@
 package com.shuzhi.entity.command;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.shuzhi.commen.Utils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -20,12 +21,8 @@ public class DelMediaData {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();
-        try {
-            sb.append("jsondata%5BfileName%5D=")
-                    .append(URLEncoder.encode((fileName), "utf-8"));
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+        sb.append("jsondata%5BfileName%5D=")
+                .append(Utils.encodeUTF8(fileName));
         return sb.toString();
     }
 /* @Override

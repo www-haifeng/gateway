@@ -1,6 +1,7 @@
 package com.shuzhi.entity.command;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.shuzhi.commen.Utils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -39,14 +40,10 @@ public class GetTaskInfo {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();
-        try {
-            sb.append("&jsondata%5Bdir%5D=")
-                    .append(URLEncoder.encode((dir), "utf-8"));
-            sb.append("jsondata%5BtaskId%5D=")
-                    .append(URLEncoder.encode((taskId), "utf-8"));
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+        sb.append("jsondata%5Bdir%5D=")
+                .append(dir);
+        sb.append("&jsondata%5BtaskId%5D=")
+                .append(Utils.encodeUTF8(taskId));
         return sb.toString();
     }
 }

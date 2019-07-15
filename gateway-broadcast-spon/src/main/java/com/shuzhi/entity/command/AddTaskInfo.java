@@ -1,6 +1,8 @@
 package com.shuzhi.entity.command;
 
 
+import com.shuzhi.commen.Utils;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
@@ -72,24 +74,20 @@ public class AddTaskInfo {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();
-        try {
-            sb.append("jsondata%5Btaskname%5D=")
-                    .append(URLEncoder.encode((taskname), "utf-8"));
-            sb.append("&jsondata%5Bisdisable%5D=")
-                    .append(isdisable);
-            sb.append("&jsondata%5Blevel%5D=")
-                    .append(level);
-            sb.append("&jsondata%5Bcreator%5D=")
-                    .append(URLEncoder.encode((creator), "utf-8"));
-            sb.append("&jsondata%5Btriggers%5D=")
-                    .append(URLEncoder.encode((triggers), "utf-8"));
-            sb.append("&jsondata%5Bcommands%5D=")
-                    .append(URLEncoder.encode((commands), "utf-8"));
-            sb.append("&jsondata%5Bdirname%5D=")
-                    .append(URLEncoder.encode((dirname), "utf-8"));
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+        sb.append("jsondata%5Btaskname%5D=")
+                .append(Utils.encodeUTF8(taskname));
+        sb.append("&jsondata%5Bisdisable%5D=")
+                .append(isdisable);
+        sb.append("&jsondata%5Blevel%5D=")
+                .append(level);
+        sb.append("&jsondata%5Bcreator%5D=")
+                .append(Utils.encodeUTF8(creator));
+        sb.append("&jsondata%5Btriggers%5D=")
+                .append(Utils.encodeUTF8(triggers));
+        sb.append("&jsondata%5Bcommands%5D=")
+                .append(Utils.encodeUTF8(commands));
+        sb.append("&jsondata%5Bdirname%5D=")
+                .append(Utils.encodeUTF8(dirname));
         return sb.toString();
     }
 /*  @Override
@@ -97,7 +95,7 @@ public class AddTaskInfo {
         final StringBuilder sb = new StringBuilder();
         try {
             sb.append("jsondata%5Btaskname%5D=")
-                    .append(URLEncoder.encode((taskname), "utf-8"));
+                    .append(Utils.encodeUTF8(taskname));
             sb.append("&jsondata%5Bisdisable%5D=")
                     .append(isdisable);
             sb.append("&jsondata%5Blevel%5D=")

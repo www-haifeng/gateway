@@ -1,6 +1,7 @@
 package com.shuzhi.entity.command;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.shuzhi.commen.Utils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -56,14 +57,10 @@ public class GetMediaData {
                 .append(pageIndex);
         sb.append("&jsondata%5BpageCount%5D=")
                 .append(pageCount);
-        try {
-            sb.append("&jsondata%5BsubPath%5D=")
-                    .append(URLEncoder.encode((subPath), "utf-8"));
-            sb.append("&jsondata%5Bfilter%5D=")
-                    .append(URLEncoder.encode((filter), "utf-8"));
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+        sb.append("&jsondata%5BsubPath%5D=")
+                .append(Utils.encodeUTF8(subPath));
+        sb.append("&jsondata%5Bfilter%5D=")
+                .append(Utils.encodeUTF8(filter));
         return sb.toString();
     }
 

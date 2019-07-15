@@ -1,5 +1,7 @@
 package com.shuzhi.entity.command;
 
+import com.shuzhi.commen.Utils;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
@@ -82,22 +84,18 @@ public class ExesdkCommand {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();
-        try {
-            sb.append("jsondata%5Bsource%5D=")
-                    .append(URLEncoder.encode((source), "utf-8"));
-            sb.append("&jsondata%5Btarget%5D=")
-                    .append(URLEncoder.encode((target), "utf-8"));
-            sb.append("&jsondata%5Bcommandtype%5D=")
-                    .append(commandtype);
-            sb.append("&jsondata%5Bisstop%5D=")
-                    .append(isstop);
-            sb.append("&jsondata%5Buser%5D=")
-                    .append(URLEncoder.encode((user), "utf-8"));
-            sb.append("&jsondata%5Bextdata%5D=")
-                    .append(URLEncoder.encode((extdata), "utf-8"));
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+        sb.append("jsondata%5Bsource%5D=")
+                .append(Utils.encodeUTF8(source));
+        sb.append("&jsondata%5Btarget%5D=")
+                .append(Utils.encodeUTF8(target));
+        sb.append("&jsondata%5Bcommandtype%5D=")
+                .append(commandtype);
+        sb.append("&jsondata%5Bisstop%5D=")
+                .append(isstop);
+        sb.append("&jsondata%5Buser%5D=")
+                .append(Utils.encodeUTF8(user));
+        sb.append("&jsondata%5Bextdata%5D=")
+                .append(Utils.encodeUTF8(extdata));
         return sb.toString();
     }
 }
