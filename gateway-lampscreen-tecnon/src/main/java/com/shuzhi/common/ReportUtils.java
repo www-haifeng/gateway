@@ -3,13 +3,17 @@ package com.shuzhi.common;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shuzhi.cache.Cache;
 import com.shuzhi.entity.CommandInfo;
+import com.shuzhi.entity.DeviceInfo;
 import com.shuzhi.entity.SystemInfoData;
+import com.shuzhi.entity.command.CommonParameters;
+import com.shuzhi.service.CommandService;
 import com.shuzhi.service.ReportService;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.Map;
 
 /**
  * @Description: 上报相关业务工具类
@@ -25,6 +29,8 @@ public class ReportUtils {
     @Autowired
     private ReportService reportService;
     @Autowired
+    private CommandService commandService;
+    @Autowired
     private Utils utils;
     @Autowired
     private ObjectMapper mapper;
@@ -35,24 +41,16 @@ public class ReportUtils {
     /**
      * 上报
      */
-    public String getReportUrl() {
-
+    public String getReportUrl(DeviceInfo deviceInfo) {
         CommandInfo commandInfo = Cache.commandMap.get("10001");
+
         if (commandInfo == null) {
-            logger.error("未查询到lcd设备cmdid为:" + "1001" + "的命令,放弃请求");
+            logger.error("未查询到lcd设备cmdid为:10001的命令,放弃请求");
             return null;
         }
-
         //获取url
-        String url = "http://" + commandInfo.getTdeviceFactoryEntity().getServerIp() + ":" + commandInfo.getTdeviceFactoryEntity().getServerPort() + commandInfo.getTmsgInfoEntity().getInterfaceId();
-        StringBuilder sb = new StringBuilder();
-        sb.append(url);
-        sb.append("?account=");
-        sb.append(configData.getAccount());
-        sb.append("&password=");
-        sb.append(configData.getPassword());
-
-        return sb.toString();
+        String url = "http://" + commandInfo.getTdeviceFactoryEntity().getServerIp() + ":" + commandInfo.getTdeviceFactoryEntity().getServerPort() + "/command/" + deviceInfo.getTdeviceTecnonEntity().getDeviceId();
+        return url;
     }
 
     /**
@@ -72,13 +70,21 @@ public class ReportUtils {
         return infoData;
     }
 
+
     /**
      * 发送上报请求
      */
     public void reportRequest() {
-        String reportUrl = getReportUrl();
-        if (StringUtils.isNotEmpty(reportUrl)) {
-            reportService.reportService(reportUrl, getRequestBody());
+        //获取设备缓存
+        Map<String, DeviceInfo> deviceInfoMap = Cache.deviceInfoMap;
+        for(String key :deviceInfoMap.keySet()){
+            DeviceInfo deviceInfo = deviceInfoMap.get(key);
+            String reportUrl = getReportUrl(deviceInfo);
+            //获取屏幕开关状态
+            CommonParameters cpScreen = new CommonParameters("callCardService","isScreenOpen");
+            reportService.reportService(reportUrl,cpScreen.toString(),deviceInfo);
         }
+        SystemInfoData systemInfoData = getRequestBody();
+        reportService.reportSend(systemInfoData);
     }
 }

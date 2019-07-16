@@ -56,6 +56,7 @@ public class ReportUtils {
      * @return
      */
     public SystemInfoData getRequestBody() {
+        //暂时写死，后期从数据库取
         SystemInfoData infoData = new SystemInfoData();
         infoData.setMsgid("550e8400-e29b-41d4-a716-446655440000");
         infoData.setMsgtype(4);
@@ -66,6 +67,10 @@ public class ReportUtils {
         return infoData;
     }
 
+    /**
+     * 请求参数
+     * @return
+     */
     public GetZoneTerminalData getRequestParams(){
         GetZoneTerminalData params = new GetZoneTerminalData();
         params.setPageIndex(0);
