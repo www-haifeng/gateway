@@ -35,7 +35,7 @@ public class LoadData implements ApplicationRunner {
             Cache.deviceInfoMap.put(info.getTdeviceFrtEntity().getDid(),info.getTdeviceFrtEntity().getDeviceId());
         }
         logger.info("设备信息缓存初始化完毕");
-        new TimeServer().bind(8080);
+        new TimeServer().bind(1113);
     }
 
 }

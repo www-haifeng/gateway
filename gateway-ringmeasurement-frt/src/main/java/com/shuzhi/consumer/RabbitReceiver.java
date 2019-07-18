@@ -23,7 +23,7 @@ import org.springframework.stereotype.Component;
 public class RabbitReceiver {
 	private final static Logger logger = LoggerFactory.getLogger(RabbitReceiver.class);
 
-	@RabbitListener(queues="frt")
+	@RabbitListener(queues="hobo")
 	@RabbitHandler
 	public void commandMessage(Message message, Channel channel) throws Exception {
 		System.out.println("消费端Payload: " + message.getPayload());

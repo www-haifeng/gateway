@@ -6,8 +6,8 @@ import javax.persistence.*;
  * 环测设备实体类
  */
 @Entity
-@Table(name = "t_device_ringgmeasurement", schema = "public", catalog = "gateways")
-public class TDeviceRingmeasurementREntity {
+@Table(name = "t_device_ringmeasurement", schema = "public", catalog = "gateways")
+public class TDeviceRingmeasurementEntity {
 
     /**
      * id

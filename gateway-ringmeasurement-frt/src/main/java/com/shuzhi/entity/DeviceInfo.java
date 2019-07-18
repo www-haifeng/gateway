@@ -10,13 +10,14 @@ import java.io.Serializable;
 public class DeviceInfo implements Serializable {
 
     private TDeviceFactoryEntity tdeviceFactoryEntity;
-    private TDeviceRingmeasurementREntity tdeviceFrtEntity;
+
+    private TDeviceRingmeasurementEntity tdeviceFrtEntity;
 
     public DeviceInfo() {
 
     }
 
-    public DeviceInfo(TDeviceFactoryEntity tdeviceFactoryEntity, TDeviceRingmeasurementREntity tdeviceFrtEntity) {
+    public DeviceInfo(TDeviceFactoryEntity tdeviceFactoryEntity, TDeviceRingmeasurementEntity tdeviceFrtEntity) {
         this.tdeviceFactoryEntity = tdeviceFactoryEntity;
         this.tdeviceFrtEntity = tdeviceFrtEntity;
     }
@@ -29,11 +30,11 @@ public class DeviceInfo implements Serializable {
         this.tdeviceFactoryEntity = tdeviceFactoryEntity;
     }
 
-    public TDeviceRingmeasurementREntity getTdeviceFrtEntity() {
+    public TDeviceRingmeasurementEntity getTdeviceFrtEntity() {
         return tdeviceFrtEntity;
     }
 
-    public void setTdeviceFrtEntity(TDeviceRingmeasurementREntity tdeviceFrtEntity) {
+    public void setTdeviceFrtEntity(TDeviceRingmeasurementEntity tdeviceFrtEntity) {
         this.tdeviceFrtEntity = tdeviceFrtEntity;
     }
 }
