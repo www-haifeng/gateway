@@ -1,159 +1,80 @@
 package com.shuzhi.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
 /**
  * 设备返回数据实体类封装
  */
+@Data
+@AllArgsConstructor
 public class DataEntity {
 
 
     /**
-     * 设备id
+     * 平台设备id
      */
-    private  int deviceId;
+    private  String did;
 
     /**
      * 环温
      */
-    private  double ringTemperature;
+    private  int ringTemperature;
     /**
      * 环湿
      */
-    private  double ringWetting;
+    private  int ringWetting;
     /**
      * 气压
      */
-    private  double pressure;
+    private  int pressure;
     /**
      * 风向
      */
-    private  double windDirection;
+    private  int windDirection;
     /**
      * 风速
      */
-    private  double windSpeed;
+    private  int windSpeed;
     /**
      * 雨量
      */
-    private  double rainfall;
+    private  int rainfall;
     /**
      * PM2.5
      */
-    private  double pmTwoPointFive;
+    private  int pmTwoPointFive;
     /**
      * PM10
      */
-    private  double pmTen;
+    private  int pmTen;
     /**
      * 噪声
      */
-    private  double noise;
-
-    public DataEntity(int deviceId, double ringTemperature, double ringWetting, double pressure, double windDirection, double windSpeed, double rainfall, double pmTwoPointFive, double pmTen, double noise) {
-        this.deviceId = deviceId;
-        this.ringTemperature = ringTemperature;
-        this.ringWetting = ringWetting;
-        this.pressure = pressure;
-        this.windDirection = windDirection;
-        this.windSpeed = windSpeed;
-        this.rainfall = rainfall;
-        this.pmTwoPointFive = pmTwoPointFive;
-        this.pmTen = pmTen;
-        this.noise = noise;
-    }
-
-    public int getDeviceId() {
-        return deviceId;
-    }
-
-    public void setDeviceId(int deviceId) {
-        this.deviceId = deviceId;
-    }
-
-    public double getRingTemperature() {
-        return ringTemperature;
-    }
-
-    public void setRingTemperature(double ringTemperature) {
-        this.ringTemperature = ringTemperature;
-    }
-
-    public double getRingWetting() {
-        return ringWetting;
-    }
-
-    public void setRingWetting(double ringWetting) {
-        this.ringWetting = ringWetting;
-    }
-
-    public double getPressure() {
-        return pressure;
-    }
-
-    public void setPressure(double pressure) {
-        this.pressure = pressure;
-    }
-
-    public double getWindDirection() {
-        return windDirection;
-    }
-
-    public void setWindDirection(double windDirection) {
-        this.windDirection = windDirection;
-    }
-
-    public double getWindSpeed() {
-        return windSpeed;
-    }
-
-    public void setWindSpeed(double windSpeed) {
-        this.windSpeed = windSpeed;
-    }
-
-    public double getRainfall() {
-        return rainfall;
-    }
-
-    public void setRainfall(double rainfall) {
-        this.rainfall = rainfall;
-    }
-
-    public double getPmTwoPointFive() {
-        return pmTwoPointFive;
-    }
-
-    public void setPmTwoPointFive(double pmTwoPointFive) {
-        this.pmTwoPointFive = pmTwoPointFive;
-    }
-
-    public double getPmTen() {
-        return pmTen;
-    }
-
-    public void setPmTen(double pmTen) {
-        this.pmTen = pmTen;
-    }
-
-    public double getNoise() {
-        return noise;
-    }
-
-    public void setNoise(double noise) {
-        this.noise = noise;
-    }
+    private  int noise;
 
     @Override
     public String toString() {
-        return "DataEntity{" +
-                "deviceId=" + deviceId +
-                ", ringTemperature=" + ringTemperature +
-                ", ringWetting=" + ringWetting +
-                ", pressure=" + pressure +
-                ", windDirection=" + windDirection +
-                ", windSpeed=" + windSpeed +
-                ", rainfall=" + rainfall +
-                ", pmTwoPointFive=" + pmTwoPointFive +
-                ", pmTen=" + pmTen +
-                ", noise=" + noise +
-                '}';
+        final StringBuilder sb = new StringBuilder("{");
+        sb.append("\"did\":\"")
+                .append(did).append('\"');
+        sb.append(",\"ringTemperature\":")
+                .append(ringTemperature);
+        sb.append(",\"ringWetting\":")
+                .append(ringWetting);
+        sb.append(",\"pressure\":")
+                .append(pressure);
+        sb.append(",\"windDirection\":")
+                .append(windDirection);
+        sb.append(",\"windSpeed\":\"")
+                .append(windSpeed).append('\"');
+        sb.append(",\"pmTwoPointFive\":\"")
+                .append(pmTwoPointFive).append('\"');
+        sb.append(",\"pmTen\":\"")
+                .append(pmTen).append('\"');
+        sb.append(",\"noise\":")
+                .append(noise);
+        sb.append('}');
+        return sb.toString();
     }
 }

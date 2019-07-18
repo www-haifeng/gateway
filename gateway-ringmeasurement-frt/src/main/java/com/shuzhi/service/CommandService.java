@@ -3,10 +3,15 @@ package com.shuzhi.service;
 import com.shuzhi.cache.Cache;
 import com.shuzhi.common.ByteUtils;
 import com.shuzhi.common.ConfigData;
+import com.shuzhi.common.Utils;
 import com.shuzhi.entity.DataEntity;
+import com.shuzhi.producer.RabbitSender;
 import io.netty.channel.ChannelHandlerContext;
 import org.apache.commons.lang.ArrayUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -19,11 +24,16 @@ import java.nio.ByteBuffer;
 @EnableConfigurationProperties(ConfigData.class)
 public class CommandService {
 
+    private final static Logger logger = LoggerFactory.getLogger(CommandService.class);
+
     @Autowired
     ConfigData configData;
 
     @Autowired
     ByteUtils byteUtils;
+
+    @Autowired
+    private RabbitSender rabbitSender;
 
     public void commandService(ChannelHandlerContext ctx) {
         byte[] mgsWindSpeed = new byte[]{(byte) 0x01, (byte) 0x03,
@@ -44,13 +54,14 @@ public class CommandService {
         if (Cache.sendOneByte != null) {
             resultbytes = ArrayUtils.addAll(Cache.sendOneByte, msgBytes);
         }
-        if (resultbytes.length == 61) {
+        if (resultbytes.length == 35) {
             ByteBuffer bf = ByteBuffer.wrap(resultbytes);
             System.out.println(resultbytes.length);
-            //取出设备id
+            //取出地址码
             byte[] idBytes = new byte[1];
             bf.get(idBytes);
             Integer deviceId = Integer.valueOf(idBytes[0]);
+            String did = Utils.deviceIdToDid(String.valueOf(deviceId));
             //取出功能码
             byte[] functionBytes = new byte[1];
             bf.get(functionBytes);
@@ -58,94 +69,87 @@ public class CommandService {
             byte[] dataLengthBytes = new byte[1];
             bf.get(dataLengthBytes);
             Integer datalength = Integer.valueOf(dataLengthBytes[0]);
-            //取出环温
+            if(datalength!=30){
+                return ;
+            }
+            //取出最小风向
             byte[] ringTemperatureBytes = new byte[2];
             bf.get(ringTemperatureBytes);
-            int ringTemperatureInt = byteUtils.byte2Int(ringTemperatureBytes, 0, 2);
-            double ringTemperature = ringTemperatureInt / 10;
-            //环湿
-            byte[] ringWettingBytes = new byte[2];
-            bf.get(ringWettingBytes);
-            int ringWettingInt = byteUtils.byte2Int(ringWettingBytes, 0, 2);
-            double ringWetting = ringWettingInt / 10.0;
-            //露点
+            //平均风向
+            byte[] avgWindDirectBytes = new byte[2];
+            bf.get(avgWindDirectBytes);
+            int avgWindDirectInt = byteUtils.byte2Int(avgWindDirectBytes, 0, 2);
+            //最大风向
             byte[] ludianBytes = new byte[2];
             bf.get(ludianBytes);
-            //气压
+            //最小风速
+            byte[] pressureByte = new byte[2];
+            bf.get(pressureByte);
+            //平均风速
+            byte[] avgWindSpeedBytes = new byte[2];
+            bf.get(avgWindSpeedBytes);
+            int avgWindSpeedInt = byteUtils.byte2Int(avgWindSpeedBytes, 0, 2);
+            int avgWindSpeed=avgWindSpeedInt*10;
+            //最大风速
+            byte[] windSpeedBytes = new byte[2];
+            bf.get(windSpeedBytes);
+            //大气温度
+            byte[] temperatureBytes = new byte[2];
+            bf.get(temperatureBytes);
+            int temperatureInt = byteUtils.byte2Int(temperatureBytes, 0, 2);
+            int temperature=temperatureInt*10;
+
+            //大气湿度
+            byte[] wettingBytes = new byte[2];
+            bf.get(wettingBytes);
+            int wettingInt = byteUtils.byte2Int(wettingBytes, 0, 2);
+            int wetting=wettingInt*10;
+
+            //大气气压
             byte[] pressureBytes = new byte[2];
             bf.get(pressureBytes);
             int pressureInt = byteUtils.byte2Int(pressureBytes, 0, 2);
-            double pressure = pressureInt / 10;
-            //海拔
-            byte[] haibaBytes = new byte[2];
-            bf.get(haibaBytes);
-            //风速
-            byte[] windSpeedBytes = new byte[2];
-            bf.get(windSpeedBytes);
-            int windSpeedInt = byteUtils.byte2Int(windSpeedBytes, 0, 2);
-            double windSpeed = windSpeedInt /  10.0;
-            //2分钟平均风速
-            byte[] windSpeed2Bytes = new byte[2];
-            bf.get(windSpeed2Bytes);
-            //10分钟平均风速
-            byte[] windSpeed10Bytes = new byte[2];
-            bf.get(windSpeed10Bytes);
-            //风向
-            byte[] windDirectionBytes = new byte[2];
-            bf.get(windDirectionBytes);
-            int windDirectionInt = byteUtils.byte2Int(windDirectionBytes, 0, 2);
-            double windDirection = windDirectionInt /  10.0;
-            //辐射1
-            byte[] radiationOneBytes = new byte[2];
-            bf.get(radiationOneBytes);
-            //辐射2
-            byte[] radiationTwoBytes = new byte[2];
-            bf.get(radiationTwoBytes);
-            //土湿
-            byte[] soilMoistureBytes = new byte[2];
-            bf.get(soilMoistureBytes);
-            //电量
-            byte[] electricQuantityBytes = new byte[2];
-            bf.get(electricQuantityBytes);
-            //雨量日累计
+            int pressure=pressureInt*10;
+
+            //雨量
             byte[] rainfallBytes = new byte[2];
             bf.get(rainfallBytes);
             int rainfallInt = byteUtils.byte2Int(rainfallBytes, 0, 2);
-            double rainfall = rainfallInt /  10.0;
-            //能见度
-            byte[] visibilityBytes = new byte[2];
-            bf.get(visibilityBytes);
-            //能见度10分钟平均
-            byte[] visibilityTenBytes = new byte[2];
-            bf.get(visibilityTenBytes);
-            //日照时日累计
-            byte[] sunshineTimeBytes = new byte[2];
-            bf.get(sunshineTimeBytes);
-            //CO2
-            byte[] co2Bytes = new byte[2];
-            bf.get(co2Bytes);
-            //电子罗盘
-            byte[] electronicCompassBytes = new byte[2];
-            bf.get(electronicCompassBytes);
-            //PM2.5
-            byte[] pmTwoPointFiveBytes = new byte[2];
-            bf.get(pmTwoPointFiveBytes);
-            int pmTwoPointFive = byteUtils.byte2Int(pmTwoPointFiveBytes, 0, 2);
-            //PM10
-            byte[] pmTenBytes = new byte[2];
-            bf.get(pmTenBytes);
-            int pmTen = byteUtils.byte2Int(pmTenBytes, 0, 2);
+            int rainfall=rainfallInt*10;
+
+            //总辐射
+            byte[] radiationTwoBytes = new byte[2];
+            bf.get(radiationTwoBytes);
+            //紫外强度
+            byte[] soilMoistureBytes = new byte[2];
+            bf.get(soilMoistureBytes);
             //噪声
             byte[] noiseBytes = new byte[2];
             bf.get(noiseBytes);
             int noiseInt = byteUtils.byte2Int(noiseBytes, 0, 2);
-            double noise = noiseInt /  10.0;
+            int noise=noiseInt*10;
+            //pm2.5
+            byte[] pmTwoPointFiveBytes = new byte[2];
+            bf.get(pmTwoPointFiveBytes);
+            int pmTwoPointFiveInt = byteUtils.byte2Int(pmTwoPointFiveBytes, 0, 2);
+            int pmTwoPointFive=pmTwoPointFiveInt*10;
+            //pm10
+            byte[] pmTenBytes = new byte[2];
+            bf.get(pmTenBytes);
+            int pmTenInt = byteUtils.byte2Int(pmTenBytes, 0, 2);
+            int pmTen=pmTenInt*10;
 
-            DataEntity dataEntity = new DataEntity(deviceId, ringTemperature, ringWetting, pressure, windDirection,
-                    windSpeed, rainfall, pmTwoPointFive, pmTen, noise);
+            DataEntity dataEntity = new DataEntity(did, temperature, wetting, pressure, avgWindDirectInt, avgWindSpeed
+                    , rainfall, pmTwoPointFive, pmTen, noise);
+
             System.out.println(dataEntity);
             //发送数据到mq
-
+            try {
+                rabbitSender.send("lowerControlMessage", dataEntity.toString());
+                logger.info("命令回执发送完毕:"+dataEntity.toString());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             //清空结果缓存
             Cache.sendOneByte = null;
         }

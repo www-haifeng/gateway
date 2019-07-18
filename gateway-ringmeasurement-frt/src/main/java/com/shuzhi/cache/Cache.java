@@ -20,4 +20,7 @@ public class Cache {
 
     //frt 定时任务缓存
     public static TDeviceFactoryCronEntity cronEntity ;
+
+    //设备信息缓存 Key:did value：deviceId
+    public static Map<String, String> deviceInfoMap = new ConcurrentHashMap<>();
 }
