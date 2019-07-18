@@ -29,7 +29,7 @@ spring:
         temp:
           use_jdbc_metadata_defaults: false
 redis:
-  host: 192.168.8.150
+  host: 192.168.7.68
   port: 6379
   keytimeout: 2000
   timeout: 2000

@@ -4,11 +4,11 @@ server:
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://192.168.8.150:5432/gateways?currentSchema=public&autoReconnect=true
+    url: jdbc:postgresql://192.168.7.68:5432/gateways?currentSchema=public&autoReconnect=true
     username: postgres
     password: 123456
   rabbitmq: #RabbitMQ\u76F8\u5173\u7684\u914D\u7F6E
-      host: 192.168.8.150
+      host: 192.168.7.68
       port: 5672
       username: guest
       password: guest
@@ -29,7 +29,7 @@ spring:
         temp:
           use_jdbc_metadata_defaults: false
 redis:
-  host: 192.168.8.150
+  host: 192.168.7.68
   port: 6379
   pool.max-idle: 10
   pool.min-idle: 10

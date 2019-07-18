@@ -6,11 +6,11 @@ spring:
     name: gateway-alarm-service-lonbon #指定服务名
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://192.168.8.150:5432/gateways?currentSchema=public&autoReconnect=true
+    url: jdbc:postgresql://192.168.7.68:5432/gateways?currentSchema=public&autoReconnect=true
     username: postgres
     password: 123456
   rabbitmq: #RabbitMQ相关的配置
-    host: 192.168.8.150
+    host: 192.168.7.68
     port: 5672
     username: guest
     password: guest
@@ -31,7 +31,7 @@ spring:
         temp:
           use_jdbc_metadata_defaults: false
 redis:
-  host: 192.168.8.150
+  host: 192.168.7.68
   port: 6379
   pool.max-idle: 10
   pool.min-idle: 10
@@ -39,7 +39,7 @@ redis:
   timeout: 2000
 
 jna:
-  serverIp: 192.168.8.235
+  serverIp: 192.168.7.235
   serverPort: 0
   dllpath: D:/lb_sdk_universal.dll
 
