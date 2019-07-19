@@ -1,11 +1,15 @@
 package com.shuzhi.schedule;
 
 import com.shuzhi.cache.Cache;
+import com.shuzhi.common.ByteUtils;
 import com.shuzhi.common.ConfigData;
+import com.shuzhi.common.Utils;
 import com.shuzhi.dao.FactoryCronDao;
+import com.shuzhi.entity.DeviceInfo;
 import com.shuzhi.service.CommandService;
 import io.micrometer.core.instrument.util.StringUtils;
 import io.netty.channel.ChannelHandlerContext;
+import org.apache.commons.lang.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -33,28 +37,39 @@ public class DynamicScheduleTask implements SchedulingConfigurer {
 
                     System.out.println("执行动态定时任务: " + LocalDateTime.now().toLocalTime());
                     Map<String, ChannelHandlerContext> channelCache = Cache.channelCache;
-                    for(String key :channelCache.keySet()){
-                        //if("192.168.10.157".equals(key)) {
-                            ChannelHandlerContext channelHandlerContext = channelCache.get(key);
-                            System.out.println("循环中的ctx"+channelHandlerContext);
-                            byte[] mgsWindSpeed = new byte[]{(byte)0x01,(byte)0x03,
-                                    (byte)0x00,(byte)0x07,(byte)0x00,(byte)0x1C,(byte)0xF5,(byte)0xC2};
-                            channelHandlerContext.channel().writeAndFlush(mgsWindSpeed);
+                    for (String key : channelCache.keySet()) {
+                        ChannelHandlerContext channelHandlerContext = channelCache.get(key);
+                        System.out.println("循环中的ctx" + channelHandlerContext);
+                        //获取device id
+                        DeviceInfo deviceInfo = Cache.deviceIpMap.get(key);
+                        if (deviceInfo != null) {
+                            String deviceId = deviceInfo.getTdeviceFrtEntity().getDeviceId();
+                            int deviceIdInt = Integer.parseInt(deviceId);
+                            String id = Integer.toHexString(deviceIdInt);
+                            byte[] idBytes = ByteUtils.str2Bcd(id);
+                            //获取crc校验码
+                            byte[] mgsBytes = ArrayUtils.addAll(idBytes, new byte[]{(byte) 0x03,
+                                    (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x0F});
+                            String crc2 = Utils.getCRC2(mgsBytes);
+                            byte[] crcBytes = ByteUtils.str2Bcd(crc2);
+                            byte[] msg = ArrayUtils.addAll(mgsBytes, crcBytes);
+                            System.out.println(ByteUtils.bytesToHexString(msg));
+                            channelHandlerContext.channel().writeAndFlush(msg);
                             System.out.println("写入数据完毕");
-//                            commandService.commandService(channelHandlerContext);
-                        //}
+                        }
+
                     }
                 },
                 //2.设置执行周期(Trigger)
                 triggerContext -> {
                     //2.2 合法性校验.
-                    if(Cache.cronEntity==null){
-                        Cache.cronEntity=factoryCronDao.getByFactoryName("富奥通");
+                    if (Cache.cronEntity == null) {
+                        Cache.cronEntity = factoryCronDao.getByFactoryName("富奥通");
                     }
                     //2.3 返回执行周期(Date)
-                    if("1".equals(Cache.cronEntity.getStartFlag())) {
+                    if ("1".equals(Cache.cronEntity.getStartFlag())) {
                         return new CronTrigger(Cache.cronEntity.getCron()).nextExecutionTime(triggerContext);
-                    }else {
+                    } else {
                         return null;
                     }
                 }

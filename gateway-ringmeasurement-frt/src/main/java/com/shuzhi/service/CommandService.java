@@ -35,12 +35,7 @@ public class CommandService {
     @Autowired
     private RabbitSender rabbitSender;
 
-    public void commandService(ChannelHandlerContext ctx) {
-        byte[] mgsWindSpeed = new byte[]{(byte) 0x01, (byte) 0x03,
-                (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x0A, (byte) 0xC5, (byte) 0xCD};
-        ctx.channel().writeAndFlush(mgsWindSpeed);
-        //new CommandThread(ctx, mgsWindSpeed).start();
-    }
+
 
 
     /**
@@ -49,19 +44,24 @@ public class CommandService {
      * @param msgBytes
      */
     public void handleResult(byte[] msgBytes) {
-        byte[] resultbytes = msgBytes;
-        //拼接上一条缓存数组
-        if (Cache.sendOneByte != null) {
-            resultbytes = ArrayUtils.addAll(Cache.sendOneByte, msgBytes);
-        }
-        if (resultbytes.length == 35) {
-            ByteBuffer bf = ByteBuffer.wrap(resultbytes);
-            System.out.println(resultbytes.length);
+
+        System.out.println("结果集长度:---"+msgBytes.length);
+        if (msgBytes.length == 35) {
+            ByteBuffer bf = ByteBuffer.wrap(msgBytes);
+            System.out.println(msgBytes.length);
             //取出地址码
             byte[] idBytes = new byte[1];
             bf.get(idBytes);
             Integer deviceId = Integer.valueOf(idBytes[0]);
-            String did = Utils.deviceIdToDid(String.valueOf(deviceId));
+            String deviceIdStr = "";
+            if(deviceId!=null){
+                deviceIdStr = String.valueOf(deviceId);
+                char[] chars = deviceIdStr.toCharArray();
+                if(chars.length==1){
+                    deviceIdStr="0"+deviceIdStr;
+                }
+            }
+            String did = Utils.deviceIdToDid(deviceIdStr);
             //取出功能码
             byte[] functionBytes = new byte[1];
             bf.get(functionBytes);
@@ -89,7 +89,7 @@ public class CommandService {
             byte[] avgWindSpeedBytes = new byte[2];
             bf.get(avgWindSpeedBytes);
             int avgWindSpeedInt = byteUtils.byte2Int(avgWindSpeedBytes, 0, 2);
-            int avgWindSpeed=avgWindSpeedInt*10;
+            double avgWindSpeed=avgWindSpeedInt/10;
             //最大风速
             byte[] windSpeedBytes = new byte[2];
             bf.get(windSpeedBytes);
@@ -97,25 +97,25 @@ public class CommandService {
             byte[] temperatureBytes = new byte[2];
             bf.get(temperatureBytes);
             int temperatureInt = byteUtils.byte2Int(temperatureBytes, 0, 2);
-            int temperature=temperatureInt*10;
+            double temperature=temperatureInt/10;
 
             //大气湿度
             byte[] wettingBytes = new byte[2];
             bf.get(wettingBytes);
             int wettingInt = byteUtils.byte2Int(wettingBytes, 0, 2);
-            int wetting=wettingInt*10;
+            double wetting=wettingInt/10;
 
             //大气气压
             byte[] pressureBytes = new byte[2];
             bf.get(pressureBytes);
             int pressureInt = byteUtils.byte2Int(pressureBytes, 0, 2);
-            int pressure=pressureInt*10;
+            double pressure=pressureInt/10;
 
             //雨量
             byte[] rainfallBytes = new byte[2];
             bf.get(rainfallBytes);
             int rainfallInt = byteUtils.byte2Int(rainfallBytes, 0, 2);
-            int rainfall=rainfallInt*10;
+            double rainfall=rainfallInt/10;
 
             //总辐射
             byte[] radiationTwoBytes = new byte[2];
@@ -127,17 +127,17 @@ public class CommandService {
             byte[] noiseBytes = new byte[2];
             bf.get(noiseBytes);
             int noiseInt = byteUtils.byte2Int(noiseBytes, 0, 2);
-            int noise=noiseInt*10;
+            double noise=noiseInt/10;
             //pm2.5
             byte[] pmTwoPointFiveBytes = new byte[2];
             bf.get(pmTwoPointFiveBytes);
             int pmTwoPointFiveInt = byteUtils.byte2Int(pmTwoPointFiveBytes, 0, 2);
-            int pmTwoPointFive=pmTwoPointFiveInt*10;
+            double pmTwoPointFive=pmTwoPointFiveInt/10;
             //pm10
             byte[] pmTenBytes = new byte[2];
             bf.get(pmTenBytes);
             int pmTenInt = byteUtils.byte2Int(pmTenBytes, 0, 2);
-            int pmTen=pmTenInt*10;
+            double pmTen=pmTenInt/10;
 
             DataEntity dataEntity = new DataEntity(did, temperature, wetting, pressure, avgWindDirectInt, avgWindSpeed
                     , rainfall, pmTwoPointFive, pmTen, noise);
@@ -150,8 +150,7 @@ public class CommandService {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            //清空结果缓存
-            Cache.sendOneByte = null;
+
         }
     }
 }

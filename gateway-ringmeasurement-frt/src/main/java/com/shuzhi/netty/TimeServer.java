@@ -12,9 +12,13 @@ import io.netty.handler.codec.bytes.ByteArrayEncoder;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class TimeServer  {
+public class TimeServer extends Thread {
 
+    private int port;
 
+    public TimeServer(int port){
+        this.port = port;
+    }
     public void bind(int port){
         log.info("netty服务启动,端口为:"+port);
         /*
@@ -48,7 +52,10 @@ public class TimeServer  {
         }
 
     }
-
+    @Override
+    public void run() {
+        bind(port);
+    }
     private class ChildChannelHandler extends ChannelInitializer<SocketChannel>{
 
         protected void initChannel(SocketChannel socketChannel) throws Exception {

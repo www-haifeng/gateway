@@ -33,9 +33,11 @@ public class LoadData implements ApplicationRunner {
         List<DeviceInfo> deviceInfos = deviceInfoDao.findDeviceInfo();
         for (DeviceInfo info : deviceInfos) {
             Cache.deviceInfoMap.put(info.getTdeviceFrtEntity().getDid(),info.getTdeviceFrtEntity().getDeviceId());
+            Cache.deviceIpMap.put(info.getTdeviceFrtEntity().getIp(),info);
         }
+
         logger.info("设备信息缓存初始化完毕");
-        new TimeServer().bind(1113);
+        new TimeServer(9001).start();
     }
 
 }

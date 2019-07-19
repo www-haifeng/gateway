@@ -1,6 +1,7 @@
 package com.shuzhi.cache;
 
 
+import com.shuzhi.entity.DeviceInfo;
 import com.shuzhi.entity.TDeviceFactoryCronEntity;
 import io.netty.channel.ChannelHandlerContext;
 
@@ -12,8 +13,6 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class Cache {
 
-    //第一条结果集的缓存
-    public static byte[] sendOneByte;
 
     //缓存客户端channel
     public static Map<String, ChannelHandlerContext> channelCache = new ConcurrentHashMap<String, ChannelHandlerContext>();
@@ -23,4 +22,7 @@ public class Cache {
 
     //设备信息缓存 Key:did value：deviceId
     public static Map<String, String> deviceInfoMap = new ConcurrentHashMap<>();
+
+    //设备ip信息缓存 Key:ip value：device
+    public static Map<String, DeviceInfo> deviceIpMap = new ConcurrentHashMap<>();
 }

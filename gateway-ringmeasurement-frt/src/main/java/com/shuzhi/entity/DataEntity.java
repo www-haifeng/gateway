@@ -19,15 +19,15 @@ public class DataEntity {
     /**
      * 环温
      */
-    private  int ringTemperature;
+    private  double ringTemperature;
     /**
      * 环湿
      */
-    private  int ringWetting;
+    private  double ringWetting;
     /**
      * 气压
      */
-    private  int pressure;
+    private  double pressure;
     /**
      * 风向
      */
@@ -35,23 +35,23 @@ public class DataEntity {
     /**
      * 风速
      */
-    private  int windSpeed;
+    private  double windSpeed;
     /**
      * 雨量
      */
-    private  int rainfall;
+    private  double rainfall;
     /**
      * PM2.5
      */
-    private  int pmTwoPointFive;
+    private  double pmTwoPointFive;
     /**
      * PM10
      */
-    private  int pmTen;
+    private  double pmTen;
     /**
      * 噪声
      */
-    private  int noise;
+    private  double noise;
 
     @Override
     public String toString() {

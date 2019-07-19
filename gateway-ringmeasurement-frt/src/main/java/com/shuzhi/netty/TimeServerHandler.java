@@ -37,10 +37,11 @@ public class TimeServerHandler extends ChannelInboundHandlerAdapter {
         ByteUtils ByteUtil = new ByteUtils();
         String s = ByteUtil.bytesToHexString(msgBytes);
         System.out.println(s);
-        if (Cache.sendOneByte == null) {
-            Cache.sendOneByte = msgBytes;
-        } else {
-            commandService.handleResult(msgBytes);
-        }
+//        if (Cache.sendOneByte == null) {
+//            Cache.sendOneByte = msgBytes;
+//        } else {
+//
+//        }
+        commandService.handleResult(msgBytes);
     }
 }
