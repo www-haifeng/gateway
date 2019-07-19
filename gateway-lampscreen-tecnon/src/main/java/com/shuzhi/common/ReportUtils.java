@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * @Description: 上报相关业务工具类
@@ -61,11 +62,12 @@ public class ReportUtils {
     public SystemInfoData getRequestBody() {
         //暂时写死，后期从数据库取
         SystemInfoData infoData = new SystemInfoData();
-        infoData.setMsgid("550e8400-e29b-41d4-a716-446655440000");
+        infoData.setMsgid(UUID.randomUUID().toString());
         infoData.setMsgtype(4);
         infoData.setSystype(1001);
         infoData.setSysid(1);
         infoData.setConnectid(1);
+        //校验暂时固定
         infoData.setSign("4634e0d2f0b2b423936eb7651eacc54b98cb248f");
         return infoData;
     }

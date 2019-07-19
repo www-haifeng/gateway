@@ -66,7 +66,7 @@ public class CommandService {
                 systemInfoData.setSign(utils.getSignVerify(systemInfoData));
                 String commandRevertJSON = systemInfoData.toString();
                 try {
-                    rabbitSender.send("lowerControlMessage",commandRevertJSON);
+                    rabbitSender.send("lowerControlMessage","lowerControlMessage",commandRevertJSON);
                     logger.info("命令回执发送完毕:"+commandRevertJSON);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -80,7 +80,7 @@ public class CommandService {
                 systemInfoData.setSign(utils.getSignVerify(systemInfoData));
                 String commandRevertJSON = systemInfoData.toString();
                 try {
-                    rabbitSender.send("lowerControlMessage",commandRevertJSON);
+                    rabbitSender.send("lowerControlMessage","lowerControlMessage",commandRevertJSON);
                     logger.error("命令执行失败，请查看原因:"+commandRevertJSON);
                 } catch (Exception e) {
                     e.printStackTrace();

@@ -43,13 +43,13 @@ public class RabbitSender {
     };
 
     //发送消息方法调用: 构建Message消息
-    public void send(String topic, Object objMessage) throws Exception {
+    public void send(String exchange,String topic, Object objMessage) throws Exception {
         rabbitTemplate.setConfirmCallback(confirmCallback);
         rabbitTemplate.setReturnCallback(returnCallback);
         //id + 时间戳 全局唯一
         CorrelationData correlationData = new CorrelationData("1234567890");
         //为空为默认  交换机
-        rabbitTemplate.convertAndSend("lowerControlMessage", topic, objMessage, correlationData);
+        rabbitTemplate.convertAndSend(exchange, topic, objMessage, correlationData);
     }
 
 

@@ -76,7 +76,7 @@ public class ReportService {
             String commandRevertJSON = requestBody.toString();
             System.out.println("结果集：----" + commandRevertJSON);
             try {
-                rabbitSender.send("lowerControlMessage", commandRevertJSON);
+                rabbitSender.send("upMessage","upMessage", commandRevertJSON);
                 logger.info("命令回执发送完毕:" + commandRevertJSON);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -91,7 +91,7 @@ public class ReportService {
             String commandRevertJSON = requestBody.toString();
             System.out.println("结果集：----" + commandRevertJSON);
             try {
-                rabbitSender.send("lowerControlMessage", commandRevertJSON);
+                rabbitSender.send("upMessage","upMessage", commandRevertJSON);
                 logger.error("命令执行失败，请查看原因:" + commandRevertJSON);
             } catch (Exception e) {
                 e.printStackTrace();

@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 /**
  * @Description: 上报相关业务工具类
  * @Author: lirb
@@ -63,7 +65,7 @@ public class ReportUtils {
     public SystemInfoData getRequestBody() {
         //暂时写死，后期从数据库取
         SystemInfoData infoData = new SystemInfoData();
-        infoData.setMsgid("550e8400-e29b-41d4-a716-446655440000");
+        infoData.setMsgid(UUID.randomUUID().toString());
         infoData.setMsgtype(4);
         infoData.setSystype(1001);
         infoData.setSysid(1);

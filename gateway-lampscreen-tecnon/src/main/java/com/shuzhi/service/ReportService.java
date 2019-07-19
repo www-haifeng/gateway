@@ -94,7 +94,7 @@ public class ReportService {
             systemInfoData.setSign(utils.getSignVerify(systemInfoData));
             String commandRevertJSON = systemInfoData.toString();
             try {
-                rabbitSender.send("lowerControlMessage", commandRevertJSON);
+                rabbitSender.send("upMessage","upMessage", commandRevertJSON);
                 logger.info("命令回执发送完毕:" + commandRevertJSON);
                 //清空缓存
                 Cache.reportResultList = new ArrayList<>();
@@ -110,7 +110,7 @@ public class ReportService {
             systemInfoData.setSign(utils.getSignVerify(systemInfoData));
             String commandRevertJSON = systemInfoData.toString();
             try {
-                rabbitSender.send("lowerControlMessage", commandRevertJSON);
+                rabbitSender.send("upMessage","upMessage", commandRevertJSON);
                 logger.error("命令执行失败，请查看原因:" + commandRevertJSON);
                 //清空缓存
                 Cache.reportResultList = new ArrayList<>();
