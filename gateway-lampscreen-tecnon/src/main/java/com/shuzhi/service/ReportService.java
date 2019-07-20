@@ -1,16 +1,15 @@
 package com.shuzhi.service;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shuzhi.cache.Cache;
 import com.shuzhi.common.ConfigData;
 import com.shuzhi.common.HttpCommandUtils;
 import com.shuzhi.common.Utils;
-import com.shuzhi.entity.DeviceInfo;
-import com.shuzhi.entity.MessageRevertData;
-import com.shuzhi.entity.ReportResult;
-import com.shuzhi.entity.SystemInfoData;
+import com.shuzhi.entity.*;
 import com.shuzhi.producer.RabbitSender;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
@@ -20,6 +19,9 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @Description: 上报 相关 业务
@@ -86,8 +88,8 @@ public class ReportService {
         String timeStamp = utils.getTimeStamp();
         //命令正确执行
         if (CollectionUtils.isNotEmpty(Cache.reportResultList)) {
-            MessageRevertData messageRevertData = utils.getMessageRevertData(configData.getSeccussCode(), timeStamp, JSON.toJSONString(Cache.reportResultList));
-            String mrdJSON = messageRevertData.toString();
+            ReportMsgRevertData messageRevertData = getReportMsgRevertData(Cache.reportResultList);
+            String mrdJSON = JSON.toJSONString(messageRevertData);
             systemInfoData.setMsgts(timeStamp);
             systemInfoData.setMsg(mrdJSON);
 
@@ -103,8 +105,8 @@ public class ReportService {
             }
         } else {
             //命令执行未成功
-            MessageRevertData messageRevertData = utils.getMessageRevertData(configData.getFailedCode(), timeStamp, JSON.toJSONString(Cache.reportResultList));
-            String mrdJSON = messageRevertData.toString();
+            ReportMsgRevertData messageRevertData = getReportMsgRevertData(Cache.reportResultList);
+            String mrdJSON = JSON.toJSONString(messageRevertData);
             systemInfoData.setMsgts(timeStamp);
             systemInfoData.setMsg(mrdJSON);
             systemInfoData.setSign(utils.getSignVerify(systemInfoData));
@@ -121,5 +123,24 @@ public class ReportService {
 
     }
 
+    /**
+     * 封装 msg层数据
+     * @param reportResultList :结果list
+     * @return
+     */
+    private ReportMsgRevertData getReportMsgRevertData( List<ReportResult> reportResultList) {
+        ReportMsgRevertData mrd = new ReportMsgRevertData();
+        Map<String, CommandInfo> commandMap = Cache.commandMap;
+        String fristKey = commandMap.keySet().iterator().next();
+        CommandInfo commandInfo = commandMap.get(fristKey);
+        mrd.setType(commandInfo.getTdeviceFactoryEntity().getType());
+        mrd.setSubtype(commandInfo.getTdeviceFactoryEntity().getSubtype());
+        mrd.setInfoid("123456");
+        mrd.setDid("\"\"");
+        Map<String, List<ReportResult>> dataMap = new HashMap<>();
+        dataMap.put("clientlist",reportResultList);
+        mrd.setData(dataMap);
+        return mrd;
+    }
 
 }

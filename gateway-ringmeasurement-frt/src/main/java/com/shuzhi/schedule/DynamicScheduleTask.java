@@ -35,7 +35,7 @@ public class DynamicScheduleTask implements SchedulingConfigurer {
                 //1.添加任务内容(Runnable)
                 () -> {
 
-                    System.out.println("执行动态定时任务: " + LocalDateTime.now().toLocalTime());
+                    System.out.println("    执行动态定时任务: " + LocalDateTime.now().toLocalTime());
                     Map<String, ChannelHandlerContext> channelCache = Cache.channelCache;
                     for (String key : channelCache.keySet()) {
                         ChannelHandlerContext channelHandlerContext = channelCache.get(key);

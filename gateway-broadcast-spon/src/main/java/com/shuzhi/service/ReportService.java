@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -92,8 +93,8 @@ public class ReportService {
         String timeStamp = utils.getTimeStamp();
         //命令正确执行
         if (resultJSON !=null && !"".equals(resultJSON)){
-            MessageRevertData messageRevertData = utils.getMessageRevertData(configData.getSeccussCode(), timeStamp, resultJSON);
-            String mrdJSON = messageRevertData.toString();
+            ReportMsgRevertData messageRevertData = getReportMsgRevertData(resultJSON);
+            String mrdJSON= messageRevertData.toString();
             systemInfoData.setMsgts(timeStamp);
             systemInfoData.setMsg(mrdJSON);
 
@@ -107,8 +108,8 @@ public class ReportService {
             }
         }else{
             //命令执行未成功
-            MessageRevertData messageRevertData = utils.getMessageRevertData(configData.getFailedCode(), timeStamp, resultJSON);
-            String mrdJSON = messageRevertData.toString();
+            ReportMsgRevertData messageRevertData = getReportMsgRevertData(resultJSON);
+            String mrdJSON= messageRevertData.toString();
             systemInfoData.setMsgts(timeStamp);
             systemInfoData.setMsg(mrdJSON);
             systemInfoData.setSign(utils.getSignVerify(systemInfoData));
@@ -123,5 +124,21 @@ public class ReportService {
 
     }
 
-
+    /**
+     * 封装 msg层数据
+     * @param resultJson :结果及
+     * @return
+     */
+    private ReportMsgRevertData getReportMsgRevertData( String resultJson) {
+        ReportMsgRevertData mrd = new ReportMsgRevertData();
+        Map<String, CommandInfo> commandMap = Cache.commandMap;
+        String fristKey = commandMap.keySet().iterator().next();
+        CommandInfo commandInfo = commandMap.get(fristKey);
+        mrd.setType(commandInfo.getTdeviceFactoryEntity().getType());
+        mrd.setSubtype(commandInfo.getTdeviceFactoryEntity().getSubtype());
+        mrd.setInfoid("123456");
+        mrd.setDid("\"\"");
+        mrd.setData(resultJson);
+        return mrd;
+    }
 }
