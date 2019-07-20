@@ -3,8 +3,12 @@ package com.shuzhi.service;
 import com.shuzhi.cache.Cache;
 import com.shuzhi.common.ByteUtils;
 import com.shuzhi.common.ConfigData;
+import com.shuzhi.common.ReportUtils;
 import com.shuzhi.common.Utils;
 import com.shuzhi.entity.DataEntity;
+import com.shuzhi.entity.DeviceInfo;
+import com.shuzhi.entity.ReportMsgRevertData;
+import com.shuzhi.entity.SystemInfoData;
 import com.shuzhi.producer.RabbitSender;
 import io.netty.channel.ChannelHandlerContext;
 import org.apache.commons.lang.ArrayUtils;
@@ -16,15 +20,16 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.stereotype.Component;
 
 import java.nio.ByteBuffer;
+import java.util.Map;
 
 /**
  * 任务业务处理
  */
 @Component
 @EnableConfigurationProperties(ConfigData.class)
-public class CommandService {
+public class ReportService {
 
-    private final static Logger logger = LoggerFactory.getLogger(CommandService.class);
+    private final static Logger logger = LoggerFactory.getLogger(ReportService.class);
 
     @Autowired
     ConfigData configData;
@@ -35,7 +40,10 @@ public class CommandService {
     @Autowired
     private RabbitSender rabbitSender;
 
-
+    @Autowired
+    private ReportUtils reportUtils;
+    @Autowired
+    private Utils utils;
 
 
     /**
@@ -143,8 +151,9 @@ public class CommandService {
 
                 logger.info("数据为:"+dataEntity);
                 //发送数据到mq
-                rabbitSender.send("upMessage", "upMessage" , dataEntity.toString());
-                logger.info("命令回执发送完毕:"+dataEntity.toString());
+//                rabbitSender.send("upMessage", "upMessage" , dataEntity.toString());
+//                logger.info("命令回执发送完毕:"+dataEntity.toString());
+                reportSend(dataEntity.toString(),reportUtils.getRequestBody());
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -153,4 +162,61 @@ public class CommandService {
     }
 
 
+    /**
+     * 上报结果集发送到 mq
+     * @param resultJSON ：结果数据
+     * @param systemInfoData ：结果体
+     */
+    public void reportSend(String resultJSON, SystemInfoData systemInfoData){
+        String timeStamp = utils.getTimeStamp();
+        //命令正确执行
+        if (resultJSON !=null && !"".equals(resultJSON)){
+            ReportMsgRevertData messageRevertData = getReportMsgRevertData(resultJSON);
+            String mrdJSON= messageRevertData.toString();
+            systemInfoData.setMsgts(timeStamp);
+            systemInfoData.setMsg(mrdJSON);
+
+            systemInfoData.setSign(utils.getSignVerify(systemInfoData));
+            String commandRevertJSON = systemInfoData.toString();
+            try {
+                rabbitSender.send("upMessage", "upMessage" , commandRevertJSON);
+                logger.info("命令回执发送完毕:"+commandRevertJSON);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }else{
+            //命令执行未成功
+            ReportMsgRevertData messageRevertData = getReportMsgRevertData(resultJSON);
+            String mrdJSON= messageRevertData.toString();
+            systemInfoData.setMsgts(timeStamp);
+            systemInfoData.setMsg(mrdJSON);
+            systemInfoData.setSign(utils.getSignVerify(systemInfoData));
+            String commandRevertJSON = systemInfoData.toString();
+            try {
+                rabbitSender.send("upMessage", "upMessage" , commandRevertJSON);
+                logger.error("命令执行失败，请查看原因:"+commandRevertJSON);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    /**
+     * 封装 msg层数据
+     * @param resultJson :结果及
+     * @return
+     */
+    private ReportMsgRevertData getReportMsgRevertData( String resultJson) {
+        ReportMsgRevertData mrd = new ReportMsgRevertData();
+        Map<String, DeviceInfo> deviceIpMap = Cache.deviceIpMap;
+        String fristKey = deviceIpMap.keySet().iterator().next();
+        DeviceInfo deviceInfo = deviceIpMap.get(fristKey);
+        mrd.setType(deviceInfo.getTdeviceFactoryEntity().getType());
+        mrd.setSubtype(deviceInfo.getTdeviceFactoryEntity().getSubtype());
+        mrd.setInfoid("123456");
+        mrd.setDid("\"\"");
+        mrd.setData(resultJson);
+        return mrd;
+    }
 }

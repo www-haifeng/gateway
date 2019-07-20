@@ -3,7 +3,9 @@ package com.shuzhi.controller;
 import com.shuzhi.cache.Cache;
 import com.shuzhi.common.ConfigData;
 import com.shuzhi.dao.DeviceInfoDao;
+import com.shuzhi.dao.GatewayConfigDao;
 import com.shuzhi.entity.DeviceInfo;
+import com.shuzhi.entity.TGatewayConfigEntity;
 import com.shuzhi.netty.TimeServer;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -26,6 +28,10 @@ public class LoadData implements ApplicationRunner {
 
     @Autowired
     private DeviceInfoDao deviceInfoDao;
+    @Autowired
+    private GatewayConfigDao gatewayConfigDao;
+    @Autowired
+    ConfigData configData;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -37,6 +43,10 @@ public class LoadData implements ApplicationRunner {
         }
 
         logger.info("设备信息缓存初始化完毕");
+        //加载网关链路信息缓存
+        TGatewayConfigEntity gatewayConfigEntity = gatewayConfigDao.getByTypeGroupCode(configData.getTypeGroupCode());
+        Cache.gatewayConfigEntity=gatewayConfigEntity;
+        logger.info("链路信息缓存初始化完毕");
         new TimeServer(9001).start();
     }
 
