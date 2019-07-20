@@ -3,6 +3,7 @@ package com.shuzhi.cache;
 import com.shuzhi.entity.CommandInfo;
 import com.shuzhi.entity.DeviceInfo;
 import com.shuzhi.entity.ReportResult;
+import com.shuzhi.entity.TGatewayConfigEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,4 +23,7 @@ public class Cache {
     public static Map<String, CommandInfo> commandMap = new ConcurrentHashMap<>();
     //设备上报结果缓存
     public static List<ReportResult> reportResultList = new ArrayList<>();
+    //网关链路信息缓存
+    public static TGatewayConfigEntity gatewayConfigEntity = new TGatewayConfigEntity();
+
 }

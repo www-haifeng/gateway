@@ -23,6 +23,12 @@ public class ConfigData {
     //命令回执消息类型
     private int msgtypeCommandReturn;
 
+    //链路类型
+    private String typeGroupCode;
+
+    //系统类型
+    private int sysType;
+
     public String getName() {
         return name;
     }
@@ -61,5 +67,21 @@ public class ConfigData {
 
     public void setMsgtypeCommandReturn(int msgtypeCommandReturn) {
         this.msgtypeCommandReturn = msgtypeCommandReturn;
+    }
+
+    public String getTypeGroupCode() {
+        return typeGroupCode;
+    }
+
+    public void setTypeGroupCode(String typeGroupCode) {
+        this.typeGroupCode = typeGroupCode;
+    }
+
+    public int getSysType() {
+        return sysType;
+    }
+
+    public void setSysType(int sysType) {
+        this.sysType = sysType;
     }
 }

@@ -28,6 +28,11 @@ public class ConfigData {
 
     private String password;
 
+    //链路类型
+    private String typeGroupCode;
+
+    //系统类型
+    private int sysType;
 
     public String getName() {
         return name;
@@ -83,5 +88,21 @@ public class ConfigData {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getTypeGroupCode() {
+        return typeGroupCode;
+    }
+
+    public void setTypeGroupCode(String typeGroupCode) {
+        this.typeGroupCode = typeGroupCode;
+    }
+
+    public int getSysType() {
+        return sysType;
+    }
+
+    public void setSysType(int sysType) {
+        this.sysType = sysType;
     }
 }

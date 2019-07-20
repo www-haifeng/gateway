@@ -34,6 +34,17 @@
       "type": "java.lang.Integer",
       "sourceType": "com.shuzhi.commen.ConfigData",
       "defaultValue": 0
+    },
+    {
+      "name": "factory.sys-type",
+      "type": "java.lang.Integer",
+      "sourceType": "com.shuzhi.commen.ConfigData",
+      "defaultValue": 0
+    },
+    {
+      "name": "factory.type-group-code",
+      "type": "java.lang.String",
+      "sourceType": "com.shuzhi.commen.ConfigData"
     }
   ],
   "hints": []
