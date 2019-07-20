@@ -153,7 +153,7 @@ public class CommandUtils {
                         }else{
                             erpf.setParam1(Cache.deviceInfoMap.get(erpf.getParam1()));
                         }
-                        if (erpf.getParam3() != 0){
+                        if (erpf.getParam3() != 0 && erpf.getParam3()!= null){
                             erpf.setParam3(Integer.parseInt(Cache.deviceInfoMap.get(erpf.getParam3().toString())));
                         }
                         commandService.commandService(url, erpf.toString(),systemInfoData);

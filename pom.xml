@@ -19,6 +19,7 @@
         <module>gateway-service-centre</module>
         <module>gateway-alarm-lonbon</module>
         <module>gateway-lcd-hobo</module>
+        <module>gateway-ringmeasurement-frt</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

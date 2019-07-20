@@ -22,7 +22,7 @@ public class TimeServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         //加入缓存 ,客户端ip作为Key
-        System.out.println("终端连接:---" + ctx);
+        log.info("终端连接:---" + ctx);
         InetSocketAddress ipSocket = (InetSocketAddress) ctx.channel().remoteAddress();
         String clientIp = ipSocket.getAddress().getHostAddress();
         System.out.println(clientIp);
@@ -34,9 +34,7 @@ public class TimeServerHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         System.out.println("----接收到数据----");
         byte[] msgBytes = (byte[]) msg;
-        ByteUtils ByteUtil = new ByteUtils();
-        String s = ByteUtil.bytesToHexString(msgBytes);
-        System.out.println(s);
+        log.info("接收到长度为:"+msgBytes.length+",ctx为"+ctx+"的数据:"+ByteUtils.bytesToHexString(msgBytes));
 //        if (Cache.sendOneByte == null) {
 //            Cache.sendOneByte = msgBytes;
 //        } else {
