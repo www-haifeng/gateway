@@ -67,10 +67,9 @@ public class ReportUtils {
         SystemInfoData infoData = new SystemInfoData();
         infoData.setMsgid(UUID.randomUUID().toString());
         infoData.setMsgtype(4);
-        infoData.setSystype(1001);
-        infoData.setSysid(1);
-        infoData.setConnectid(1);
-        infoData.setSign("4634e0d2f0b2b423936eb7651eacc54b98cb248f");
+        infoData.setSystype(configData.getSysType());
+        infoData.setSysid(Integer.parseInt(Cache.gatewayConfigEntity.getSysId()));
+        infoData.setConnectid(Integer.parseInt(Cache.gatewayConfigEntity.getConnectId()));
         return infoData;
     }
 

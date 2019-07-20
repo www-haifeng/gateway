@@ -1,12 +1,10 @@
 package com.shuzhi.common;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shuzhi.cache.Cache;
 import com.shuzhi.entity.CommandInfo;
 import com.shuzhi.entity.DeviceInfo;
 import com.shuzhi.entity.SystemInfoData;
 import com.shuzhi.entity.command.CommonParameters;
-import com.shuzhi.service.CommandService;
 import com.shuzhi.service.ReportService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,12 +27,6 @@ public class ReportUtils {
 
     @Autowired
     private ReportService reportService;
-    @Autowired
-    private CommandService commandService;
-    @Autowired
-    private Utils utils;
-    @Autowired
-    private ObjectMapper mapper;
     @Autowired
     private ConfigData configData;
 
@@ -64,11 +56,9 @@ public class ReportUtils {
         SystemInfoData infoData = new SystemInfoData();
         infoData.setMsgid(UUID.randomUUID().toString());
         infoData.setMsgtype(4);
-        infoData.setSystype(1001);
-        infoData.setSysid(1);
-        infoData.setConnectid(1);
-        //校验暂时固定
-        infoData.setSign("4634e0d2f0b2b423936eb7651eacc54b98cb248f");
+        infoData.setSystype(configData.getSysType());
+        infoData.setSysid(Integer.parseInt(Cache.gatewayConfigEntity.getSysId()));
+        infoData.setConnectid(Integer.parseInt(Cache.gatewayConfigEntity.getConnectId()));
         return infoData;
     }
 

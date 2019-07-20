@@ -31,7 +31,7 @@ import java.util.Map;
  **/
 @Component
 @EnableConfigurationProperties(ConfigData.class)
-public class ReportService {
+public class        ReportService {
 
     private final static Logger logger = LoggerFactory.getLogger(ReportService.class);
 
