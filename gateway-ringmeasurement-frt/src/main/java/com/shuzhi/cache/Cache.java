@@ -3,6 +3,7 @@ package com.shuzhi.cache;
 
 import com.shuzhi.entity.DeviceInfo;
 import com.shuzhi.entity.TDeviceFactoryCronEntity;
+import com.shuzhi.entity.TGatewayConfigEntity;
 import io.netty.channel.ChannelHandlerContext;
 
 import java.util.Map;
@@ -25,4 +26,8 @@ public class Cache {
 
     //设备ip信息缓存 Key:ip value：device
     public static Map<String, DeviceInfo> deviceIpMap = new ConcurrentHashMap<>();
+
+    //网关链路信息缓存
+    public static TGatewayConfigEntity gatewayConfigEntity = new TGatewayConfigEntity();
+
 }

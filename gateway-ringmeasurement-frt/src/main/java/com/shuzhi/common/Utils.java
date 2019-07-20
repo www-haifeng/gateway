@@ -1,12 +1,14 @@
 package com.shuzhi.common;
 
 import com.shuzhi.cache.Cache;
+import com.shuzhi.entity.SystemInfoData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -135,7 +137,34 @@ public class Utils {
         return Integer.toHexString(CRC);
     }
 
+    /**
+     * 功能描述 生成sign校验
+     * @author YHF
+     * @date 2019/6/10
+     * @params [systemInfoData]
+     * @return java.lang.String
+     */
+    public String getSignVerify(SystemInfoData systemInfoData){
+        String md5Str = encodeByMD5((String) systemInfoData.getMsg());
+        String shaStr = addPwd(systemInfoData.getMsgid() + configData.getKey() + md5Str + systemInfoData.getMsgts());
+        return shaStr;
+    }
 
+    private String addPwd(String inputStr) {
+        BigInteger sha = null;
+        System.out.println("=======加密前的数据:" + inputStr);
+        byte[] inputData = inputStr.getBytes();
+        try {
+            MessageDigest messageDigest = MessageDigest.getInstance(KEY_SHA);
+            messageDigest.update(inputData);
+            sha = new BigInteger(messageDigest.digest());
+            System.out.println("SHA加密后:" + sha.toString(32));
+            return sha.toString(32);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 
 }

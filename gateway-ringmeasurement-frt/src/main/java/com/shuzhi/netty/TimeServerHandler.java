@@ -3,7 +3,7 @@ package com.shuzhi.netty;
 import com.shuzhi.cache.Cache;
 import com.shuzhi.common.ByteUtils;
 import com.shuzhi.common.SpringUtil;
-import com.shuzhi.service.CommandService;
+import com.shuzhi.service.ReportService;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.extern.slf4j.Slf4j;
@@ -13,10 +13,10 @@ import java.net.InetSocketAddress;
 @Slf4j
 public class TimeServerHandler extends ChannelInboundHandlerAdapter {
 
-    private static CommandService commandService;
+    private static ReportService reportService;
 
     {
-        commandService = SpringUtil.getBean(CommandService.class);
+        reportService = SpringUtil.getBean(ReportService.class);
     }
 
     @Override
@@ -40,6 +40,6 @@ public class TimeServerHandler extends ChannelInboundHandlerAdapter {
 //        } else {
 //
 //        }
-        commandService.handleResult(msgBytes);
+        reportService.handleResult(msgBytes);
     }
 }
