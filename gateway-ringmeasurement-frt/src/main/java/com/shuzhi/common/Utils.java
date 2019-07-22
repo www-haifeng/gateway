@@ -219,18 +219,16 @@ public class Utils {
 
     /**
      * 解析成cron表达式
-     * @param intervaltime : 秒
+     * @param intervaltime : 分钟
      * @return
      */
-    public String parseCron(Integer intervaltime) {
+    public String parseCron(int intervaltime) {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("0/");
-        if(intervaltime!=null&&intervaltime>0){
-            stringBuilder.append(String.valueOf(intervaltime));
-        }else {
-            stringBuilder.append("40");
-        }
-        stringBuilder.append(" * * * * ?");
+        stringBuilder.append("0 *");
+        if(intervaltime <=0) intervaltime=1;
+        if(intervaltime>60) intervaltime=60;
+        stringBuilder.append("/" + intervaltime);
+        stringBuilder.append(" * * * ?");
         return stringBuilder.toString();
     }
 
