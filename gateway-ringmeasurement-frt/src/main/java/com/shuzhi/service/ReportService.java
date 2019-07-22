@@ -1,5 +1,6 @@
 package com.shuzhi.service;
 
+import com.alibaba.fastjson.JSON;
 import com.shuzhi.cache.Cache;
 import com.shuzhi.common.ByteUtils;
 import com.shuzhi.common.ConfigData;
@@ -61,14 +62,14 @@ public class ReportService {
                 bf.get(idBytes);
                 Integer deviceId = Integer.valueOf(idBytes[0]);
                 String deviceIdStr = "";
-                if(deviceId!=null){
+                if (deviceId != null) {
                     deviceIdStr = String.valueOf(deviceId);
                     char[] chars = deviceIdStr.toCharArray();
-                    if(chars.length==1){
-                        deviceIdStr="0"+deviceIdStr;
+                    if (chars.length == 1) {
+                        deviceIdStr = "0" + deviceIdStr;
                     }
                 }
-                String did = Utils.deviceIdToDid(deviceIdStr);
+                String did = utils.deviceIdToDid(deviceIdStr);
                 //取出功能码
                 byte[] functionBytes = new byte[1];
                 bf.get(functionBytes);
@@ -76,8 +77,8 @@ public class ReportService {
                 byte[] dataLengthBytes = new byte[1];
                 bf.get(dataLengthBytes);
                 Integer datalength = Integer.valueOf(dataLengthBytes[0]);
-                if(datalength!=30){
-                    return ;
+                if (datalength != 30) {
+                    return;
                 }
                 //取出最小风向
                 byte[] ringTemperatureBytes = new byte[2];
@@ -96,7 +97,7 @@ public class ReportService {
                 byte[] avgWindSpeedBytes = new byte[2];
                 bf.get(avgWindSpeedBytes);
                 int avgWindSpeedInt = byteUtils.byte2Int(avgWindSpeedBytes, 0, 2);
-                double avgWindSpeed=avgWindSpeedInt/10;
+                double avgWindSpeed = avgWindSpeedInt / 10;
                 //最大风速
                 byte[] windSpeedBytes = new byte[2];
                 bf.get(windSpeedBytes);
@@ -104,25 +105,25 @@ public class ReportService {
                 byte[] temperatureBytes = new byte[2];
                 bf.get(temperatureBytes);
                 int temperatureInt = byteUtils.byte2Int(temperatureBytes, 0, 2);
-                double temperature=temperatureInt/10;
+                double temperature = temperatureInt / 10;
 
                 //大气湿度
                 byte[] wettingBytes = new byte[2];
                 bf.get(wettingBytes);
                 int wettingInt = byteUtils.byte2Int(wettingBytes, 0, 2);
-                double wetting=wettingInt/10;
+                double wetting = wettingInt / 10;
 
                 //大气气压
                 byte[] pressureBytes = new byte[2];
                 bf.get(pressureBytes);
                 int pressureInt = byteUtils.byte2Int(pressureBytes, 0, 2);
-                double pressure=pressureInt/10;
+                double pressure = pressureInt / 10;
 
                 //雨量
                 byte[] rainfallBytes = new byte[2];
                 bf.get(rainfallBytes);
                 int rainfallInt = byteUtils.byte2Int(rainfallBytes, 0, 2);
-                double rainfall=rainfallInt/10;
+                double rainfall = rainfallInt / 10;
 
                 //总辐射
                 byte[] radiationTwoBytes = new byte[2];
@@ -134,26 +135,28 @@ public class ReportService {
                 byte[] noiseBytes = new byte[2];
                 bf.get(noiseBytes);
                 int noiseInt = byteUtils.byte2Int(noiseBytes, 0, 2);
-                double noise=noiseInt/10;
+                double noise = noiseInt / 10;
                 //pm2.5
                 byte[] pmTwoPointFiveBytes = new byte[2];
                 bf.get(pmTwoPointFiveBytes);
                 int pmTwoPointFiveInt = byteUtils.byte2Int(pmTwoPointFiveBytes, 0, 2);
-                double pmTwoPointFive=pmTwoPointFiveInt/10;
+                double pmTwoPointFive = pmTwoPointFiveInt / 10;
                 //pm10
                 byte[] pmTenBytes = new byte[2];
                 bf.get(pmTenBytes);
                 int pmTenInt = byteUtils.byte2Int(pmTenBytes, 0, 2);
-                double pmTen=pmTenInt/10;
+                double pmTen = pmTenInt / 10;
 
-                DataEntity dataEntity = new DataEntity(did, temperature, wetting, pressure, avgWindDirectInt, avgWindSpeed
+                //获取deviceType
+                String deviceType = utils.getDeviceType(deviceIdStr);
+                DataEntity dataEntity = new DataEntity(did, deviceType, temperature, wetting, pressure, avgWindDirectInt, avgWindSpeed
                         , rainfall, pmTwoPointFive, pmTen, noise);
 
-                logger.info("数据为:"+dataEntity);
+                logger.info("数据为:" + dataEntity);
                 //发送数据到mq
 //                rabbitSender.send("upMessage", "upMessage" , dataEntity.toString());
 //                logger.info("命令回执发送完毕:"+dataEntity.toString());
-                reportSend(dataEntity.toString(),reportUtils.getRequestBody());
+                reportSend(JSON.toJSONString(dataEntity), reportUtils.getRequestBody());
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -164,37 +167,38 @@ public class ReportService {
 
     /**
      * 上报结果集发送到 mq
-     * @param resultJSON ：结果数据
+     *
+     * @param resultJSON     ：结果数据
      * @param systemInfoData ：结果体
      */
-    public void reportSend(String resultJSON, SystemInfoData systemInfoData){
+    public void reportSend(String resultJSON, SystemInfoData systemInfoData) {
         String timeStamp = utils.getTimeStamp();
         //命令正确执行
-        if (resultJSON !=null && !"".equals(resultJSON)){
+        if (resultJSON != null && !"".equals(resultJSON)) {
             ReportMsgRevertData messageRevertData = getReportMsgRevertData(resultJSON);
-            String mrdJSON= messageRevertData.toString();
+            String mrdJSON = messageRevertData.toString();
             systemInfoData.setMsgts(timeStamp);
             systemInfoData.setMsg(mrdJSON);
 
             systemInfoData.setSign(utils.getSignVerify(systemInfoData));
             String commandRevertJSON = systemInfoData.toString();
             try {
-                rabbitSender.send("upMessage", "upMessage" , commandRevertJSON);
-                logger.info("命令回执发送完毕:"+commandRevertJSON);
+                rabbitSender.send("upMessage", "upMessage", commandRevertJSON);
+                logger.info("命令回执发送完毕:" + commandRevertJSON);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }else{
+        } else {
             //命令执行未成功
             ReportMsgRevertData messageRevertData = getReportMsgRevertData(resultJSON);
-            String mrdJSON= messageRevertData.toString();
+            String mrdJSON = messageRevertData.toString();
             systemInfoData.setMsgts(timeStamp);
             systemInfoData.setMsg(mrdJSON);
             systemInfoData.setSign(utils.getSignVerify(systemInfoData));
             String commandRevertJSON = systemInfoData.toString();
             try {
-                rabbitSender.send("upMessage", "upMessage" , commandRevertJSON);
-                logger.error("命令执行失败，请查看原因:"+commandRevertJSON);
+                rabbitSender.send("upMessage", "upMessage", commandRevertJSON);
+                logger.error("命令执行失败，请查看原因:" + commandRevertJSON);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -204,16 +208,17 @@ public class ReportService {
 
     /**
      * 封装 msg层数据
+     *
      * @param resultJson :结果及
      * @return
      */
-    private ReportMsgRevertData getReportMsgRevertData( String resultJson) {
+    private ReportMsgRevertData getReportMsgRevertData(String resultJson) {
         ReportMsgRevertData mrd = new ReportMsgRevertData();
         Map<String, DeviceInfo> deviceIpMap = Cache.deviceIpMap;
         String fristKey = deviceIpMap.keySet().iterator().next();
         DeviceInfo deviceInfo = deviceIpMap.get(fristKey);
-        mrd.setType(deviceInfo.getTdeviceFactoryEntity().getType());
-        mrd.setSubtype(deviceInfo.getTdeviceFactoryEntity().getSubtype());
+        mrd.setType(deviceInfo.getTdeviceFactoryEntity().getType().toString());
+        mrd.setSubtype(deviceInfo.getTdeviceFactoryEntity().getSubtype().toString());
         mrd.setInfoid("123456");
         mrd.setDid("\"\"");
         mrd.setData(resultJson);

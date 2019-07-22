@@ -2,8 +2,10 @@ package com.shuzhi.controller;
 
 import com.shuzhi.cache.Cache;
 import com.shuzhi.common.ConfigData;
+import com.shuzhi.dao.CommandInfoDao;
 import com.shuzhi.dao.DeviceInfoDao;
 import com.shuzhi.dao.GatewayConfigDao;
+import com.shuzhi.entity.CommandInfo;
 import com.shuzhi.entity.DeviceInfo;
 import com.shuzhi.entity.TGatewayConfigEntity;
 import com.shuzhi.netty.TimeServer;
@@ -29,6 +31,8 @@ public class LoadData implements ApplicationRunner {
     @Autowired
     private DeviceInfoDao deviceInfoDao;
     @Autowired
+    private CommandInfoDao commandInfoDao;
+    @Autowired
     private GatewayConfigDao gatewayConfigDao;
     @Autowired
     ConfigData configData;
@@ -38,11 +42,18 @@ public class LoadData implements ApplicationRunner {
         //加载设备信息缓存
         List<DeviceInfo> deviceInfos = deviceInfoDao.findDeviceInfo();
         for (DeviceInfo info : deviceInfos) {
-            Cache.deviceInfoMap.put(info.getTdeviceFrtEntity().getDid(),info.getTdeviceFrtEntity().getDeviceId());
+            Cache.deviceInfoMap.put(info.getTdeviceFrtEntity().getDid(),info);
             Cache.deviceIpMap.put(info.getTdeviceFrtEntity().getIp(),info);
         }
 
         logger.info("设备信息缓存初始化完毕");
+        //加载命令信息缓存
+        List<CommandInfo> commandInfos = commandInfoDao.findcommandInfo(configData.getName());
+        for (CommandInfo info : commandInfos) {
+            Cache.commandMap.put(info.getTmsgInfoEntity().getMsgId(),info);
+        }
+        logger.info("命令信息缓存初始化完毕");
+
         //加载网关链路信息缓存
         TGatewayConfigEntity gatewayConfigEntity = gatewayConfigDao.getByTypeGroupCode(configData.getTypeGroupCode());
         Cache.gatewayConfigEntity=gatewayConfigEntity;

@@ -1,7 +1,11 @@
 package com.shuzhi.common;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.shuzhi.cache.Cache;
+import com.shuzhi.entity.DeviceInfo;
+import com.shuzhi.entity.MessageRevertData;
 import com.shuzhi.entity.SystemInfoData;
+import com.shuzhi.entity.TDeviceRingmeasurementEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,11 +93,11 @@ public class Utils {
      * @param deviceId : 设备id
      * @return
      */
-    public static  String deviceIdToDid(String deviceId) {
+    public   String deviceIdToDid(String deviceId) {
 
-        Map<String, String> deviceInfoMap = Cache.deviceInfoMap;
+        Map<String, DeviceInfo> deviceInfoMap = Cache.deviceInfoMap;
         for (String did : deviceInfoMap.keySet()) {
-            if (deviceInfoMap.get(did).equals(deviceId)) {
+            if (deviceInfoMap.get(did).getTdeviceFrtEntity().getDeviceId().equals(deviceId)) {
                 return did;
             }
         }
@@ -101,6 +105,40 @@ public class Utils {
         return null;
     }
 
+    /**
+     * 平台id 转换为设备id
+     *
+     * @param did : 平台id
+     * @return
+     */
+    public String didToDeviceId(String did) {
+
+        if (did.contains("_")) {
+            StringBuffer stringBuffer = new StringBuffer();
+            String[] dids = did.split("_");
+            for (String d : dids) {
+                String deviceId = Cache.deviceInfoMap.get(d).getTdeviceFrtEntity().getDeviceId();
+                stringBuffer.append(deviceId);
+                stringBuffer.append("_");
+            }
+            String deviceIds = stringBuffer.toString();
+            return deviceIds.substring(0, deviceIds.length() - 1);
+        }
+        return Cache.deviceInfoMap.get(did).getTdeviceFrtEntity().getDeviceId();
+    }
+
+
+    public  String  getDeviceType(String deviceId){
+        Map<String, DeviceInfo> deviceInfoMap = Cache.deviceInfoMap;
+        for (String did : deviceInfoMap.keySet()) {
+            TDeviceRingmeasurementEntity tdeviceFrtEntity = deviceInfoMap.get(did).getTdeviceFrtEntity();
+            if (tdeviceFrtEntity.getDeviceId().equals(deviceId)) {
+                return tdeviceFrtEntity.getDeviceType();
+            }
+        }
+
+        return null;
+    }
 
     public static String getCRC2(byte[] bytes) {
 //        ModBus 通信协议的 CRC ( 冗余循环校验码含2个字节, 即 16 位二进制数。
@@ -136,7 +174,19 @@ public class Utils {
         CRC = ( (CRC & 0x0000FF00) >> 8) | ( (CRC & 0x000000FF ) << 8);
         return Integer.toHexString(CRC);
     }
-
+    /**
+     * @Description: sign校验
+     * @Author: YHF
+     * @date 2019/6/10
+     */
+    public boolean signVerify(SystemInfoData systemInfoData, JsonNode jsonParentNode) {
+        String md5Str = encodeByMD5(jsonParentNode.path("msg").toString());
+        String shaStr = addPwd(systemInfoData.getMsgid() + configData.getKey() + md5Str + systemInfoData.getMsgts());
+        if (systemInfoData.getSign().equals(shaStr)) {
+            return true;
+        }
+        return false;
+    }
     /**
      * 功能描述 生成sign校验
      * @author YHF
@@ -167,4 +217,33 @@ public class Utils {
     }
 
 
+    /**
+     * 解析成cron表达式
+     * @param intervaltime : 秒
+     * @return
+     */
+    public String parseCron(Integer intervaltime) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("0/");
+        if(intervaltime!=null&&intervaltime>0){
+            stringBuilder.append(String.valueOf(intervaltime));
+        }else {
+            stringBuilder.append("40");
+        }
+        stringBuilder.append(" * * * * ?");
+        return stringBuilder.toString();
+    }
+
+    /**
+     * @Description:封装命令回执message层
+     * @Author: YHF
+     * @date 2019/6/6
+     */
+    public MessageRevertData getMessageRevertData(int code, String timestamp, String data){
+        MessageRevertData mrd = new MessageRevertData();
+        mrd.setCode(code);
+        mrd.setTimestamp(timestamp);
+        mrd.setData(data);
+        return mrd;
+    }
 }

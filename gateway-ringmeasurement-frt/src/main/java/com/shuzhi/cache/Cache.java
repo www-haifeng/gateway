@@ -1,10 +1,12 @@
 package com.shuzhi.cache;
 
 
+import com.shuzhi.entity.CommandInfo;
 import com.shuzhi.entity.DeviceInfo;
 import com.shuzhi.entity.TDeviceFactoryCronEntity;
 import com.shuzhi.entity.TGatewayConfigEntity;
 import io.netty.channel.ChannelHandlerContext;
+
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -22,12 +24,16 @@ public class Cache {
     public static TDeviceFactoryCronEntity cronEntity ;
 
     //设备信息缓存 Key:did value：deviceId
-    public static Map<String, String> deviceInfoMap = new ConcurrentHashMap<>();
+    public static Map<String, DeviceInfo> deviceInfoMap = new ConcurrentHashMap<>();
 
     //设备ip信息缓存 Key:ip value：device
     public static Map<String, DeviceInfo> deviceIpMap = new ConcurrentHashMap<>();
 
     //网关链路信息缓存
     public static TGatewayConfigEntity gatewayConfigEntity = new TGatewayConfigEntity();
+
+    //设备命令缓存 Key:cmdid
+    public static Map<String, CommandInfo> commandMap = new ConcurrentHashMap<>();
+
 
 }

@@ -35,11 +35,6 @@ public class TimeServerHandler extends ChannelInboundHandlerAdapter {
         System.out.println("----接收到数据----");
         byte[] msgBytes = (byte[]) msg;
         log.info("接收到长度为:"+msgBytes.length+",ctx为"+ctx+"的数据:"+ByteUtils.bytesToHexString(msgBytes));
-//        if (Cache.sendOneByte == null) {
-//            Cache.sendOneByte = msgBytes;
-//        } else {
-//
-//        }
         reportService.handleResult(msgBytes);
     }
 }

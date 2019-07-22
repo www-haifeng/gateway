@@ -14,7 +14,11 @@ public class DataEntity {
     /**
      * 平台设备id
      */
-    private  String did;
+    private  String deviceid;
+    /**
+     * deviceType
+     */
+    private  String deviceType;
 
     /**
      * 环温
@@ -56,8 +60,10 @@ public class DataEntity {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("{");
-        sb.append("\"did\":\"")
-                .append(did).append('\"');
+        sb.append("\"deviceid\":\"")
+                .append(deviceid).append('\"');
+        sb.append("\"deviceType\":\"")
+                .append(deviceType).append('\"');
         sb.append(",\"ringTemperature\":")
                 .append(ringTemperature);
         sb.append(",\"ringWetting\":")

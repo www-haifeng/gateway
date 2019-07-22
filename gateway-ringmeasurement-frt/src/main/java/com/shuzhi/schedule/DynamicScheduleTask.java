@@ -2,6 +2,7 @@ package com.shuzhi.schedule;
 
 import com.shuzhi.cache.Cache;
 import com.shuzhi.common.ByteUtils;
+import com.shuzhi.common.ConfigData;
 import com.shuzhi.common.Utils;
 import com.shuzhi.dao.FactoryCronDao;
 import com.shuzhi.entity.DeviceInfo;
@@ -9,6 +10,7 @@ import io.netty.channel.ChannelHandlerContext;
 import org.apache.commons.lang.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.SchedulingConfigurer;
 import org.springframework.scheduling.config.ScheduledTaskRegistrar;
@@ -21,10 +23,15 @@ import java.util.Map;
 @Component
 @Configuration
 @EnableScheduling
+@Order(5)
 public class DynamicScheduleTask implements SchedulingConfigurer {
 
     @Autowired
     private FactoryCronDao factoryCronDao;
+
+    //时间表达式  每2秒执行一次
+    private  String cron ="";
+
 
     @Override
     public void configureTasks(ScheduledTaskRegistrar scheduledTaskRegistrar) {
@@ -63,13 +70,18 @@ public class DynamicScheduleTask implements SchedulingConfigurer {
                     if (Cache.cronEntity == null) {
                         Cache.cronEntity = factoryCronDao.getByFactoryName("富奥通");
                     }
+                    setCron(Cache.cronEntity.getCron());
                     //2.3 返回执行周期(Date)
                     if ("1".equals(Cache.cronEntity.getStartFlag())) {
-                        return new CronTrigger(Cache.cronEntity.getCron()).nextExecutionTime(triggerContext);
+                        return new CronTrigger(cron).nextExecutionTime(triggerContext);
                     } else {
                         return null;
                     }
                 }
         );
+    }
+
+    public void setCron(String cron) {
+        this.cron = cron;
     }
 }

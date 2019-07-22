@@ -18,11 +18,11 @@ public class ReportMsgRevertData {
     /**
      * 设备类型
      */
-    private int type;
+    private String type;
     /**
      * 厂商类型
      */
-    private int subtype;
+    private String subtype;
     /**
      * 平台设备编号
      */
