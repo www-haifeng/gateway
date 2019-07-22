@@ -11,8 +11,10 @@ import com.shuzhi.entity.DeviceInfo;
 import com.shuzhi.entity.ReportMsgRevertData;
 import com.shuzhi.entity.SystemInfoData;
 import com.shuzhi.producer.RabbitSender;
+import com.shuzhi.util.StringUtil;
 import io.netty.channel.ChannelHandlerContext;
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,16 +62,12 @@ public class ReportService {
                 //取出地址码
                 byte[] idBytes = new byte[1];
                 bf.get(idBytes);
-                Integer deviceId = Integer.valueOf(idBytes[0]);
-                String deviceIdStr = "";
-                if (deviceId != null) {
-                    deviceIdStr = String.valueOf(deviceId);
-                    char[] chars = deviceIdStr.toCharArray();
-                    if (chars.length == 1) {
-                        deviceIdStr = "0" + deviceIdStr;
-                    }
-                }
+                String deviceIdStr = ByteUtils.bytesToHexString(idBytes);
                 String did = utils.deviceIdToDid(deviceIdStr);
+                if(StringUtil.isEmpty(did)){
+                    logger.error("数据库中未加入设备地址为"+deviceIdStr+"的设备，放弃此消息。");
+                    return;
+                }
                 //取出功能码
                 byte[] functionBytes = new byte[1];
                 bf.get(functionBytes);
@@ -154,9 +152,7 @@ public class ReportService {
 
                 logger.info("数据为:" + dataEntity);
                 //发送数据到mq
-//                rabbitSender.send("upMessage", "upMessage" , dataEntity.toString());
-//                logger.info("命令回执发送完毕:"+dataEntity.toString());
-                reportSend(JSON.toJSONString(dataEntity), reportUtils.getRequestBody());
+                reportSend(did,JSON.toJSONString(dataEntity), reportUtils.getRequestBody());
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -171,11 +167,11 @@ public class ReportService {
      * @param resultJSON     ：结果数据
      * @param systemInfoData ：结果体
      */
-    public void reportSend(String resultJSON, SystemInfoData systemInfoData) {
+    public void reportSend(String did ,String resultJSON, SystemInfoData systemInfoData) {
         String timeStamp = utils.getTimeStamp();
         //命令正确执行
         if (resultJSON != null && !"".equals(resultJSON)) {
-            ReportMsgRevertData messageRevertData = getReportMsgRevertData(resultJSON);
+            ReportMsgRevertData messageRevertData = getReportMsgRevertData(did,resultJSON);
             String mrdJSON = messageRevertData.toString();
             systemInfoData.setMsgts(timeStamp);
             systemInfoData.setMsg(mrdJSON);
@@ -190,7 +186,7 @@ public class ReportService {
             }
         } else {
             //命令执行未成功
-            ReportMsgRevertData messageRevertData = getReportMsgRevertData(resultJSON);
+            ReportMsgRevertData messageRevertData = getReportMsgRevertData(did,resultJSON);
             String mrdJSON = messageRevertData.toString();
             systemInfoData.setMsgts(timeStamp);
             systemInfoData.setMsg(mrdJSON);
@@ -212,7 +208,7 @@ public class ReportService {
      * @param resultJson :结果及
      * @return
      */
-    private ReportMsgRevertData getReportMsgRevertData(String resultJson) {
+    private ReportMsgRevertData getReportMsgRevertData(String did,String resultJson) {
         ReportMsgRevertData mrd = new ReportMsgRevertData();
         Map<String, DeviceInfo> deviceIpMap = Cache.deviceIpMap;
         String fristKey = deviceIpMap.keySet().iterator().next();
@@ -220,7 +216,7 @@ public class ReportService {
         mrd.setType(deviceInfo.getTdeviceFactoryEntity().getType().toString());
         mrd.setSubtype(deviceInfo.getTdeviceFactoryEntity().getSubtype().toString());
         mrd.setInfoid("123456");
-        mrd.setDid("\"\"");
+        mrd.setDid(did);
         mrd.setData(resultJson);
         return mrd;
     }
