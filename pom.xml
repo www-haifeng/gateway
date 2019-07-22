@@ -21,6 +21,7 @@
         <module>gateway-lcd-hobo</module>
         <module>gateway-ringmeasurement-frt</module>
         <module>gateway-cardiscern-sensing</module>
+        <module>gateway-videodiscern-sensing</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

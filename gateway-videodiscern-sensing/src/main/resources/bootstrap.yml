@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: gateway-videodiscern-sensing #指定服务名
+
+
+
