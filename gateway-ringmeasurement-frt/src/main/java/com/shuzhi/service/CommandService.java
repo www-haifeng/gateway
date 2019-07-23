@@ -67,7 +67,7 @@ public class CommandService {
             e.printStackTrace();
             //发送响应
             Map<String, String> reultData = new HashMap<>();
-            reultData.put("type", "false");
+            reultData.put("type", "failed");
             commandSend(JSON.toJSONString(reultData),systemInfoData);
         }
     }
@@ -80,7 +80,7 @@ public class CommandService {
     public void commandSend(String resultJSON, SystemInfoData systemInfoData){
         String timeStamp = utils.getTimeStamp();
         //命令正确执行
-        if (resultJSON !=null && !"".equals(resultJSON)){
+        if (resultJSON !=null && !"".equals(resultJSON) && !"failed".equals(resultJSON)){
             MessageRevertData messageRevertData = utils.getMessageRevertData(configData.getSeccussCode(), timeStamp, resultJSON);
             String mrdJSON = messageRevertData.toString();
             systemInfoData.setMsgts(timeStamp);
