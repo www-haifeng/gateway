@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: gateway-cardiscern-sensing #指定服务名
+
+
+
