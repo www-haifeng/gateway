@@ -40,8 +40,8 @@ public class ReportMsgRevertData {
     public String toString() {
 
         final StringBuilder sb = new StringBuilder("{");
-        sb.append("\"type\":\"")
-                .append(type).append('\"');
+        sb.append("\"type\":")
+                .append(type);
         sb.append(",\"subtype\":")
                 .append(subtype);
         sb.append(",\"did\":")
