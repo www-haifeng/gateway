@@ -33,6 +33,9 @@ public class CommandUtils {
     private ObjectMapper mapper;
     @Autowired
     private FtpUtil ftpUtil;
+    @Autowired
+    private ConfigData configData;
+
     /**
      * @Description:匹配数据指令
      * @Author: YHF
@@ -137,7 +140,7 @@ public class CommandUtils {
                     case "/php/addmediadata.php":
                         //添加媒体文件
                         AddMediaData amd = mapper.readValue(jsonParentNode.path("msg").path("data").toString(), AddMediaData.class);
-                        ftpUtil.connectServer("192.168.8.150",21,"shuzhi","shuzhi","/");
+                        ftpUtil.connectServer(configData.getFtpIp(),configData.getFtpPort(),configData.getFtpName(),configData.getFtpPassword(),amd.getFile().substring(0,amd.getFile().lastIndexOf("/")));
                         String resultStr = ftpUtil.uploadMediaFile(amd, url);
                         commandService.commandSend(resultStr,systemInfoData);
                         break;
@@ -153,7 +156,7 @@ public class CommandUtils {
                         }else{
                             erpf.setParam1(Cache.deviceInfoMap.get(erpf.getParam1()));
                         }
-                        if (erpf.getParam3() != 0 && erpf.getParam3()!= null){
+                        if (erpf.getParam3()!= null && erpf.getParam3() != 0){
                             erpf.setParam3(Integer.parseInt(Cache.deviceInfoMap.get(erpf.getParam3().toString())));
                         }
                         commandService.commandService(url, erpf.toString(),systemInfoData);

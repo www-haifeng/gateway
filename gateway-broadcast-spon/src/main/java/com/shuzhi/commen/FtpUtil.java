@@ -27,7 +27,7 @@ public class FtpUtil {
                     SocketAddress addr = new InetSocketAddress(ip, port);
                     ftpClient.connect(addr);
                     ftpClient.login(user, password.toCharArray());
-                    System.out.println("login success!");
+                    log.info("FTP login success!");
                     if (path.length() != 0) {
                         //把远程系统上的目录切换到参数path所指定的目录
                         ftpClient.changeDirectory(path);
@@ -47,7 +47,7 @@ public class FtpUtil {
         public void closeConnect() {
             try {
                 ftpClient.close();
-                System.out.println("disconnect success");
+               log.info("disconnect success");
             } catch (IOException ex) {
                 System.out.println("not disconnect");
                 ex.printStackTrace();
@@ -106,7 +106,7 @@ public class FtpUtil {
         }
         public String uploadMediaFile(AddMediaData amd, String url){
             RestTemplate rest = new RestTemplate();
-            FileSystemResource resource = new FileSystemResource(new File(amd.getFile()));
+            FileSystemResource resource = new FileSystemResource(new File(amd.getFile().substring(amd.getFile().lastIndexOf("/")+1,amd.getFile().length())));
             MultiValueMap<String, Object> param = new LinkedMultiValueMap<>();
             param.add("subpath", amd.getSubpath());
             param.add("unfomat", amd.getUnformat());
@@ -114,6 +114,7 @@ public class FtpUtil {
 
             try {
                 String resultStr = new String(rest.postForObject(url, param, String.class).getBytes("ISO-8859-1"),"UTF-8");
+                closeConnect();
                 return resultStr;
             } catch (UnsupportedEncodingException e) {
                 log.error("请求出错",e);

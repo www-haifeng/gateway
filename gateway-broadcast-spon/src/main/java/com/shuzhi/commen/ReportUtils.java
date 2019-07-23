@@ -75,10 +75,10 @@ public class ReportUtils {
     public GetZoneTerminalData getRequestParams(){
         GetZoneTerminalData params = new GetZoneTerminalData();
         params.setPageIndex(0);
-        params.setPageCount(10);
+        params.setPageCount(1000);
         params.setGroupName("*");
         params.setShowType("1");
-        params.setSimple(2);
+        params.setSimple(1);
         return params;
     }
     /**

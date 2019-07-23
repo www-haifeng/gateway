@@ -1,10 +1,12 @@
 package com.shuzhi.commen;
 
 
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
+@Data
 @Component
 @ConfigurationProperties(prefix="factory")
 @PropertySource(value="classpath:factory.properties",encoding = "utf-8")
@@ -29,59 +31,16 @@ public class ConfigData {
     //系统类型
     private int sysType;
 
-    public String getName() {
-        return name;
-    }
+    //添加媒体文件ftp地址
+    private String ftpIp;
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    //添加媒体文件ftp端口
+    private int ftpPort;
 
-    public String getKey() {
-        return key;
-    }
+    //添加媒体文件ftp用户名
+    private String ftpName;
 
-    public void setKey(String key) {
-        this.key = key;
-    }
+    //添加媒体文件ftp密码
+    private String ftpPassword;
 
-    public int getSeccussCode() {
-        return seccussCode;
-    }
-
-    public void setSeccussCode(int seccussCode) {
-        this.seccussCode = seccussCode;
-    }
-
-    public int getFailedCode() {
-        return failedCode;
-    }
-
-    public void setFailedCode(int failedCode) {
-        this.failedCode = failedCode;
-    }
-
-    public int getMsgtypeCommandReturn() {
-        return msgtypeCommandReturn;
-    }
-
-    public void setMsgtypeCommandReturn(int msgtypeCommandReturn) {
-        this.msgtypeCommandReturn = msgtypeCommandReturn;
-    }
-
-    public String getTypeGroupCode() {
-        return typeGroupCode;
-    }
-
-    public void setTypeGroupCode(String typeGroupCode) {
-        this.typeGroupCode = typeGroupCode;
-    }
-
-    public int getSysType() {
-        return sysType;
-    }
-
-    public void setSysType(int sysType) {
-        this.sysType = sysType;
-    }
 }
