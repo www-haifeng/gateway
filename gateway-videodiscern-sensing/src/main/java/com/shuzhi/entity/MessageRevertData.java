@@ -1,11 +1,10 @@
 package com.shuzhi.entity;
 /**
- * 功能描述 消息回执二层数据
- * @author YHF
- * @date 2019/6/6
- * @params
- * @return
- */
+ * @Description: 消息回执二层数据
+ * @Author:     lirb
+ * @CreateDate:   2019/7/23 13:38
+ * @Version:   1.0
+ **/
 public class MessageRevertData {
     //时间戳
     private String timestamp;

@@ -1,9 +1,10 @@
 package com.shuzhi.entity;
 /**
- * @Description:命令信息
- * @Author: YHF
- * @date 10:46
- */
+ * @Description: 命令信息
+ * @Author:     lirb
+ * @CreateDate:   2019/7/23 13:37
+ * @Version:   1.0
+ **/
 public class CommandInfo {
     private TDeviceFactoryEntity tdeviceFactoryEntity;
     private TMsgInfoEntity tmsgInfoEntity;

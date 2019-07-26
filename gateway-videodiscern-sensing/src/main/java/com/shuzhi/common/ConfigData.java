@@ -5,6 +5,12 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
+/**
+ * @Description: 全局配置
+ * @Author:     lirb
+ * @CreateDate:   2019/7/23 13:34
+ * @Version:   1.0
+ **/
 @Component
 @ConfigurationProperties(prefix="factory")
 @PropertySource(value="classpath:factory.properties",encoding = "utf-8")

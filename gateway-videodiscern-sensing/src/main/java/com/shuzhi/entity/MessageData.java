@@ -1,6 +1,11 @@
 package com.shuzhi.entity;
 
-
+/**
+ * @Description: 接收消息 message层封装实体
+ * @Author:     lirb
+ * @CreateDate:   2019/7/23 13:38
+ * @Version:   1.0
+ **/
 public class MessageData {
     private int overtime;
     private int type;

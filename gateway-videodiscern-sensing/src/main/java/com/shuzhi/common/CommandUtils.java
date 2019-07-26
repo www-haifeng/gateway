@@ -18,12 +18,11 @@ import org.springframework.stereotype.Component;
 
 
 /**
- *功能描述 命令工具
- * @author YHF
- * @date 2019/6/5
- * @params
- * @return
- */
+ * @Description: 功能描述 命令工具
+ * @Author:     lirb
+ * @CreateDate:   2019/7/23 13:34
+ * @Version:   1.0
+ **/
 @Component
 public class CommandUtils {
     private final static Logger logger = LoggerFactory.getLogger(CommandUtils.class);
@@ -59,7 +58,7 @@ public class CommandUtils {
                 CommandInfo commandInfo = Cache.commandMap.get(messageData.getCmdid());
 
                 if (commandInfo == null){
-                    logger.error("未查询到lcd设备cmdid为:"+messageData.getCmdid()+"的命令,放弃请求");
+                    logger.error("未查询到cmdid为:"+messageData.getCmdid()+"的命令,放弃请求");
                     return;
                 }
 

@@ -1,6 +1,5 @@
 package com.shuzhi.entity.command;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 /**
@@ -15,13 +14,11 @@ public class FaceTemplateCreateData {
     /**
      * 图片文件; Base64 编码
      */
-    @JsonProperty("ftimage")
     private  String ftImage;
 
     /**
      * 目标库 ID
      */
-    @JsonProperty("ftdbid")
     private  String ftdbId;
 
     /**
@@ -38,12 +35,10 @@ public class FaceTemplateCreateData {
     /**
      * 用户自定义 ID
      */
-    @JsonProperty("customerid")
     private String customerId;
 
     /**
      * 用户自定义 Data
      */
-    @JsonProperty("customerdata")
     private String customerData;
 }

@@ -15,11 +15,12 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-/*
- * @Description:启动时加载数据库数据到缓存，以便翻译解析协议
- * @Author: YHF
- * @date 16:57
- */
+/**
+ * @Description: 启动时加载数据库数据到缓存
+ * @Author:     lirb
+ * @CreateDate:   2019/7/23 13:36
+ * @Version:   1.0
+ **/
 @Component
 @EnableConfigurationProperties(ConfigData.class)
 @Order(1)
@@ -31,12 +32,11 @@ public class LoadData implements ApplicationRunner {
 
     @Autowired
     ConfigData configData;
+
     /**
-     *功能描述 初始化缓存
-     * @author YHF
-     * @date 16:57
-     * @params
-     * @return void
+     * 初始化缓存
+     * @param args
+     * @throws Exception
      */
       @Override
   public void run(ApplicationArguments args) throws Exception {

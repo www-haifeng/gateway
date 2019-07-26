@@ -1,5 +1,11 @@
 package com.shuzhi.entity;
 
+/**
+ * @Description: 接受消息封装实体
+ * @Author:     lirb
+ * @CreateDate:   2019/7/23 13:39
+ * @Version:   1.0
+ **/
 public class SystemInfoData {
     //报文消息id
     private String msgid;

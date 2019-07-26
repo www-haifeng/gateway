@@ -14,12 +14,11 @@ import org.springframework.stereotype.Component;
 
 
 /**
-* @Program: rabbitmq接收方法
-* @Description: 
-* @Author: YuJQ
-* @Create: 2019/6/4 16:40
-**/
-
+ * @Description: rabbitmq接收方法
+ * @Author:     lirb
+ * @CreateDate:   2019/7/23 13:36
+ * @Version:   1.0
+ **/
 @Component
 @Order(2)
 public class RabbitReceiver {
@@ -30,7 +29,7 @@ public class RabbitReceiver {
 	@RabbitListener(queues="sensingvideo")
 	@RabbitHandler
 	public void commandMessage(Message message, Channel channel) throws Exception {
-		System.out.println("消费端Payload: " + message.getPayload());
+		logger.info("消费端Payload: " + message.getPayload());
 		Long deliveryTag = (Long)message.getHeaders().get(AmqpHeaders.DELIVERY_TAG);
 		//手工ACK
 		channel.basicAck(deliveryTag, false);

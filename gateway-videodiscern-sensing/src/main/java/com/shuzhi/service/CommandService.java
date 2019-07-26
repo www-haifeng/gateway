@@ -13,12 +13,11 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.stereotype.Component;
 
 /**
- * 功能描述 命令业务逻辑处理
- * @author YHF
- * @date 2019/6/6
- * @params
- * @return
- */
+ * @Description: 命令业务逻辑处理
+ * @Author:     lirb
+ * @CreateDate:   2019/7/23 13:40
+ * @Version:   1.0
+ **/
 @Component
 @EnableConfigurationProperties(ConfigData.class)
 public class CommandService {
@@ -32,14 +31,17 @@ public class CommandService {
     @Autowired
     private HttpCommandUtils httpCommandUtils;
 
+
     /**
-     * @Description: 统一处理请求
-     * @Author: YHF
-     * @date 2019/6/10
+     * 统一处理请求
+     * @param url : 请求路径
+     * @param commandJSON ：请求参数
+     * @param systemInfoData ： 接收的消息体
      */
     public void commandService(String url,String commandJSON,SystemInfoData systemInfoData){
         try {
             //调用请求
+            logger.info("请求url为："+url+";请求参数为"+commandJSON);
             String resultJSON = httpCommandUtils.postHTTP(url, commandJSON);
             logger.info("请求返回结果:"+resultJSON);
             commandSend(resultJSON,systemInfoData);
@@ -48,10 +50,11 @@ public class CommandService {
         }
     }
 
+
     /**
-     * @Description:组装命令返回rabbit
-     * @Author: YHF
-     * @date 2019/6/6
+     * 组装命令返回rabbit
+     * @param resultJSON ：结果集
+     * @param systemInfoData ：接收的消息体
      */
     public void commandSend(String resultJSON, SystemInfoData systemInfoData){
         String timeStamp = utils.getTimeStamp();
@@ -67,7 +70,7 @@ public class CommandService {
             String commandRevertJSON = systemInfoData.toString();
             try {
                 rabbitSender.send("lowerControlMessage",commandRevertJSON);
-                logger.info("命令回执发送完毕:"+commandRevertJSON);
+                logger.info("命令回执发送完毕 :"+commandRevertJSON);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -81,7 +84,7 @@ public class CommandService {
             String commandRevertJSON = systemInfoData.toString();
             try {
                 rabbitSender.send("lowerControlMessage",commandRevertJSON);
-                logger.error("命令执行失败，请查看原因:"+commandRevertJSON);
+                logger.error("命令执行失败，请查看失败原因:"+commandRevertJSON);
             } catch (Exception e) {
                 e.printStackTrace();
             }

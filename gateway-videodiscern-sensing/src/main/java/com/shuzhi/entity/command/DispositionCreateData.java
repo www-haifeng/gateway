@@ -1,5 +1,6 @@
 package com.shuzhi.entity.command;
 
+import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 /**
@@ -56,4 +57,16 @@ public class DispositionCreateData {
      */
     private String partnerId;
 
+    public static void main(String[] args) {
+        DispositionCreateData d = new DispositionCreateData();
+        d.setPartnerId("wefr");
+        d.setCustomerData("Dsf");
+        d.setCustomerId("Df");
+        d.setName("Sdf");
+        d.setMemo("DSf");
+        d.setJobChannels("Sdf");
+        d.setJobScore(2);
+        d.setJobTemplateDbs("Sdf");
+        System.out.println(JSON.toJSONString(d));
+    }
 }
