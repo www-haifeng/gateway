@@ -30,7 +30,7 @@ public class TDeviceFactoryCronEntity {
      */
     private String cron;
     /**
-     * 是否启动 0 启动 1 不启动
+     * 是否启动 0 不启动 1 启动
      */
     private String startFlag;
     /**
