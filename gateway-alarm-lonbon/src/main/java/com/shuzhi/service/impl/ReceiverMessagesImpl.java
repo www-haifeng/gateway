@@ -103,7 +103,7 @@ public class ReceiverMessagesImpl {
                 case "lb_getTerminalInfo":
                     // 指定终端信息
                     Terminal terminal = new Terminal();
-                    rest = lonBon.lb_getTerminalInfo(lbe.getSvrip(), lbe.getHostnum(), terminal);
+                    rest = lonBon.lb_getTerminalInfo(lbe.getSvrip(), lbe.getTernum(), terminal);
                     terminalList = new ArrayList<>();
                     terminalList.add(terminal);
                     resultDataEntity.setResult(rest);

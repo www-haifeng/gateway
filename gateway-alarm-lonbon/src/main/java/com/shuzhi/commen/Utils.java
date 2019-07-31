@@ -1,8 +1,10 @@
 package com.shuzhi.commen;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.shuzhi.cache.Cache;
 import com.shuzhi.entity.MessageRevertData;
 import com.shuzhi.entity.ResultDataEntity;
 import com.shuzhi.entity.SystemInfoData;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -10,9 +12,13 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.UUID;
 
 @Component
 public class Utils {
+
+    @Autowired
+    ProtocolProperties protocolProperties;
 
     //十六进制下数字到字符的映射数组
     private final static String[] hexDigits = {"0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F"};
@@ -126,6 +132,19 @@ public class Utils {
         int d2 = n%16;
         return hexDigits[d1] + hexDigits[d2];
     }
-
+    /**
+     * 上报请求实体
+     *
+     * @return
+     */
+    public SystemInfoData getRequestBody() {
+        SystemInfoData infoData = new SystemInfoData();
+        infoData.setMsgid(UUID.randomUUID().toString());
+        infoData.setMsgtype(4);
+        infoData.setSystype(protocolProperties.getSystype());
+        infoData.setSysid(protocolProperties.getSysid());
+        infoData.setConnectid(protocolProperties.getConnectid());
+        return infoData;
+    }
 
 }

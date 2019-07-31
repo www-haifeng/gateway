@@ -21,6 +21,10 @@ public class FTPProperties {
     private String password;
     private String host;
     private Integer port;
+    private String targetUserName;
+    private String targetPassWord;
+    private String targetHost;
+    private Integer targetPort;
     private String baseUrl;
     private Integer passiveMode = FTP.BINARY_FILE_TYPE;
     private String encoding="UTF-8";
@@ -29,6 +33,7 @@ public class FTPProperties {
     private int transferFileType= FTP.BINARY_FILE_TYPE;
     private boolean renameUploaded;
     private int retryTime;
+
 
 }
 

@@ -1,5 +1,8 @@
 package com.shuzhi.scheduled;
 
+import com.alibaba.fastjson.JSON;
+import com.shuzhi.cache.Cache;
+import com.shuzhi.commen.ProtocolProperties;
 import com.shuzhi.commen.Utils;
 import com.shuzhi.dao.*;
 import com.shuzhi.entity.*;
@@ -13,7 +16,11 @@ import com.shuzhi.util.JsonConvertBeanUtil;
 import com.shuzhi.util.ToolUtils;
 import com.sun.jna.Pointer;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.net.ftp.FTP;
+import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
+import org.apache.commons.net.ftp.FTPReply;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -21,9 +28,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.SocketException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,9 +66,13 @@ public class LonBonScheduled {
     @Autowired
     FTPProperties ftpProperties;
     @Autowired
+    ProtocolProperties protocolProperties;
+    @Autowired
     FTPUtils ftpUtils;
     @Autowired
     TDeviceLonBonRepository tdr;
+    @Autowired
+    Utils utils;
 
 
     /**
@@ -90,7 +105,7 @@ public class LonBonScheduled {
              * 上报 设备告警信息
              * @param tLonbonEventEntity
              */
-            public void sendMessage(TLonbonEventEntity tLonbonEventEntity) {
+            public void sendMessage(TLonbonEventEntity tLonbonEventEntity,LonBonEntity lonBonEntity) {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -99,14 +114,20 @@ public class LonBonScheduled {
                             TGatewayConfigEntity gatewayConfigEntity = tGatewayConfigEntity.findByTypeGroupCode("4");
                             //构建上报报文
                             // @TODO 修改
-                            MessageData messageData = new MessageData(deviceFactoryEntity.getType(), deviceFactoryEntity.getSubtype(), tLonbonEventEntity.getSender() + "", "infoid", null, tLonbonEventEntity);
+                            MessageData messageData = null;
+                            if (tLonbonEventEntity != null){
+                                messageData = new MessageData(deviceFactoryEntity.getType(), deviceFactoryEntity.getSubtype(), tLonbonEventEntity.getSender() + "", "infoid", null, tLonbonEventEntity);
+                            }else if(lonBonEntity != null){
+                                messageData = new MessageData(deviceFactoryEntity.getType(), deviceFactoryEntity.getSubtype(), lonBonEntity.getHostnum() + "", "infoid", null, lonBonEntity);
+                            }
+
                             String msgts = Utils.getTimeStamp();
                             // @TODO 修改
-                            SystemInfoData systemInfoData = new SystemInfoData(ToolUtils.generateUUID() + "", 4, deviceFactoryEntity.getType(), gatewayConfigEntity.getSysId(), gatewayConfigEntity.getConnectId(), "", msgts, messageData);
+                            SystemInfoData systemInfoData = new SystemInfoData(ToolUtils.generateUUID() + "", 4, deviceFactoryEntity.getType(),Integer.parseInt(gatewayConfigEntity.getSysId()), Integer.parseInt(gatewayConfigEntity.getConnectId()), "", msgts, messageData);
                             String sign = ToolUtils.getBussesSha(systemInfoData.getMsgid() + key + ToolUtils.md5Hex(systemInfoData.getMsg().toString()) + msgts);
                             systemInfoData.setSign(sign);
 
-                            log.info("=======================" + JsonConvertBeanUtil.bean2json(systemInfoData));
+                            log.info("===========上报事件============" + JsonConvertBeanUtil.bean2json(systemInfoData));
 
                             rabbitSender.send("alarmMessage", JsonConvertBeanUtil.bean2json(systemInfoData));
                         } catch (Exception e) {
@@ -125,7 +146,19 @@ public class LonBonScheduled {
              */
             @Override
             public void invoke(int userEvent, Action_param.ByReference action, Pointer userData) {
-                TLonbonEventEntity tLonbonEventEntity = new TLonbonEventEntity();
+                TLonbonEventEntity tLonbonEventEntity = null;
+                LonBonEntity lonBonEntity = null;
+                //如果是普通呼入参数(3),单独进行处理
+              /*  if (userEvent == 3){
+                    lonBonEntity = new LonBonEntity();
+                    lonBonEntity.setSvrip("");
+                    lonBonEntity.setHostnum(action.sender);
+                    lonBonEntity.setTernum(action.receiver);
+                    sendMessage(tLonbonEventEntity,lonBonEntity);
+                    return;
+                }*/
+
+                tLonbonEventEntity = new TLonbonEventEntity();
 
                 tLonbonEventEntity.setEventId(userEvent);//事件---
                 tLonbonEventEntity.setSender(action.sender);//发送端---
@@ -140,7 +173,7 @@ public class LonBonScheduled {
                 tLonbonEventEntity.setCreateTime(d);
                 tLonbonEventEntity.setUploadTime(d);
                 lonBonEventDao.save(tLonbonEventEntity);
-                sendMessage(tLonbonEventEntity);
+                sendMessage(tLonbonEventEntity,lonBonEntity);
             }
         }, null);
         log.info(LocalDateTime.now() + "回调事件-----事件--------返回值：" + ret);
@@ -177,6 +210,12 @@ public class LonBonScheduled {
                     if (file.isFile()) {
                         //文件已上传
                         if (file.getName().equals(fileName)) {
+                            try {
+                                readConfigfileForFTP(ftpProperties.getBaseUrl()+"/"+path,fileName);
+                            } catch (IOException e) {
+                                log.error("上传文件错误");
+                                e.printStackTrace();
+                            }
                             lonBonEventDao.updateFileStatus(new Timestamp(System.currentTimeMillis()), rdFile);
                             Map map = new HashMap();
                             map.put("sessionid", tLonbonEventMap.get("session_id"));
@@ -187,7 +226,7 @@ public class LonBonScheduled {
                             MessageData messageData = new MessageData(deviceFactoryEntity.getType(), deviceFactoryEntity.getSubtype(), tLonbonEventMap.get("sender") + "", "infoid", null, map);
                             String msgts = Utils.getTimeStamp();
                             // @TODO 修改
-                            SystemInfoData systemInfoData = new SystemInfoData(ToolUtils.generateUUID() + "", 4, deviceFactoryEntity.getType(), gatewayConfigEntity.getSysId(), gatewayConfigEntity.getConnectId(), "", msgts, messageData);
+                            SystemInfoData systemInfoData = new SystemInfoData(ToolUtils.generateUUID() + "", 4, deviceFactoryEntity.getType(), Integer.parseInt(gatewayConfigEntity.getSysId()), Integer.parseInt(gatewayConfigEntity.getConnectId()), "", msgts, messageData);
 
                             try {
                                 String sign = ToolUtils.getBussesSha(systemInfoData.getMsgid() + key + ToolUtils.md5Hex(systemInfoData.getMsg().toString()) + msgts);
@@ -205,7 +244,7 @@ public class LonBonScheduled {
                 }
             });
         }
-        log.info(LocalDateTime.now() + "uploadFile-----在线状态--------uploadFile：");
+        log.info(LocalDateTime.now() + "uploadFile-----上传状态--------uploadFile：");
     }
 
 
@@ -225,9 +264,141 @@ public class LonBonScheduled {
             tLonbonOnlineEntity.setState(ret + "");
             tLonbonOnlineEntity.setCreateTime(new Timestamp(System.currentTimeMillis()));
             tLonBonOnlineRepository.save(tLonbonOnlineEntity);
-            log.info(LocalDateTime.now() + "-----在线状态-----" + tDeviceLonBonEntity.getDid() + "---返回值：" + ret);
+
+            //记录设备状态
+            DeviceState deviceState = new DeviceState();
+            deviceState.setTernum(Integer.parseInt(tDeviceLonBonEntity.getDid()));
+            deviceState.setState(Integer.parseInt(tDeviceLonBonEntity.getDid()));
+            deviceState.setType(tDeviceLonBonEntity.getDeviceType());
+            Cache.reportResultList.add(deviceState);
+            log.info(LocalDateTime.now() + "-----在线状态-----" + tDeviceLonBonEntity.getDid() + "---返回值：" + ret +tDeviceLonBonEntity.getDeviceType()+"---设备类型");
         });
 
+        if ( protocolProperties.getRunMsg()!=0 ){
+            SystemInfoData systemInfoData = utils.getRequestBody();
+            reportSend(systemInfoData);
+        }
     }
 
+    private void reportSend(SystemInfoData systemInfoData) {
+        String timeStamp = utils.getTimeStamp();
+        //命令正确执行
+        if (CollectionUtils.isNotEmpty(Cache.reportResultList)) {
+            ReportMsgRevertData messageRevertData = getReportMsgRevertData(Cache.reportResultList);
+            String mrdJSON = JSON.toJSONString(messageRevertData);
+            systemInfoData.setMsgts(timeStamp);
+            systemInfoData.setMsg(mrdJSON);
+
+            systemInfoData.setSign(utils.getSignVerify(systemInfoData));
+            String commandRevertJSON = systemInfoData.toString();
+            try {
+                rabbitSender.send("upMessage","upMessage", commandRevertJSON);
+                log.info("上报命令发送完毕:" + commandRevertJSON);
+                //清空缓存
+                Cache.reportResultList = new ArrayList<>();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            //命令执行未成功
+            ReportMsgRevertData messageRevertData = getReportMsgRevertData(Cache.reportResultList);
+            String mrdJSON = JSON.toJSONString(messageRevertData);
+            systemInfoData.setMsgts(timeStamp);
+            systemInfoData.setMsg(mrdJSON);
+            systemInfoData.setSign(utils.getSignVerify(systemInfoData));
+            String commandRevertJSON = systemInfoData.toString();
+            try {
+                rabbitSender.send("upMessage","upMessage", commandRevertJSON);
+                log.error("上报命令执行失败，请查看原因:" + commandRevertJSON);
+                //清空缓存
+                Cache.reportResultList.clear();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    /**
+     * 封装 msg层数据
+     * @param reportResultList :结果list
+     * @return
+     */
+    private ReportMsgRevertData getReportMsgRevertData( List<DeviceState> reportResultList) {
+        ReportMsgRevertData mrd = new ReportMsgRevertData();
+        Map<String, CommandInfo> commandMap = Cache.commandMap;
+        String fristKey = commandMap.keySet().iterator().next();
+        CommandInfo commandInfo = commandMap.get(fristKey);
+        mrd.setType(commandInfo.getTdeviceFactoryEntity().getType());
+        mrd.setSubtype(commandInfo.getTdeviceFactoryEntity().getSubtype());
+        mrd.setInfoid("123456");
+        mrd.setDid("\"\"");
+        Map<String, List<DeviceState>> dataMap = new HashMap<>();
+        dataMap.put("clientlist",reportResultList);
+        mrd.setData(dataMap);
+        return mrd;
+    }
+
+    public String readConfigfileForFTP(String localPath,String localName) throws SocketException, IOException {
+      FTPClient ftpOne = new FTPClient();
+      FTPClient ftpTwo = new FTPClient();
+      ftpOne.connect(ftpProperties.getHost(), ftpProperties.getPort());
+      //连接FTPOne
+      boolean isloginOne = ftpOne.login(ftpProperties.getUsername(), ftpProperties.getPassword());
+      if (!FTPReply.isPositiveCompletion(ftpOne.getReplyCode())) {
+            log.info("连接失败，用户名或密码错误");
+      } else {
+            log.info("FTP连接成功");
+      }
+      ftpTwo.connect(ftpProperties.getTargetHost(), ftpProperties.getTargetPort());
+
+      //连接FTPTwo
+      boolean isloginTwo = ftpTwo.login(ftpProperties.getTargetUserName(), ftpProperties.getTargetPassWord());
+      if (!FTPReply.isPositiveCompletion(ftpOne.getReplyCode())) {
+            log.info("连接失败，用户名或密码错误");
+      } else {
+            log.info("备份FTP连接成功");
+      }
+      if (isloginOne && isloginTwo) {
+            ftpOne.enterLocalPassiveMode();
+            log.info("获取ftpOne路径" + localPath + "文件");
+            // 获取ftpOne目录下的文件
+            FTPFile[] ftp = ftpOne.listFiles(localPath);
+            System.out.println("文件数量:"+ftp.length);
+            for (FTPFile file : ftp) {
+                if (!localName.equals(file.getName())){
+                    continue;
+                }
+                String st = new String(file.getName().getBytes(), "UTF-8");
+                log.info("开始备份"+st+"文书");
+                if (st.endsWith("mp4")) {
+
+                      log.info("" + "传输开始时间");
+                      ftpTwo.setRemoteVerificationEnabled(false);
+                      // 获取ftpTwo输出流
+                      OutputStream is = ftpTwo.storeFileStream(ftpTwo.printWorkingDirectory()+ "/video/"+ file.getName());
+                      if (is == null) {
+                        log.error("目标文件不存在");
+                      }
+                      ftpOne.changeWorkingDirectory(localPath);
+                      ftpOne.setFileType(FTP.BINARY_FILE_TYPE);
+                      // 通过流把FTPOne复制到FTPTwo
+                      ftpOne.retrieveFile(file.getName(), is);
+                        log.info(st + "备份完成");
+                      is.close();
+                      // 检查返回值是否成功
+                      ftpTwo.completePendingCommand();
+                        log.info("结束时间");
+                }
+            }
+      }
+      ftpOne.logout();
+      if (ftpOne.isConnected()) {
+            ftpOne.disconnect();
+      }
+      if (ftpTwo.isConnected()) {
+            ftpTwo.disconnect();
+      } else {
+            log.error("ftp路径错误");
+      }
+      return "数据全部已完成";
+      }
 }

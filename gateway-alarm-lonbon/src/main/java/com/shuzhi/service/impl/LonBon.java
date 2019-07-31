@@ -163,7 +163,7 @@ public class LonBon {
      * @param svrIp    对讲服务器 IP 地址
      * @param terNum   指定终端的编号
      * @param terminal 返回的指定的对讲终端信息
-     * @return 0 成功，其他失败
+     *      * @return 0 成功，其他失败
      */
     public int lb_getTerminalInfo(String svrIp, int terNum, Terminal terminal) throws UnsupportedEncodingException {
         TerminalInfo.ByReference terminalInfo = new TerminalInfo.ByReference();
