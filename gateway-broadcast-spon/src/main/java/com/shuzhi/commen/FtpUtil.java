@@ -2,7 +2,10 @@ package com.shuzhi.commen;
 
 import com.shuzhi.entity.command.AddMediaData;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -104,42 +107,80 @@ public class FtpUtil {
             }
 
         }
-        public String uploadMediaFile(AddMediaData amd, String url){
+        /**
+         * @Description:上传媒体文件
+         * @Author: YHF
+         * @date 2019/7/31
+         */
+        public String uploadMediaFile(AddMediaData amd, String url) {
+            String fileName = amd.getFile().substring(amd.getFile().lastIndexOf("/") + 1, amd.getFile().length());
+            //下载文件到本地
+            download(fileName,fileName);
+            //上传文件到设备
             RestTemplate rest = new RestTemplate();
-            FileSystemResource resource = new FileSystemResource(new File(amd.getFile().substring(amd.getFile().lastIndexOf("/")+1,amd.getFile().length())));
+            FileSystemResource resource = new FileSystemResource(fileName);
             MultiValueMap<String, Object> param = new LinkedMultiValueMap<>();
             param.add("subpath", amd.getSubpath());
             param.add("unfomat", amd.getUnformat());
             param.add("file", resource);
-
             try {
-                String resultStr = new String(rest.postForObject(url, param, String.class).getBytes("ISO-8859-1"),"UTF-8");
+                String resultStr = new String(rest.postForObject(url, param, String.class).getBytes("ISO-8859-1"), "UTF-8");
+                deleteFile(fileName);
                 closeConnect();
                 return resultStr;
             } catch (UnsupportedEncodingException e) {
-                log.error("请求出错",e);
+                closeConnect();
+                log.error("请求出错", e);
                 return "";
 
             }
-
         }
 
+    /**
+     * 删除单个文件
+     *
+     * @param fileName
+     *            要删除的文件的文件名
+     * @return 单个文件删除成功返回true，否则返回false
+     */
+    private static boolean deleteFile(String fileName) {
+        File file = new File(fileName);
+        // 如果文件路径所对应的文件存在，并且是一个文件，则直接删除
+        if (file.exists() && file.isFile()) {
+            if (file.delete()) {
+                System.out.println("删除单个文件" + fileName + "成功！");
+                return true;
+            } else {
+                System.out.println("删除单个文件" + fileName + "失败！");
+                return false;
+            }
+        } else {
+            System.out.println("删除单个文件失败：" + fileName + "不存在！");
+            return false;
+        }
+    }
 
-    public static void main(String agrs[]) {
+        public static void main(String agrs[]) {
         FtpUtil fu = new FtpUtil();
 
-        fu.connectServer("192.168.8.150",21,"shuzhi","shuzhi","/");
-
+        fu.connectServer("39.96.84.143",21,"appgate","IC5uGeIT2upEEU99AHjIKr2tg","/mp3");
+        AddMediaData amd = new AddMediaData();
+        amd.setFile("/mp3/beep.mp3");
+        amd.setSubpath("");
+        amd.setUnformat("1");
+        //uploadMediaFile(amd,"http://192.168.7.71:90/php/addmediadata.php");
+/*
         //下载测试
-        /*String filepath = "jd-gui.exe";
-        String localfilepath = "D:/jd-gui.exe";
-            fu.download(filepath, localfilepath);*/
+        String filepath = "huijia.mp3";
+        String localfilepath = "D:/jd-gui.mp3";
+            fu.download(filepath, localfilepath);
 
         //上传测试
         String localfile = "D:/回家-萨克斯.mp3";
         String remotefile = "回家-萨克斯.mp3";                //上传
         fu.upload(localfile, remotefile);
         fu.closeConnect();
+*/
 
     }
 
