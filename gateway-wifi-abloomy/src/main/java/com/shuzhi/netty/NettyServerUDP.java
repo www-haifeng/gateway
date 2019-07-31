@@ -15,6 +15,7 @@ public class NettyServerUDP {
      * @date 2019/6/17
      */
     public void run(int port) throws Exception{
+        System.out.println(port+"---");
         log.info("探针数据监听netty启动,端口为:"+port);
         EventLoopGroup group = new NioEventLoopGroup();
         Bootstrap b = new Bootstrap();

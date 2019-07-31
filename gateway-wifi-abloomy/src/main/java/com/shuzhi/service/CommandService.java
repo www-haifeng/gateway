@@ -115,6 +115,7 @@ public class CommandService {
         logger.info("接收到探针数据,内容为:"+byteUtils.bytesToHexString(bytes));
         if (bytes.length != 51){
             logger.error("数据包长度有误,请检查"+byteUtils.bytesToHexString(bytes));
+            return;
         }
 
         ByteBuffer bf = ByteBuffer.wrap(bytes);

@@ -22,7 +22,7 @@ public class UdpServerHandler extends SimpleChannelInboundHandler<DatagramPacket
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, DatagramPacket msg)
             throws Exception {
-//		System.out.println("接收到数据:"+msg);
+		System.out.println("接收到数据:"+msg);
         ByteBuf buf =msg.copy().content();
         byte[] bytes = new byte[buf.readableBytes()];
         buf.readBytes(bytes);
