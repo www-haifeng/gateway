@@ -3,7 +3,9 @@ package com.shuzhi.controller;
 import com.shuzhi.cache.Cache;
 import com.shuzhi.commen.ConfigData;
 import com.shuzhi.dao.CommandInfoDao;
+import com.shuzhi.dao.GatewayConfigDao;
 import com.shuzhi.entity.CommandInfo;
+import com.shuzhi.entity.TGatewayConfigEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,8 @@ public class LoadData implements ApplicationRunner {
     @Autowired
     private CommandInfoDao commandInfoDao;
     @Autowired
+    private GatewayConfigDao gatewayConfigDao;
+    @Autowired
     ConfigData configData;
     /**
      *功能描述 初始化缓存
@@ -44,5 +48,9 @@ public class LoadData implements ApplicationRunner {
               Cache.commandMap.put(info.getTmsgInfoEntity().getMsgId(),info);
           }
           logger.info("命令信息缓存初始化完毕");
+          //加载网关链路信息缓存
+          TGatewayConfigEntity gatewayConfigEntity = gatewayConfigDao.getByTypeGroupCode(configData.getTypeGroupCode());
+          Cache.gatewayConfigEntity=gatewayConfigEntity;
+          logger.info("链路信息缓存初始化完毕");
       }
 }

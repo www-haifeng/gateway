@@ -74,7 +74,6 @@ public class ReportService {
 
             requestBody.setSign(utils.getSignVerify(requestBody));
             String commandRevertJSON = requestBody.toString();
-            System.out.println("结果集：----" + commandRevertJSON);
             try {
                 rabbitSender.send("upMessage","upMessage", commandRevertJSON);
                 logger.info("命令回执发送完毕:" + commandRevertJSON);
@@ -89,7 +88,6 @@ public class ReportService {
             requestBody.setMsg(mrdJSON);
             requestBody.setSign(utils.getSignVerify(requestBody));
             String commandRevertJSON = requestBody.toString();
-            System.out.println("结果集：----" + commandRevertJSON);
             try {
                 rabbitSender.send("upMessage","upMessage", commandRevertJSON);
                 logger.error("命令执行失败，请查看原因:" + commandRevertJSON);
@@ -109,6 +107,7 @@ public class ReportService {
         mrd.setType(commandInfo.getTdeviceFactoryEntity().getType());
         mrd.setSubtype(commandInfo.getTdeviceFactoryEntity().getSubtype());
         mrd.setInfoid("123456");
+        mrd.setDid("\"\"");
         try {
             JSONArray objects = JSONArray.parseArray(data);
             JSONObject jsonObject = objects.getJSONObject(0);
