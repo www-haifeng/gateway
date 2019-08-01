@@ -26,7 +26,6 @@ public class KafkaConsumer {
     @KafkaListener(topics = "ViStrCap", groupId = "testGroup")
     public void listner(ConsumerRecord<String, byte[]> record) {
         try {
-
             pbcapturemsg pbcm = KafkaCapMsgM.pbcapturemsg.parseFrom(record.value());
             reportUtils.reportTypeSelect(pbcm);
         }catch (Exception e){

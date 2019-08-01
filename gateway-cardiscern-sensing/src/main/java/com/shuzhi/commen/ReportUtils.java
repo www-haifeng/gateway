@@ -47,22 +47,22 @@ public class ReportUtils {
         SystemInfoData systemInfoData = getRequestBody();
         switch (pbcm.getCapType()) {
             case 1:
-                logger.info("上报消息类型为："+pbcm.getCapType());
+                logger.info("kafka上报消息类型为："+pbcm.getCapType());
                 PersonData personData = new PersonData(pbcm);
                 reportService.reportSend(personData,systemInfoData);
                 break;
             case 3:
-                logger.info("上报消息类型为："+pbcm.getCapType());
+                logger.info("kafka上报消息类型为："+pbcm.getCapType());
                 MotorData motorData = new MotorData(pbcm);
                 reportService.reportSend(motorData,systemInfoData);
                 break;
             case 4:
-                logger.info("上报消息类型为："+pbcm.getCapType());
+                logger.info("kafka上报消息类型为："+pbcm.getCapType());
                 NonmotorData nonmotorData = new NonmotorData(pbcm);
                 reportService.reportSend(nonmotorData,systemInfoData);
                 break;
             default:
-                throw new Exception("上报类型错误：" + pbcm.getCapType());
+                throw new Exception("kafka上报消息类型为：" + pbcm.getCapType());
         }
     }
 
