@@ -7,6 +7,8 @@ import com.shuzhi.cache.Cache;
 import com.shuzhi.commen.Utils;
 import com.shuzhi.dao.LonBonEventDao;
 import com.shuzhi.entity.*;
+import com.shuzhi.ftp.FTPProperties;
+import com.shuzhi.scheduled.LonBonScheduled;
 import com.shuzhi.util.JsonConvertBeanUtil;
 import com.shuzhi.util.ToolUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -42,7 +44,10 @@ public class ReceiverMessagesImpl {
     private String routingKey;
     @Autowired
     private LonBonEventDao lonBonEventDao;
-
+    @Autowired
+    private LonBonScheduled lonBonScheduled;
+    @Autowired
+    FTPProperties ftpProperties;
     /**
      * 接收指令处理
      */
@@ -172,6 +177,7 @@ public class ReceiverMessagesImpl {
                         if (rest == 0) {
                             rest = -1;
                         } else if (rest == 1) {
+                            lonBonScheduled.readConfigfileForFTP(ftpProperties.getBaseUrl()+"/"+rdfile.split("/")[0],rdfile.split("/")[1]);
                             rest = 0;
                         }
                     }
