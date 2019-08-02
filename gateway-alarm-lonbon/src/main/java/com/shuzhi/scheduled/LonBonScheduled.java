@@ -268,7 +268,7 @@ public class LonBonScheduled {
             //记录设备状态
             DeviceState deviceState = new DeviceState();
             deviceState.setTernum(Integer.parseInt(tDeviceLonBonEntity.getDid()));
-            deviceState.setState(Integer.parseInt(tDeviceLonBonEntity.getDid()));
+            deviceState.setState(ret);
             deviceState.setType(tDeviceLonBonEntity.getDeviceType());
             Cache.reportResultList.add(deviceState);
             log.info(LocalDateTime.now() + "-----在线状态-----" + tDeviceLonBonEntity.getDid() + "---返回值：" + ret +tDeviceLonBonEntity.getDeviceType()+"---设备类型");
