@@ -1,5 +1,6 @@
 package com.shuzhi.schedule;
 
+import com.shuzhi.common.ConfigData;
 import com.shuzhi.common.ReportUtils;
 import com.shuzhi.dao.FactoryCronDao;
 import com.shuzhi.entity.TDeviceFactoryCronEntity;
@@ -22,6 +23,8 @@ public class DynamicScheduleTask implements SchedulingConfigurer {
     private FactoryCronDao factoryCronDao;
     @Autowired
     private ReportUtils reportUtils;
+    @Autowired
+    private ConfigData configData;
 
     @Override
     public void configureTasks(ScheduledTaskRegistrar scheduledTaskRegistrar) {
@@ -34,7 +37,7 @@ public class DynamicScheduleTask implements SchedulingConfigurer {
                 //2.设置执行周期(Trigger)
                 triggerContext -> {
                     //2.2 合法性校验.
-                    TDeviceFactoryCronEntity cron = factoryCronDao.getByFactoryName("太龙");
+                    TDeviceFactoryCronEntity cron = factoryCronDao.getByFactoryName(configData.getName());
                     //2.3 返回执行周期(Date)
                     if ("1".equals(cron.getStartFlag())) {
                         return new CronTrigger(cron.getCron()).nextExecutionTime(triggerContext);

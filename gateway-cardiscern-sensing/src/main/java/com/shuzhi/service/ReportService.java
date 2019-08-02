@@ -89,7 +89,7 @@ public class ReportService {
         CommandInfo commandInfo = commandMap.get(fristKey);
         mrd.setType(commandInfo.getTdeviceFactoryEntity().getType());
         mrd.setSubtype(commandInfo.getTdeviceFactoryEntity().getSubtype());
-        mrd.setInfoid("123456");
+        mrd.setInfoid(configData.getInfoId());
         mrd.setDid("");
         mrd.setData(resultJson);
         return mrd;

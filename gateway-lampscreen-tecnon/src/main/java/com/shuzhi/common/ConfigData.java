@@ -29,6 +29,9 @@ public class ConfigData {
     //系统类型
     private int sysType;
 
+    //上报返回的infoid
+    private String infoId;
+
     public String getName() {
         return name;
     }
@@ -83,5 +86,13 @@ public class ConfigData {
 
     public void setSysType(int sysType) {
         this.sysType = sysType;
+    }
+
+    public String getInfoId() {
+        return infoId;
+    }
+
+    public void setInfoId(String infoId) {
+        this.infoId = infoId;
     }
 }

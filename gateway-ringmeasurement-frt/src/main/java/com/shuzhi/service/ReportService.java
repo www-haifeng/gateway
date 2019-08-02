@@ -215,7 +215,7 @@ public class ReportService {
         DeviceInfo deviceInfo = deviceIpMap.get(fristKey);
         mrd.setType(deviceInfo.getTdeviceFactoryEntity().getType().toString());
         mrd.setSubtype(deviceInfo.getTdeviceFactoryEntity().getSubtype().toString());
-        mrd.setInfoid("123456");
+        mrd.setInfoid(configData.getMsgId());
         mrd.setDid(did);
         mrd.setData(resultJson);
         return mrd;

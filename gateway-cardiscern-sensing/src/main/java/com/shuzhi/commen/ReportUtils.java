@@ -1,12 +1,8 @@
 package com.shuzhi.commen;
 
-import com.alibaba.fastjson.JSON;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shuzhi.cache.Cache;
-import com.shuzhi.entity.CommandInfo;
 import com.shuzhi.entity.KafkaCapMsgM.pbcapturemsg;
 import com.shuzhi.entity.SystemInfoData;
-import com.shuzhi.entity.report.MessageReportData;
 import com.shuzhi.entity.report.MotorData;
 import com.shuzhi.entity.report.NonmotorData;
 import com.shuzhi.entity.report.PersonData;
@@ -16,10 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
 import java.util.UUID;
-
-import static javafx.scene.input.KeyCode.T;
 
 /**
  * @Description: 上报相关业务工具类
@@ -47,19 +40,19 @@ public class ReportUtils {
         SystemInfoData systemInfoData = getRequestBody();
         switch (pbcm.getCapType()) {
             case 1:
-                logger.info("上报消息类型为："+pbcm.getCapType());
+                logger.info("上报消息类型为：" + pbcm.getCapType());
                 PersonData personData = new PersonData(pbcm);
-                reportService.reportSend(personData,systemInfoData);
+                reportService.reportSend(personData, systemInfoData);
                 break;
             case 3:
-                logger.info("上报消息类型为："+pbcm.getCapType());
+                logger.info("上报消息类型为：" + pbcm.getCapType());
                 MotorData motorData = new MotorData(pbcm);
-                reportService.reportSend(motorData,systemInfoData);
+                reportService.reportSend(motorData, systemInfoData);
                 break;
             case 4:
-                logger.info("上报消息类型为："+pbcm.getCapType());
+                logger.info("上报消息类型为：" + pbcm.getCapType());
                 NonmotorData nonmotorData = new NonmotorData(pbcm);
-                reportService.reportSend(nonmotorData,systemInfoData);
+                reportService.reportSend(nonmotorData, systemInfoData);
                 break;
             default:
                 throw new Exception("上报类型错误：" + pbcm.getCapType());
@@ -81,7 +74,6 @@ public class ReportUtils {
         infoData.setConnectid(Integer.parseInt(Cache.gatewayConfigEntity.getConnectId()));
         return infoData;
     }
-
 
 
 }

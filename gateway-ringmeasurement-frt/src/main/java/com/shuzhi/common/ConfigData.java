@@ -33,6 +33,9 @@ public class ConfigData {
     //系统类型
     private int sysType;
 
+    //上报返回的msgid
+    private String msgId;
+
     public String getName() {
         return name;
     }
@@ -103,5 +106,13 @@ public class ConfigData {
 
     public void setSysType(int sysType) {
         this.sysType = sysType;
+    }
+
+    public String getMsgId() {
+        return msgId;
+    }
+
+    public void setMsgId(String msgId) {
+        this.msgId = msgId;
     }
 }

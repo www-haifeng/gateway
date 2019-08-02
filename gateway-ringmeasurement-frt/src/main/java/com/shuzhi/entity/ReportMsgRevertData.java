@@ -47,7 +47,7 @@ public class ReportMsgRevertData {
         sb.append(",\"did\":")
                 .append(did);
         sb.append(",\"infoid\":")
-                .append(infoid);
+                .append("\""+infoid+"\"");
         sb.append(",\"data\":")
                 .append(data);
         sb.append('}');

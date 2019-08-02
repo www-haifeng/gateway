@@ -28,6 +28,8 @@ public class DynamicScheduleTask implements SchedulingConfigurer {
 
     @Autowired
     private FactoryCronDao factoryCronDao;
+    @Autowired
+    private ConfigData configData;
 
     //时间表达式  每2秒执行一次
     private  String cron ="";
@@ -68,7 +70,7 @@ public class DynamicScheduleTask implements SchedulingConfigurer {
                 triggerContext -> {
                     //2.2 合法性校验.
                     if (Cache.cronEntity == null) {
-                        Cache.cronEntity = factoryCronDao.getByFactoryName("富奥通");
+                        Cache.cronEntity = factoryCronDao.getByFactoryName(configData.getName());
                     }
                     setCron(Cache.cronEntity.getCron());
                     //2.3 返回执行周期(Date)

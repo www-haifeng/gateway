@@ -42,14 +42,14 @@ public class ReportUtils {
      * 上报
      */
     public String getReportUrl() {
-        CommandInfo commandInfo = Cache.commandMap.get("10001");
-        if (commandInfo == null){
+        CommandInfo commandInfo = Cache.commandMap.get(configData.getReportMsgId());
+        if (commandInfo == null) {
             logger.error("未查询到广播设备cmdid为:10001的命令,放弃请求");
             return null;
         }
         //获取url
-        String url = "http://"+commandInfo.getTdeviceFactoryEntity().getServerIp()+":"+commandInfo.getTdeviceFactoryEntity().getServerPort()+commandInfo.getTmsgInfoEntity().getInterfaceId();
-        return url ;
+        String url = "http://" + commandInfo.getTdeviceFactoryEntity().getServerIp() + ":" + commandInfo.getTdeviceFactoryEntity().getServerPort() + commandInfo.getTmsgInfoEntity().getInterfaceId();
+        return url;
     }
 
     /**
@@ -70,9 +70,10 @@ public class ReportUtils {
 
     /**
      * 请求参数
+     *
      * @return
      */
-    public GetZoneTerminalData getRequestParams(){
+    public GetZoneTerminalData getRequestParams() {
         GetZoneTerminalData params = new GetZoneTerminalData();
         params.setPageIndex(0);
         params.setPageCount(1000);
@@ -81,6 +82,7 @@ public class ReportUtils {
         params.setSimple(1);
         return params;
     }
+
     /**
      * 发送上报请求
      */
@@ -88,6 +90,6 @@ public class ReportUtils {
         String url = getReportUrl();
         GetZoneTerminalData gztd = getRequestParams();
         SystemInfoData systemInfoData = getRequestBody();
-        reportService.reportService(url, gztd.toString(),systemInfoData);
+        reportService.reportService(url, gztd.toString(), systemInfoData);
     }
 }
