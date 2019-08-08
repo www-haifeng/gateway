@@ -35,6 +35,15 @@ public class ConfigData {
     //标识用户的身份
     private String partnerId;
 
+    //链路类型
+    private String typeGroupCode;
+
+    //系统类型
+    private int sysType;
+
+    //用于上报的infoid
+    private  String infoId;
+
     public String getName() {
         return name;
     }
@@ -89,5 +98,29 @@ public class ConfigData {
 
     public void setPartnerId(String partnerId) {
         this.partnerId = partnerId;
+    }
+
+    public String getTypeGroupCode() {
+        return typeGroupCode;
+    }
+
+    public void setTypeGroupCode(String typeGroupCode) {
+        this.typeGroupCode = typeGroupCode;
+    }
+
+    public int getSysType() {
+        return sysType;
+    }
+
+    public void setSysType(int sysType) {
+        this.sysType = sysType;
+    }
+
+    public String getInfoId() {
+        return infoId;
+    }
+
+    public void setInfoId(String infoId) {
+        this.infoId = infoId;
     }
 }

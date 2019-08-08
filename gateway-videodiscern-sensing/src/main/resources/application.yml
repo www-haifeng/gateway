@@ -28,6 +28,18 @@ spring:
       hibernate:
         temp:
           use_jdbc_metadata_defaults: false
+  kafka:
+        bootstrap-servers: 106.120.131.67:9092
+        producer:
+          key-serializer: org.apache.kafka.common.serialization.StringDeserializer
+          value-serializer: org.apache.kafka.common.serialization.ByteArrayDeserializer
+        consumer:
+          group-id: group1
+          enable-auto-commit: true
+          auto-commit-interval: 1000
+          key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+          value-deserializer: org.apache.kafka.common.serialization.ByteArrayDeserializer
+
 redis:
   host: 192.168.7.68
   port: 6379
