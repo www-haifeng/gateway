@@ -1,6 +1,6 @@
 spring:
   application:
-    name: gateway-lcd-hanpon #指定服务名
+    name: gateway-light-iotcomm #指定服务名
 
 
 
