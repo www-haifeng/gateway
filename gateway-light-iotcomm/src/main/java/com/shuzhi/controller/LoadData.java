@@ -71,7 +71,6 @@ public class LoadData implements ApplicationRunner {
           TGatewayConfigEntity gatewayConfigEntity = gatewayConfigDao.getByTypeGroupCode(configData.getTypeGroupCode());
           Cache.gatewayConfigEntity=gatewayConfigEntity;
           logger.info("链路信息缓存初始化完毕！");
-
           String result = taskService.getAppLogin();
           logger.info("初始化访问令牌完毕："+result);
       }

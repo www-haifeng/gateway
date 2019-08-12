@@ -39,6 +39,7 @@ public class DynamicScheduleTask implements SchedulingConfigurer {
     private String cron = "";
 
 
+
     @Override
     public void configureTasks(ScheduledTaskRegistrar scheduledTaskRegistrar) {
         scheduledTaskRegistrar.addTriggerTask(
@@ -72,7 +73,7 @@ public class DynamicScheduleTask implements SchedulingConfigurer {
     /**
      * 定时获取访问令牌
      */
-    @Scheduled(fixedRate = 1000 * 60 * 28)
+    @Scheduled(initialDelay=1000 * 60 * 28,fixedRate = 1000 * 60 * 28)
     public void getAppLogin() {
         String result = taskService.getAppLogin();
         logger.info("定时任务执行结果为：" + result);
