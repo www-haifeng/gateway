@@ -116,9 +116,9 @@ public class LonBonScheduled {
                             // @TODO 修改
                             MessageData messageData = null;
                             if (tLonbonEventEntity != null){
-                                messageData = new MessageData(deviceFactoryEntity.getType(), deviceFactoryEntity.getSubtype(), tLonbonEventEntity.getSender() + "", "infoid", null, tLonbonEventEntity);
+                                messageData = new MessageData(deviceFactoryEntity.getType(), deviceFactoryEntity.getSubtype(), tLonbonEventEntity.getSender() + "", protocolProperties.getInfoidEvent(), null, tLonbonEventEntity);
                             }else if(lonBonEntity != null){
-                                messageData = new MessageData(deviceFactoryEntity.getType(), deviceFactoryEntity.getSubtype(), lonBonEntity.getHostnum() + "", "infoid", null, lonBonEntity);
+                                messageData = new MessageData(deviceFactoryEntity.getType(), deviceFactoryEntity.getSubtype(), lonBonEntity.getHostnum() + "", protocolProperties.getInfoidEvent(), null, lonBonEntity);
                             }
 
                             String msgts = Utils.getTimeStamp();
@@ -223,7 +223,7 @@ public class LonBonScheduled {
                             TDeviceFactoryEntity deviceFactoryEntity = factoryIdRepository.findByMqTypeAndMqSubType("alarmexchange", "lonbon");
                             TGatewayConfigEntity gatewayConfigEntity = tGatewayConfigEntity.findByTypeGroupCode("4");
                             // @TODO 修改
-                            MessageData messageData = new MessageData(deviceFactoryEntity.getType(), deviceFactoryEntity.getSubtype(), tLonbonEventMap.get("sender") + "", "infoid", null, map);
+                            MessageData messageData = new MessageData(deviceFactoryEntity.getType(), deviceFactoryEntity.getSubtype(), tLonbonEventMap.get("sender") + "", protocolProperties.getInfoidUpLoad(), null, map);
                             String msgts = Utils.getTimeStamp();
                             // @TODO 修改
                             SystemInfoData systemInfoData = new SystemInfoData(ToolUtils.generateUUID() + "", 4, deviceFactoryEntity.getType(), Integer.parseInt(gatewayConfigEntity.getSysId()), Integer.parseInt(gatewayConfigEntity.getConnectId()), "", msgts, messageData);
@@ -329,7 +329,7 @@ public class LonBonScheduled {
         CommandInfo commandInfo = commandMap.get(fristKey);
         mrd.setType(commandInfo.getTdeviceFactoryEntity().getType());
         mrd.setSubtype(commandInfo.getTdeviceFactoryEntity().getSubtype());
-        mrd.setInfoid("123456");
+        mrd.setInfoid(protocolProperties.getInfoidOnLine());
         mrd.setDid("\"\"");
         Map<String, List<DeviceState>> dataMap = new HashMap<>();
         dataMap.put("clientlist",reportResultList);

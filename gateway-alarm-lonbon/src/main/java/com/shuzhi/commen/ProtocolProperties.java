@@ -20,7 +20,9 @@ public class ProtocolProperties {
     private int systype;
     private int sysid;
     private int connectid;
-    private String infoid;
+    private String infoidOnLine;
+    private String infoidEvent;
+    private String infoidUpLoad;
 
 }
 
