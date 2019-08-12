@@ -65,7 +65,7 @@ public class CommandService {
 
                         systemInfoData.setSign(utils.getSignVerify(systemInfoData));
                         String commandRevertJSON = systemInfoData.toString();
-                        rabbitSender.send("lowerControlMessage",commandRevertJSON,"lowerControlMessage");
+                        rabbitSender.send("lowerControlMessage","lowerControlMessage", commandRevertJSON);
                         logger.info("命令回执发送完毕:"+commandRevertJSON);
                     }else{
                         //命令执行未成功
@@ -103,7 +103,7 @@ public class CommandService {
         systemInfoData.setSign(utils.getSignVerify(systemInfoData));
         String commandRevertJSON = systemInfoData.toString();
         try {
-            rabbitSender.send("lowerControlMessage",commandRevertJSON,"lowerControlMessage");
+            rabbitSender.send("lowerControlMessage","lowerControlMessage",commandRevertJSON);
             logger.info("命令-失败-回执发送完毕:"+commandRevertJSON);
             logger.error("命令执行失败，请查看原因:"+commandRevertJSON);
         } catch (Exception e) {
@@ -169,7 +169,7 @@ public class CommandService {
         SystemInfoData sid = new SystemInfoData(msgid,configData.getMsgtypeReportMsg(),configData.getSystype(),configData.getSysid(),configData.getConnectid(),"",msgts,wsm.toString());
         sid.setSign(utils.getSignVerify(sid));
         try {
-            rabbitSender.send("wifiMessage",sid.toString(),"wifiMessage");
+            rabbitSender.send("wifiMessage", "wifiMessage", sid.toString());
             logger.info("上报探针数据:"+sid.toString());
         } catch (Exception e) {
             logger.error("数据发送出错",e);
