@@ -127,6 +127,11 @@ public class CommandUtils {
                         //发送请求
                         commandService.commandService(url,commandJSON,systemInfoData);
                         break;
+                    //通行量统计(VS_WS_TJ_001)
+                    case "/videostructure/search/channelTrafficCountActual":
+                        //发送请求
+                        commandService.commandService(url,commandJSON,systemInfoData);
+                        break;
                         default:
                             logger.error("没有找到对应请求命令,请查证");
                             break;
