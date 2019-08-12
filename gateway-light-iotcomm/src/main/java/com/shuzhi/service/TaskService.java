@@ -6,6 +6,7 @@ import com.shuzhi.common.ConfigData;
 import com.shuzhi.common.HttpCommandUtils;
 import com.shuzhi.entity.AppLoginData;
 import com.shuzhi.entity.CommandInfo;
+import com.shuzhi.entity.DeviceInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,11 +42,18 @@ public class TaskService {
      * @return
      */
     private String getAppLoginUrl() {
-        CommandInfo commandInfo = Cache.commandMap.get("10001");
+        Map<Integer, DeviceInfo> commandMap = Cache.deviceInfoMap;
+        DeviceInfo deviceInfo=null;
+        for(DeviceInfo device : commandMap.values()){
+            deviceInfo=device;
+            if(deviceInfo!=null){
+                break;
+            }
+        }
         StringBuilder sb = new StringBuilder("http://");
-        sb.append(commandInfo.getTdeviceFactoryEntity().getServerIp());
+        sb.append(deviceInfo.getTdeviceFactoryEntity().getServerIp());
         sb.append(":");
-        sb.append(commandInfo.getTdeviceFactoryEntity().getServerPort());
+        sb.append(deviceInfo.getTdeviceFactoryEntity().getServerPort());
         sb.append(appLoginUrl);
         return sb.toString();
     }
