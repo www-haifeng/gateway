@@ -45,11 +45,13 @@ public class ConfigData {
     //系统类型
     private int sysType;
 
-    //用于上报的infoid
-    private String infoId;
+    //用于回路状态上报的infoid
+    private String breakerInfoId;
 
-    //用于上报的 commandId ，多个用分号分割
-    private String reportCommandId;
+    //用于终端状态上报的infoid
+    private String rtuInfoId;
+
+
 
     public String getName() {
         return name;
@@ -139,19 +141,20 @@ public class ConfigData {
         this.sysType = sysType;
     }
 
-    public String getInfoId() {
-        return infoId;
+    public String getBreakerInfoId() {
+        return breakerInfoId;
     }
 
-    public void setInfoId(String infoId) {
-        this.infoId = infoId;
+    public void setBreakerInfoId(String breakerInfoId) {
+        this.breakerInfoId = breakerInfoId;
     }
 
-    public String getReportCommandId() {
-        return reportCommandId;
+    public String getRtuInfoId() {
+        return rtuInfoId;
     }
 
-    public void setReportCommandId(String reportCommandId) {
-        this.reportCommandId = reportCommandId;
+    public void setRtuInfoId(String rtuInfoId) {
+        this.rtuInfoId = rtuInfoId;
     }
+
 }

@@ -1,9 +1,11 @@
 package com.shuzhi.schedule;
 
+import com.alibaba.fastjson.JSON;
 import com.shuzhi.cache.Cache;
 import com.shuzhi.common.ConfigData;
 import com.shuzhi.common.ReportUtils;
 import com.shuzhi.dao.FactoryCronDao;
+import com.shuzhi.entity.AppLoginData;
 import com.shuzhi.service.TaskService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -16,8 +18,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.scheduling.annotation.SchedulingConfigurer;
 import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 import org.springframework.scheduling.support.CronTrigger;
-
-import java.util.Arrays;
 
 
 @Configuration
@@ -44,11 +44,9 @@ public class DynamicScheduleTask implements SchedulingConfigurer {
         scheduledTaskRegistrar.addTriggerTask(
                 //1.添加任务内容(Runnable)
                 () -> {
-                    String reportCommandId = configData.getReportCommandId();
-                    String[] commandIds = reportCommandId.split(";");
-                    Arrays.stream(commandIds).forEach(commandId->{
-                        reportUtils.report(commandId);
-                    });
+                    for (int i = 1; i < 3; i++) {
+                        reportUtils.report(i);
+                    }
                 },
                 //2.设置执行周期(Trigger)
                 triggerContext -> {
@@ -77,10 +75,7 @@ public class DynamicScheduleTask implements SchedulingConfigurer {
     @Scheduled(fixedRate = 1000 * 60 * 28)
     public void getAppLogin() {
         String result = taskService.getAppLogin();
-        if (StringUtils.isNotEmpty(result)) {
-            logger.info("定时任务执行结果为：" + result);
-        } else {
-            logger.info("定时任务执行结果为空，请检查");
-        }
+        logger.info("定时任务执行结果为：" + result);
+
     }
 }

@@ -4,7 +4,9 @@ import com.alibaba.fastjson.JSON;
 import com.shuzhi.cache.Cache;
 import com.shuzhi.common.ConfigData;
 import com.shuzhi.common.HttpCommandUtils;
+import com.shuzhi.entity.AppLoginData;
 import com.shuzhi.entity.CommandInfo;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +30,7 @@ public class TaskService {
 
     private final static Logger logger = LoggerFactory.getLogger(TaskService.class);
 
-    private String url = "/monitor/module/pub/user/appLogin.action";
+    private String appLoginUrl = "/monitor/module/pub/user/appLogin.action";
 
     @Autowired
     private ConfigData configData;
@@ -44,12 +46,13 @@ public class TaskService {
         sb.append(commandInfo.getTdeviceFactoryEntity().getServerIp());
         sb.append(":");
         sb.append(commandInfo.getTdeviceFactoryEntity().getServerPort());
-        sb.append(url);
+        sb.append(appLoginUrl);
         return sb.toString();
     }
 
     /**
      * 获取访问令牌的请求参数
+     *
      * @return
      */
     private String getAppLoginReqParams() {
@@ -68,7 +71,8 @@ public class TaskService {
             String taskRequestUrl = getAppLoginUrl();
             String reqParams = getAppLoginReqParams();
             logger.info("请求url为：" + taskRequestUrl + ";请求参数为" + reqParams);
-            String resultJSON = postHTTP(taskRequestUrl,reqParams);
+            String resultJSON = postHTTP(taskRequestUrl, reqParams);
+            verifyAppLoginResult(resultJSON);
             return resultJSON;
         } catch (Exception e) {
             logger.error("定时任务执行失败");
@@ -109,5 +113,26 @@ public class TaskService {
 
     }
 
-
+    /**
+     * 验证访问令牌结果集是否正确
+     * @param result
+     */
+    public void verifyAppLoginResult(String result) {
+        try {
+            if (StringUtils.isNotEmpty(result)) {
+                AppLoginData appLoginData = JSON.parseObject(result, AppLoginData.class);
+                if (!appLoginData.getSuccess()) {
+                    logger.info("定时获取访问令牌结果不正确，3秒后再次执行：" + result);
+                    Thread.sleep(1000 * 3);
+                    getAppLogin();
+                }
+            } else {
+                logger.info("定时获取访问令牌结果为空，3分钟后再次执行");
+                Thread.sleep(1000 * 60 * 3);
+                getAppLogin();
+            }
+        } catch (InterruptedException e) {
+            logger.error("请求获取访问令牌出现异常：{}", e);
+        }
+    }
 }

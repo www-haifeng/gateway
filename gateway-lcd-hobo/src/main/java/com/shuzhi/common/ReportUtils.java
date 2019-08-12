@@ -41,7 +41,7 @@ public class ReportUtils {
 
         CommandInfo commandInfo = Cache.commandMap.get("10001");
         if (commandInfo == null) {
-            logger.error("未查询到lcd设备cmdid为:" + "1001" + "的命令,放弃请求");
+            logger.error("未查询到lcd设备cmdid为:" + "10001" + "的命令,放弃请求");
             return null;
         }
 

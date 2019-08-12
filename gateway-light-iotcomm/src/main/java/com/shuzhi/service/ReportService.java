@@ -49,7 +49,7 @@ public class ReportService {
             //调用请求
             String resultJSON = httpCommandUtils.postHTTP(url, commandJSON);
             logger.info("请求返回结果:" + resultJSON);
-            reportSend(resultJSON, systemInfoData);
+            reportSend( url,resultJSON, systemInfoData);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -59,14 +59,15 @@ public class ReportService {
     /**
      * 上报结果集发送到 mq
      *
+     * @param url     ：请求路径
      * @param resultJSON     ：结果数据
      * @param systemInfoData ：结果体
      */
-    public void reportSend(String resultJSON, SystemInfoData systemInfoData) {
+    public void reportSend(String url,String resultJSON, SystemInfoData systemInfoData) {
         String timeStamp = utils.getTimeStamp();
         //命令正确执行
         if (resultJSON != null && !"".equals(resultJSON)) {
-            ReportMsgRevertData messageRevertData = getReportMsgRevertData(resultJSON);
+            ReportMsgRevertData messageRevertData = getReportMsgRevertData(url,resultJSON);
             String mrdJSON = messageRevertData.toString();
             systemInfoData.setMsgts(timeStamp);
             systemInfoData.setMsg(mrdJSON);
@@ -81,7 +82,7 @@ public class ReportService {
             }
         } else {
             //命令执行未成功
-            ReportMsgRevertData messageRevertData = getReportMsgRevertData(resultJSON);
+            ReportMsgRevertData messageRevertData = getReportMsgRevertData(url,resultJSON);
             String mrdJSON = messageRevertData.toString();
             systemInfoData.setMsgts(timeStamp);
             systemInfoData.setMsg(mrdJSON);
@@ -100,17 +101,22 @@ public class ReportService {
     /**
      * 封装 msg层数据
      *
+     * @param url :请求路径
      * @param resultJson :结果及
      * @return
      */
-    private ReportMsgRevertData getReportMsgRevertData(String resultJson) {
+    private ReportMsgRevertData getReportMsgRevertData(String url,String resultJson) {
         ReportMsgRevertData mrd = new ReportMsgRevertData();
         Map<String, CommandInfo> commandMap = Cache.commandMap;
         String fristKey = commandMap.keySet().iterator().next();
         CommandInfo commandInfo = commandMap.get(fristKey);
         mrd.setType(commandInfo.getTdeviceFactoryEntity().getType());
         mrd.setSubtype(commandInfo.getTdeviceFactoryEntity().getSubtype());
-        mrd.setInfoid(configData.getInfoId());
+        if(url.contains("/monitor/module/light/monitoring/queryBreakerPageList.action")) {
+            mrd.setInfoid(configData.getBreakerInfoId());
+        }else if(url.contains("/monitor/module/light/monitoring/queryRtuPageList.action")){
+            mrd.setInfoid(configData.getRtuInfoId());
+        }
         mrd.setDid("\"\"");
         mrd.setData(resultJson);
         return mrd;
