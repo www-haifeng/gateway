@@ -7,19 +7,19 @@ import org.springframework.stereotype.Component;
 
 /**
  * @Description: 全局配置
- * @Author:     lirb
- * @CreateDate:   2019/7/23 13:34
- * @Version:   1.0
+ * @Author: lirb
+ * @CreateDate: 2019/7/23 13:34
+ * @Version: 1.0
  **/
 @Component
-@ConfigurationProperties(prefix="factory")
-@PropertySource(value="classpath:factory.properties",encoding = "utf-8")
+@ConfigurationProperties(prefix = "factory")
+@PropertySource(value = "classpath:factory.properties", encoding = "utf-8")
 public class ConfigData {
     //设备厂商 匹配数据库字段
     private String name;
 
     //厂商设备类型
-    private  String typeName;
+    private String typeName;
 
     //sign中的key
     private String key;
@@ -46,7 +46,10 @@ public class ConfigData {
     private int sysType;
 
     //用于上报的infoid
-    private  String infoId;
+    private String infoId;
+
+    //用于上报的 commandId ，多个用分号分割
+    private String reportCommandId;
 
     public String getName() {
         return name;
@@ -142,5 +145,13 @@ public class ConfigData {
 
     public void setInfoId(String infoId) {
         this.infoId = infoId;
+    }
+
+    public String getReportCommandId() {
+        return reportCommandId;
+    }
+
+    public void setReportCommandId(String reportCommandId) {
+        this.reportCommandId = reportCommandId;
     }
 }

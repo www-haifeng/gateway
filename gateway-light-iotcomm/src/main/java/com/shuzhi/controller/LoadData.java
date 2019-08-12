@@ -3,9 +3,12 @@ package com.shuzhi.controller;
 import com.shuzhi.cache.Cache;
 import com.shuzhi.common.ConfigData;
 import com.shuzhi.dao.CommandInfoDao;
+import com.shuzhi.dao.DeviceInfoDao;
 import com.shuzhi.dao.GatewayConfigDao;
 import com.shuzhi.entity.CommandInfo;
+import com.shuzhi.entity.DeviceInfo;
 import com.shuzhi.entity.TGatewayConfigEntity;
+import com.shuzhi.service.TaskService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +32,13 @@ public class LoadData implements ApplicationRunner {
 
     private final static Logger logger = LoggerFactory.getLogger(LoadData.class);
     @Autowired
+    private DeviceInfoDao deviceInfoDao;
+    @Autowired
     private CommandInfoDao commandInfoDao;
     @Autowired
     private GatewayConfigDao gatewayConfigDao;
+    @Autowired
+    private TaskService taskService;
     @Autowired
     ConfigData configData;
 
@@ -43,6 +50,14 @@ public class LoadData implements ApplicationRunner {
     **/
       @Override
   public void run(ApplicationArguments args) throws Exception {
+          //加载设备信息缓存
+          List<DeviceInfo> deviceInfos = deviceInfoDao.findDeviceInfo();
+          for (DeviceInfo info : deviceInfos) {
+              Cache.deviceInfoMap.put(info.getTDeviceIotcommEntity().getCuuid(),info);
+
+          }
+
+          logger.info("设备信息缓存初始化完毕");
           //加载命令信息缓存
           List<CommandInfo> commandInfos = commandInfoDao.findcommandInfo(configData.getName());
           for (CommandInfo info : commandInfos) {
@@ -53,5 +68,9 @@ public class LoadData implements ApplicationRunner {
           TGatewayConfigEntity gatewayConfigEntity = gatewayConfigDao.getByTypeGroupCode(configData.getTypeGroupCode());
           Cache.gatewayConfigEntity=gatewayConfigEntity;
           logger.info("链路信息缓存初始化完毕！");
+
+          //获取访问令牌
+          String result = taskService.getAppLogin();
+          logger.info("初始化获取访问令牌成功："+result);
       }
 }

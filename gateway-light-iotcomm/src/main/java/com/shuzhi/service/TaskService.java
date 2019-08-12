@@ -34,11 +34,11 @@ public class TaskService {
     private ConfigData configData;
 
     /**
-     * 获取定时任务请求的url
+     * 获取获取访问令牌请求的url
      *
      * @return
      */
-    private String getTaskRequestUrl() {
+    private String getAppLoginUrl() {
         CommandInfo commandInfo = Cache.commandMap.get("10001");
         StringBuilder sb = new StringBuilder("http://");
         sb.append(commandInfo.getTdeviceFactoryEntity().getServerIp());
@@ -48,7 +48,11 @@ public class TaskService {
         return sb.toString();
     }
 
-    private String getReqParams() {
+    /**
+     * 获取访问令牌的请求参数
+     * @return
+     */
+    private String getAppLoginReqParams() {
         Map<String, Object> params = new HashMap<>();
         params.put("userName", configData.getUserName());
         params.put("password", configData.getPassword());
@@ -58,11 +62,11 @@ public class TaskService {
     /**
      * 定时任务请求
      */
-    public String taskReqest() {
+    public String getAppLogin() {
         try {
             //调用请求
-            String taskRequestUrl = getTaskRequestUrl();
-            String reqParams = getReqParams();
+            String taskRequestUrl = getAppLoginUrl();
+            String reqParams = getAppLoginReqParams();
             logger.info("请求url为：" + taskRequestUrl + ";请求参数为" + reqParams);
             String resultJSON = postHTTP(taskRequestUrl,reqParams);
             return resultJSON;

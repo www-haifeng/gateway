@@ -1,6 +1,8 @@
 package com.shuzhi.cache;
 
 import com.shuzhi.entity.CommandInfo;
+import com.shuzhi.entity.DeviceInfo;
+import com.shuzhi.entity.TDeviceFactoryCronEntity;
 import com.shuzhi.entity.TGatewayConfigEntity;
 
 import java.util.*;
@@ -14,6 +16,9 @@ import java.util.concurrent.ConcurrentHashMap;
  **/
 public class Cache {
 
+    //设备信息缓存 Key:cuuid value：deviceId
+    public static Map<Integer, DeviceInfo> deviceInfoMap = new ConcurrentHashMap<>();
+
     //设备命令缓存 Key:cmdid
     public static Map<String, CommandInfo> commandMap = new ConcurrentHashMap<>();
 
@@ -21,5 +26,8 @@ public class Cache {
     public static TGatewayConfigEntity gatewayConfigEntity = new TGatewayConfigEntity();
 
     public static String cookie = "";
+
+    // 定时任务缓存
+    public static TDeviceFactoryCronEntity cronEntity ;
 
 }

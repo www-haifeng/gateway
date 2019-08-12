@@ -38,7 +38,7 @@ public class CommandService {
      * @param commandJSON ：请求参数
      * @param systemInfoData ： 接收的消息体
      */
-    public void commandService(String url,String commandJSON,SystemInfoData systemInfoData){
+    public  void commandService(String url,String commandJSON,SystemInfoData systemInfoData){
         try {
             //调用请求
             logger.info("请求url为："+url+";请求参数为"+commandJSON);
