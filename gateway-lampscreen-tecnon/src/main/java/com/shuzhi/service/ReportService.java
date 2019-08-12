@@ -97,7 +97,7 @@ public class        ReportService {
             String commandRevertJSON = systemInfoData.toString();
             try {
                 rabbitSender.send("upMessage","upMessage", commandRevertJSON);
-                logger.info("命令回执发送完毕:" + commandRevertJSON);
+                logger.info("schedule---定时请求设备状态发送完毕:" + commandRevertJSON);
                 //清空缓存
                 Cache.reportResultList = new ArrayList<>();
             } catch (Exception e) {
@@ -113,7 +113,7 @@ public class        ReportService {
             String commandRevertJSON = systemInfoData.toString();
             try {
                 rabbitSender.send("upMessage","upMessage", commandRevertJSON);
-                logger.error("命令执行失败，请查看原因:" + commandRevertJSON);
+                logger.error("schedule---定时请求，请查看原因:" + commandRevertJSON);
                 //清空缓存
                 Cache.reportResultList = new ArrayList<>();
             } catch (Exception e) {
