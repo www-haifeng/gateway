@@ -48,7 +48,7 @@ public class ReportService {
         try {
             //调用请求
             String resultJSON = httpCommandUtils.postHTTP(url, commandJSON);
-            logger.info("请求返回结果:" + resultJSON);
+            logger.info("上报-请求返回结果:" + resultJSON);
             reportSend( url,resultJSON, systemInfoData);
         } catch (Exception e) {
             e.printStackTrace();
@@ -75,8 +75,8 @@ public class ReportService {
             systemInfoData.setSign(utils.getSignVerify(systemInfoData));
             String commandRevertJSON = systemInfoData.toString();
             try {
-                rabbitSender.send("lowerControlMessage", commandRevertJSON);
-                logger.info("命令回执发送完毕:" + commandRevertJSON);
+                rabbitSender.send("upMessage","upMessage", commandRevertJSON);
+                logger.info("上报命令发送完毕:" + commandRevertJSON);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -89,8 +89,8 @@ public class ReportService {
             systemInfoData.setSign(utils.getSignVerify(systemInfoData));
             String commandRevertJSON = systemInfoData.toString();
             try {
-                rabbitSender.send("lowerControlMessage", commandRevertJSON);
-                logger.error("命令执行失败，请查看原因:" + commandRevertJSON);
+                rabbitSender.send("upMessage","upMessage", commandRevertJSON);
+                logger.error("上报命令失败，请查看原因:" + commandRevertJSON);
             } catch (Exception e) {
                 e.printStackTrace();
             }

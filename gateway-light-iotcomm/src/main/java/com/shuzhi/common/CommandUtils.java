@@ -58,7 +58,7 @@ public class CommandUtils {
                 CommandInfo commandInfo = Cache.commandMap.get(messageData.getCmdid());
 
                 if (commandInfo == null){
-                    logger.error("未查询到lcd设备cmdid为:"+messageData.getCmdid()+"的命令,放弃请求");
+                    logger.error("未查询到照明控制设备cmdid为:"+messageData.getCmdid()+"的命令,放弃请求");
                     return;
                 }
 

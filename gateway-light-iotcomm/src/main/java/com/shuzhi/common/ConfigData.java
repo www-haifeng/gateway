@@ -32,9 +32,6 @@ public class ConfigData {
     //命令回执消息类型
     private int msgtypeCommandReturn;
 
-    //标识用户的身份
-    private String partnerId;
-
     //用户名和密码 获取访问权限
     private String userName;
     private String password;
@@ -99,14 +96,6 @@ public class ConfigData {
 
     public void setMsgtypeCommandReturn(int msgtypeCommandReturn) {
         this.msgtypeCommandReturn = msgtypeCommandReturn;
-    }
-
-    public String getPartnerId() {
-        return partnerId;
-    }
-
-    public void setPartnerId(String partnerId) {
-        this.partnerId = partnerId;
     }
 
     public String getUserName() {
