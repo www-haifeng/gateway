@@ -35,15 +35,24 @@ public class ReportUtils {
      * 上报
      */
     public String getReportUrl(DeviceInfo deviceInfo) {
-        CommandInfo commandInfo = Cache.commandMap.get("10001");
 
-        if (commandInfo == null) {
-            logger.error("未查询到lcd设备cmdid为:10001的命令,放弃请求");
-            return null;
+        CommandInfo commandInfo =null;
+        Map<String, CommandInfo> commandMap = Cache.commandMap;
+        for(CommandInfo command:commandMap.values()){
+            commandInfo=command;
+            if(commandInfo!=null){
+                break;
+            }
         }
         //获取url
-        String url = "http://" + commandInfo.getTdeviceFactoryEntity().getServerIp() + ":" + commandInfo.getTdeviceFactoryEntity().getServerPort() + "/command/" + deviceInfo.getTdeviceTecnonEntity().getDeviceId();
-        return url;
+        StringBuilder sb = new StringBuilder();
+        sb.append("http://");
+        sb.append(commandInfo.getTdeviceFactoryEntity().getServerIp());
+        sb.append(":");
+        sb.append(commandInfo.getTdeviceFactoryEntity().getServerPort());
+        sb.append("/command/");
+        sb.append( deviceInfo.getTdeviceTecnonEntity().getDeviceId());
+        return sb.toString();
     }
 
     /**

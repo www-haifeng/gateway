@@ -46,6 +46,4 @@ public class ConfigData {
     //msgInfo 上报返回msg层使用
     private String infoId;
 
-    //上报请求的url的 msgid
-    private String reportMsgId;
 }

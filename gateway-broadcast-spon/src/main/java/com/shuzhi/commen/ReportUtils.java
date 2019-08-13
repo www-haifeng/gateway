@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -29,27 +30,31 @@ public class ReportUtils {
     @Autowired
     private ReportService reportService;
     @Autowired
-    private CommandService commandService;
-    @Autowired
-    private Utils utils;
-    @Autowired
-    private ObjectMapper mapper;
-    @Autowired
     private ConfigData configData;
 
+    private final String url = "/php/getzoneterminaldata.php";
 
     /**
      * 上报
      */
     public String getReportUrl() {
-        CommandInfo commandInfo = Cache.commandMap.get(configData.getReportMsgId());
-        if (commandInfo == null) {
-            logger.error("未查询到广播设备cmdid为:10001的命令,放弃请求");
-            return null;
+
+        CommandInfo commandInfo =null;
+        Map<String, CommandInfo> commandMap = Cache.commandMap;
+        for(CommandInfo command:commandMap.values()){
+            commandInfo=command;
+            if(commandInfo!=null){
+                break;
+            }
         }
         //获取url
-        String url = "http://" + commandInfo.getTdeviceFactoryEntity().getServerIp() + ":" + commandInfo.getTdeviceFactoryEntity().getServerPort() + commandInfo.getTmsgInfoEntity().getInterfaceId();
-        return url;
+        StringBuilder sb = new StringBuilder();
+        sb.append("http://");
+        sb.append(commandInfo.getTdeviceFactoryEntity().getServerIp());
+        sb.append(":");
+        sb.append(commandInfo.getTdeviceFactoryEntity().getServerPort());
+        sb.append(url);
+        return sb.toString();
     }
 
     /**

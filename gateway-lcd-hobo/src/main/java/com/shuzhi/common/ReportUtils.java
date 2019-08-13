@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -33,22 +34,28 @@ public class ReportUtils {
     @Autowired
     private ConfigData configData;
 
+    private final String reqUrl = "/vs/api/apiselclient.vs";
 
     /**
      * 上报
      */
     public String getReportUrl() {
 
-        CommandInfo commandInfo = Cache.commandMap.get("10001");
-        if (commandInfo == null) {
-            logger.error("未查询到lcd设备cmdid为:" + "10001" + "的命令,放弃请求");
-            return null;
+        CommandInfo commandInfo =null;
+        Map<String, CommandInfo> commandMap = Cache.commandMap;
+        for(CommandInfo command:commandMap.values()){
+            commandInfo=command;
+            if(commandInfo!=null){
+                break;
+            }
         }
-
         //获取url
-        String url = "http://" + commandInfo.getTdeviceFactoryEntity().getServerIp() + ":" + commandInfo.getTdeviceFactoryEntity().getServerPort() + commandInfo.getTmsgInfoEntity().getInterfaceId();
         StringBuilder sb = new StringBuilder();
-        sb.append(url);
+        sb.append("http://");
+        sb.append(commandInfo.getTdeviceFactoryEntity().getServerIp());
+        sb.append(":");
+        sb.append(commandInfo.getTdeviceFactoryEntity().getServerPort());
+        sb.append(reqUrl);
         sb.append("?account=");
         sb.append(configData.getAccount());
         sb.append("&password=");

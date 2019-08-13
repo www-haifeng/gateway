@@ -74,7 +74,7 @@ public class        ReportService {
             //放入缓存
             Cache.reportResultList.add(rr);
         } catch (Exception e) {
-            e.printStackTrace();
+           logger.error("上报请求失败：{}",e);
         }
     }
 
