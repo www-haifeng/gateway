@@ -32,7 +32,7 @@ public class DynamicScheduleTask implements SchedulingConfigurer {
     private ConfigData configData;
 
     //时间表达式  每2秒执行一次
-    private  String cron ="";
+    public static String cron = "0/3 * * * * ?";
 
 
     @Override
@@ -71,10 +71,11 @@ public class DynamicScheduleTask implements SchedulingConfigurer {
                     //2.2 合法性校验.
                     if (Cache.cronEntity == null) {
                         Cache.cronEntity = factoryCronDao.getByFactoryName(configData.getName());
+                        setCron(Cache.cronEntity.getCron());
                     }
-                    setCron(Cache.cronEntity.getCron());
                     //2.3 返回执行周期(Date)
                     if ("1".equals(Cache.cronEntity.getStartFlag())) {
+                        //任务触发，可修改任务的执行周期
                         return new CronTrigger(cron).nextExecutionTime(triggerContext);
                     } else {
                         return null;
