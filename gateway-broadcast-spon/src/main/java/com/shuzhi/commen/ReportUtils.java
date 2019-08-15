@@ -81,7 +81,7 @@ public class ReportUtils {
     public GetZoneTerminalData getRequestParams() {
         GetZoneTerminalData params = new GetZoneTerminalData();
         params.setPageIndex(0);
-        params.setPageCount(1000);
+        params.setPageCount(Cache.deviceInfoMap.size()+10);
         params.setGroupName("*");
         params.setShowType("1");
         params.setSimple(1);

@@ -4,6 +4,7 @@ import com.shuzhi.commen.ConfigData;
 import com.shuzhi.commen.ReportUtils;
 import com.shuzhi.dao.FactoryCronDao;
 import com.shuzhi.entity.TDeviceFactoryCronEntity;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
 @Component
 @Configuration
 @EnableScheduling
+@Slf4j
 public class DynamicScheduleTask implements SchedulingConfigurer {
 
     @Autowired
@@ -31,7 +33,7 @@ public class DynamicScheduleTask implements SchedulingConfigurer {
         scheduledTaskRegistrar.addTriggerTask(
                 //1.添加任务内容(Runnable)
                 () -> {
-                    System.out.println("执行动态定时任务: " + LocalDateTime.now().toLocalTime());
+                    log.info("执行动态定时任务: " + LocalDateTime.now().toLocalTime());
                     reportUtils.reportRequest();
                 },
                 //2.设置执行周期(Trigger)
@@ -47,4 +49,4 @@ public class DynamicScheduleTask implements SchedulingConfigurer {
                 }
         );
     }
-}
+   }
