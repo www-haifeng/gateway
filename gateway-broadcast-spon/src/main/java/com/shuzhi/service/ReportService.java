@@ -57,30 +57,33 @@ public class ReportService {
             //调用请求
             String resultJSON = httpCommandUtils.postHTTP(url, commandJSON);
             logger.info("请求返回结果:" + resultJSON);
+            if (resultJSON != null && !"".equals(resultJSON)) {
 
-            //解析返回结果 转换成对象
-            Receipt receiptData = mapper.readValue(resultJSON, Receipt.class);
-
-            //处理device与did映射关系
-            List<Map<String, Object>> clientList = (List<Map<String, Object>>) JSONArray.parse(receiptData.getRows().toString());
-            if (CollectionUtils.isNotEmpty(clientList)) {
-                for (Map<String, Object> datamap : clientList) {
-                    if (datamap.containsKey("id")) {
-                        if (!StringUtil.isEmpty(Cache.device_IdMap.get(datamap.get("id").toString()))) {
-                            datamap.put("id", Cache.device_IdMap.get(datamap.get("id").toString()));
+                //解析返回结果 转换成对象
+                Receipt receiptData = mapper.readValue(resultJSON, Receipt.class);
+                //处理device与did映射关系
+                List<Map<String, Object>> clientList = (List<Map<String, Object>>) JSONArray.parse(receiptData.getRows().toString());
+                if (CollectionUtils.isNotEmpty(clientList)) {
+                    for (Map<String, Object> datamap : clientList) {
+                        if (datamap.containsKey("id")) {
+                            if (!StringUtil.isEmpty(Cache.device_IdMap.get(datamap.get("id").toString()))) {
+                                datamap.put("id", Cache.device_IdMap.get(datamap.get("id").toString()));
+                            }
                         }
                     }
                 }
-            }
-            String json = mapper.writeValueAsString(clientList);
-            System.out.println(json);
+                String json = mapper.writeValueAsString(clientList);
+                receiptData.setRows(JSONArray.parseArray(json));
+                logger.info("处理后的结果:" + receiptData.toString());
+                reportSend(receiptData.toString(), systemInfoData);
 
-            receiptData.setRows(JSONArray.parseArray(json));
-            logger.info("处理后的结果:" + receiptData.toString());
-            reportSend(receiptData.toString(), systemInfoData);
+            } else {
+                reportSend(resultJSON, systemInfoData);
+            }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("世邦上报请求结果处理device与did映射关系失败，请查看原因 : {}", e);
         }
+
     }
 
 
@@ -102,7 +105,7 @@ public class ReportService {
             systemInfoData.setSign(utils.getSignVerify(systemInfoData));
             String commandRevertJSON = systemInfoData.toString();
             try {
-                rabbitSender.send("upMessage","upMessage", commandRevertJSON);
+                rabbitSender.send("upMessage", "upMessage", commandRevertJSON);
                 logger.info("命令回执发送完毕:" + commandRevertJSON);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -116,7 +119,7 @@ public class ReportService {
             systemInfoData.setSign(utils.getSignVerify(systemInfoData));
             String commandRevertJSON = systemInfoData.toString();
             try {
-                rabbitSender.send("upMessage","upMessage", commandRevertJSON);
+                rabbitSender.send("upMessage", "upMessage", commandRevertJSON);
                 logger.error("命令执行失败，请查看原因:" + commandRevertJSON);
             } catch (Exception e) {
                 e.printStackTrace();

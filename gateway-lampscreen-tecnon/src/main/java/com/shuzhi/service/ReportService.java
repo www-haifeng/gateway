@@ -58,23 +58,25 @@ public class        ReportService {
             //调用请求
             String resultJSON = httpCommandUtils.postHTTP(url, commandJSON);
             logger.info("请求返回结果:" + resultJSON);
-            //结果集中包含Boolean 处理成统一协议格式
-            JsonNode jsonNode = mapper.readTree(resultJSON).get("result");
-            //取出返回结果
-            Boolean resultBoolean = jsonNode.traverse(mapper).readValueAs(Boolean.class);
-            //Boolean处理成魔法数
-            ReportResult rr = new ReportResult();
-            rr.setId(deviceInfo.getTdeviceTecnonEntity().getDid());
-            if (resultBoolean) {
-                rr.setResult(1);
-            } else if (!resultBoolean) {
-                rr.setResult(0);
-            }
+            if (resultJSON != null && !"".equals(resultJSON)) {
+                //结果集中包含Boolean 处理成统一协议格式
+                JsonNode jsonNode = mapper.readTree(resultJSON).get("result");
+                //取出返回结果
+                Boolean resultBoolean = jsonNode.traverse(mapper).readValueAs(Boolean.class);
+                //Boolean处理成魔法数
+                ReportResult rr = new ReportResult();
+                rr.setId(deviceInfo.getTdeviceTecnonEntity().getDid());
+                if (resultBoolean) {
+                    rr.setResult(1);
+                } else if (!resultBoolean) {
+                    rr.setResult(0);
+                }
 
-            //放入缓存
-            Cache.reportResultList.add(rr);
+                //放入缓存
+                Cache.reportResultList.add(rr);
+            }
         } catch (Exception e) {
-           logger.error("上报请求失败：{}",e);
+           logger.error("上报请求处理结果集中boolean数据失败：{}",e);
         }
     }
 
