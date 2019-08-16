@@ -32,7 +32,7 @@ public class DynamicScheduleTask implements SchedulingConfigurer {
     private ConfigData configData;
 
     //时间表达式  每2秒执行一次
-    public static String cron = "0/3 * * * * ?";
+    private String cron = "0/3 * * * * ?";
 
 
     @Override
