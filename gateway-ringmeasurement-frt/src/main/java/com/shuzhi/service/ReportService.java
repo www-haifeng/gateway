@@ -95,7 +95,7 @@ public class ReportService {
                 byte[] avgWindSpeedBytes = new byte[2];
                 bf.get(avgWindSpeedBytes);
                 int avgWindSpeedInt = byteUtils.byte2Int(avgWindSpeedBytes, 0, 2);
-                double avgWindSpeed = avgWindSpeedInt / 10;
+                double avgWindSpeed = (double)avgWindSpeedInt / 10;
                 //最大风速
                 byte[] windSpeedBytes = new byte[2];
                 bf.get(windSpeedBytes);
@@ -103,25 +103,25 @@ public class ReportService {
                 byte[] temperatureBytes = new byte[2];
                 bf.get(temperatureBytes);
                 int temperatureInt = byteUtils.byte2Int(temperatureBytes, 0, 2);
-                double temperature = temperatureInt / 10;
+                double temperature = (double)temperatureInt / 10;
 
                 //大气湿度
                 byte[] wettingBytes = new byte[2];
                 bf.get(wettingBytes);
                 int wettingInt = byteUtils.byte2Int(wettingBytes, 0, 2);
-                double wetting = wettingInt / 10;
+                double wetting = (double)wettingInt / 10;
 
                 //大气气压
                 byte[] pressureBytes = new byte[2];
                 bf.get(pressureBytes);
                 int pressureInt = byteUtils.byte2Int(pressureBytes, 0, 2);
-                double pressure = pressureInt / 10;
+                double pressure = (double)pressureInt / 10;
 
                 //雨量
                 byte[] rainfallBytes = new byte[2];
                 bf.get(rainfallBytes);
                 int rainfallInt = byteUtils.byte2Int(rainfallBytes, 0, 2);
-                double rainfall = rainfallInt / 10;
+                double rainfall = (double)rainfallInt / 10;
 
                 //总辐射
                 byte[] radiationTwoBytes = new byte[2];
@@ -133,17 +133,17 @@ public class ReportService {
                 byte[] noiseBytes = new byte[2];
                 bf.get(noiseBytes);
                 int noiseInt = byteUtils.byte2Int(noiseBytes, 0, 2);
-                double noise = noiseInt / 10;
+                double noise = (double)noiseInt / 10;
                 //pm2.5
                 byte[] pmTwoPointFiveBytes = new byte[2];
                 bf.get(pmTwoPointFiveBytes);
                 int pmTwoPointFiveInt = byteUtils.byte2Int(pmTwoPointFiveBytes, 0, 2);
-                double pmTwoPointFive = pmTwoPointFiveInt / 10;
+                double pmTwoPointFive = (double)pmTwoPointFiveInt / 10;
                 //pm10
                 byte[] pmTenBytes = new byte[2];
                 bf.get(pmTenBytes);
                 int pmTenInt = byteUtils.byte2Int(pmTenBytes, 0, 2);
-                double pmTen = pmTenInt / 10;
+                double pmTen = (double)pmTenInt / 10;
 
                 //获取deviceType
                 String deviceType = utils.getDeviceType(deviceIdStr);
